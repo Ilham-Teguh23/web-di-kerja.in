@@ -207,7 +207,9 @@
                             <h4>
                                 <sup>Rp.</sup>0
                             </h4>
-                            <a target="_blank" href="https://api.whatsapp.com/send?phone=081214707143&text=Hallo Admin, Saya ingin bertanya mengenai Konsultasi Alur / Program" class="cta-btn">Hubungi Admin</a>
+                            <a target="_blank"
+                                href="https://api.whatsapp.com/send?phone=081214707143&text=Hallo Admin, Saya ingin bertanya mengenai Konsultasi Alur / Program"
+                                class="cta-btn">Hubungi Admin</a>
                             <ul>
                                 <li><i class="bi bi-check"></i> <span>Konsultasi Program</span></li>
                                 <li><i class="bi bi-check"></i> <span>Konsultasi Alur</span></li>
@@ -231,7 +233,9 @@
                             <h4>
                                 <sup>Rp.</sup>199.000<span> / Mulai dari</span>
                             </h4>
-                            <a target="_blank" href="https://api.whatsapp.com/send?phone=081214707143&text=Hallo Admin, Saya ingin bertanya mengenai Pembuatan Company Profile / Pembuatan CRUD Sederhana" class="cta-btn">Hubungi Admin</a>
+                            <a target="_blank"
+                                href="https://api.whatsapp.com/send?phone=081214707143&text=Hallo Admin, Saya ingin bertanya mengenai Pembuatan Company Profile / Pembuatan CRUD Sederhana"
+                                class="cta-btn">Hubungi Admin</a>
                             <ul>
                                 <li><i class="bi bi-check"></i> <span>Free Konsultasi Flow Database</span></li>
                                 <li><i class="bi bi-check"></i> <span>Free Konsultasi Alur Proses</span></li>
@@ -260,7 +264,9 @@
                                 <sup>Rp.</sup>399.000
                                 <span> / Mulai Dari</span>
                             </h4>
-                            <a target="_blank" href="https://api.whatsapp.com/send?phone=081214707143&text=Hallo Admin, Saya ingin bertanya tentang Pembuatan Program / Laporan Untuk Skripsi / Tugas Akhir." class="cta-btn">Hubungi Admin</a>
+                            <a target="_blank"
+                                href="https://api.whatsapp.com/send?phone=081214707143&text=Hallo Admin, Saya ingin bertanya tentang Pembuatan Program / Laporan Untuk Skripsi / Tugas Akhir."
+                                class="cta-btn">Hubungi Admin</a>
                             <ul>
                                 <li><i class="bi bi-check"></i> <span>Free Konsultasi Flow Database</span></li>
                                 <li><i class="bi bi-check"></i> <span>Free Konsultasi Alur Proses</span></li>
@@ -662,6 +668,52 @@
     <div id="preloader"></div>
 
     @include('pages.landing-page.layouts.js.style')
+
+    <script>
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(function(position) {
+                const lat = position.coords.latitude;
+                const lon = position.coords.longitude;
+
+                fetch('/api/get-location', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                        },
+                        body: JSON.stringify({
+                            latitude: lat,
+                            longitude: lon
+                        })
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+
+                        // const locationDiv = document.getElementById('location-info');
+
+                        // if (data && data.address) {
+                        //     locationDiv.innerHTML = `<strong>Lokasi Anda:</strong><br>
+                        //                  ${data.address}<br>
+                        //                  Latitude: ${lat}, Longitude: ${lon}`;
+                        // } else if (data.error) {
+                        //     locationDiv.innerHTML = `<strong>Error:</strong><br>${data.error}`;
+                        // } else {
+                        //     locationDiv.innerHTML = `<strong>Lokasi Anda:</strong><br>
+                        //                  Tidak dapat mendeteksi alamat dari koordinat yang diberikan.`;
+                        // }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                    });
+            }, function(error) {
+                console.warn('Geolocation error:', error);
+                const locationDiv = document.getElementById('location-info');
+                locationDiv.innerHTML = 'Lokasi tidak dapat dideteksi.';
+            });
+        } else {
+            alert('Geolocation is not supported by this browser.');
+        }
+    </script>
 
 </body>
 

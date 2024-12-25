@@ -207,7 +207,7 @@
                             <h4>
                                 <sup>Rp.</sup>0
                             </h4>
-                            <a href="#" class="cta-btn">Hubungi Admin</a>
+                            <a target="_blank" href="https://api.whatsapp.com/send?phone=081214707143&text=Hallo Admin, Saya ingin bertanya mengenai Konsultasi Alur / Program" class="cta-btn">Hubungi Admin</a>
                             <ul>
                                 <li><i class="bi bi-check"></i> <span>Konsultasi Program</span></li>
                                 <li><i class="bi bi-check"></i> <span>Konsultasi Alur</span></li>
@@ -231,7 +231,7 @@
                             <h4>
                                 <sup>Rp.</sup>199.000<span> / Mulai dari</span>
                             </h4>
-                            <a href="#" class="cta-btn">Hubungi Admin</a>
+                            <a target="_blank" href="https://api.whatsapp.com/send?phone=081214707143&text=Hallo Admin, Saya ingin bertanya mengenai Pembuatan Company Profile / Pembuatan CRUD Sederhana" class="cta-btn">Hubungi Admin</a>
                             <ul>
                                 <li><i class="bi bi-check"></i> <span>Free Konsultasi Flow Database</span></li>
                                 <li><i class="bi bi-check"></i> <span>Free Konsultasi Alur Proses</span></li>
@@ -260,7 +260,7 @@
                                 <sup>Rp.</sup>399.000
                                 <span> / Mulai Dari</span>
                             </h4>
-                            <a href="#" class="cta-btn">Hubungi Admin</a>
+                            <a target="_blank" href="https://api.whatsapp.com/send?phone=081214707143&text=Hallo Admin, Saya ingin bertanya tentang Pembuatan Program / Laporan Untuk Skripsi / Tugas Akhir." class="cta-btn">Hubungi Admin</a>
                             <ul>
                                 <li><i class="bi bi-check"></i> <span>Free Konsultasi Flow Database</span></li>
                                 <li><i class="bi bi-check"></i> <span>Free Konsultasi Alur Proses</span></li>

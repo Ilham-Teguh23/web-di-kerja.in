@@ -2,8 +2,8 @@
     <div class="container-fluid container-xl position-relative d-flex align-items-center">
 
         <a href="index.html" class="logo d-flex align-items-center me-auto">
-            <img src="{{ url('/landing-page') }}/assets/img/logo.png" alt="">
-            <h1 class="sitename">di.kerja.in</h1>
+            <img src="{{ url('/assets-images') }}/logo_aplikasi.png"  alt="" style="width: 75px; height: 75px;">
+            <h1 class="sitename">di-kerja.in</h1>
         </a>
 
         <nav id="navmenu" class="navmenu">

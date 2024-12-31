@@ -8,7 +8,7 @@
     {!! config('seo.meta') !!}
 
     <title>
-        .: di.kerja.in :.
+        .: di-kerja.in :.
     </title>
 
     @include('pages.landing-page.layouts.favico.favico')
@@ -32,7 +32,7 @@
             </div>
             <div class="container text-center">
                 <div class="d-flex flex-column justify-content-center align-items-center">
-                    <h1 data-aos="fade-up">Selamat Datang <span>di.kerja.in</span></h1>
+                    <h1 data-aos="fade-up">Selamat Datang <span>di-kerja.in</span></h1>
                     <p data-aos="fade-up" data-aos-delay="100">
                         Jasa Pembuatan Website dan Aplikasi Termurah dan Terpercaya.
                     </p>
@@ -56,7 +56,7 @@
                             Kami lebih mengedepankan kualitas dibandingkan kuantitas
                         </h3>
                         <p class="fst-italic">
-                            di.kerja.in merupakan sebuah penyedia Jasa Pembuatan Aplikasi atau Website yang memiliki
+                            di-kerja.in merupakan sebuah penyedia Jasa Pembuatan Aplikasi atau Website yang memiliki
                             harga terjangkau, pengerjaan cepat dan berkualitas.
                         </p>
                         <ul>
@@ -616,39 +616,32 @@
                 <div class="mt-1 row gy-4">
 
                     <div class="col-lg-12">
-                        <form action="forms/contact.php" method="post" class="php-email-form" data-aos="fade-up"
-                            data-aos-delay="400">
+                        <form action="{{ route('contact-message-store') }}" method="POST" class="php-email-form" data-aos="fade-up" data-aos-delay="400">
+                            @csrf
                             <div class="row gy-4">
-
+                        
                                 <div class="col-md-6">
-                                    <input type="text" name="name" class="form-control"
-                                        placeholder="Your Name" required="">
+                                    <input type="text" name="name" class="form-control" placeholder="Your Name" required>
                                 </div>
-
-                                <div class="col-md-6 ">
-                                    <input type="email" class="form-control" name="email"
-                                        placeholder="Your Email" required="">
+                        
+                                <div class="col-md-6">
+                                    <input type="email" class="form-control" name="email" placeholder="Your Email" required>
                                 </div>
-
+                        
                                 <div class="col-md-12">
-                                    <input type="text" class="form-control" name="subject" placeholder="Subject"
-                                        required="">
+                                    <input type="text" class="form-control" name="subject" placeholder="Subject" required>
                                 </div>
-
+                        
                                 <div class="col-md-12">
-                                    <textarea class="form-control" name="message" rows="6" placeholder="Message" required=""></textarea>
+                                    <textarea class="form-control" name="message" rows="6" placeholder="Message" required></textarea>
                                 </div>
-
+                        
                                 <div class="text-center col-md-12">
-                                    <div class="loading">Loading</div>
-                                    <div class="error-message"></div>
-                                    <div class="sent-message">Your message has been sent. Thank you!</div>
-
                                     <button type="submit">Send Message</button>
                                 </div>
-
+                        
                             </div>
-                        </form>
+                        </form>                        
                     </div><!-- End Contact Form -->
 
                 </div>
@@ -713,6 +706,38 @@
         } else {
             alert('Geolocation is not supported by this browser.');
         }
+
+        let type = false;
+            
+            if('{{session()->has("success")}}' == true) type = "success";
+            if('{{session()->has("error")}}' == true) type = "error";
+            
+            if(type === "success"){
+                Swal.fire({
+                    icon: 'success',
+                    title: 'success!',
+                    text: '{{ session('success') }}'
+                });
+                
+            }else if(type === "error") {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error!',
+                    text: '{{ session('error') }}'
+                });
+            }
+            
+            function toast(message) {
+                Swal.fire({
+                    toast: true,
+                    position: 'top-end',
+                    icon: 'error',
+                    title: 'ERROR !',
+                    text: message,
+                    showConfirmButton: false,
+                    timer: 2000
+                });
+            }
     </script>
 
 </body>

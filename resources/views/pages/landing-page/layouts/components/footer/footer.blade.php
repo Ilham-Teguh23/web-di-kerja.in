@@ -5,7 +5,7 @@
             <div class="col-lg-12 col-md-12 footer-about" style="text-align: center">
                 <a href="index.html" class="logo">
                     <span class="sitename">
-                        di.kerja.in
+                        di-kerja.in
                     </span>
                 </a>
                 <div class="pt-3 footer-contact">
@@ -40,7 +40,7 @@
         <p>
             ©<span>Copyright 2024</span>
             <strong class="px-1 sitename">
-                di.kerja.in
+                di-kerja.in
             </strong>
             <span>All Rights Reserved</span>
         </p>

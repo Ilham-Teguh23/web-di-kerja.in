@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers\Master;
 
-use Artesaos\SEOTools\Facades\SEOTools;
-use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\ContactMessages;
+use App\Http\Controllers\Controller;
+use Artesaos\SEOTools\Facades\SEOTools;
 
 class LandingPageController extends Controller
 {
@@ -101,5 +102,28 @@ class LandingPageController extends Controller
         } else {
             return response()->json(['error' => 'Location not found']);
         }
+    }
+
+    public function store(Request $request)
+    {
+        // dd($request);
+        // Validasi data dari form
+        $validatedData = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|max:255',
+            'subject' => 'required|string|max:255',
+            'message' => 'required|string',
+        ]);
+
+        // Simpan data ke tabel contact_messages
+        ContactMessages::create([
+            'name' => $validatedData['name'],
+            'email' => $validatedData['email'],
+            'subject' => $validatedData['subject'],
+            'message' => $validatedData['message'],
+        ]);
+
+        // Redirect dengan pesan sukses
+        return back()->with('success', 'Your message has been sent successfully!');
     }
 }

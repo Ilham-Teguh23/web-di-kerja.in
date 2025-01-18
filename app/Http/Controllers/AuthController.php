@@ -29,7 +29,7 @@ class AuthController extends Controller
         // Coba autentikasi
         if (Auth::attempt($request->only('username', 'password'))) {
             // Redirect ke halaman setelah login
-            return redirect()->intended('/dashboard')->with('success', 'Login berhasil!');
+            return redirect()->intended('/master/dashboard')->with('success', 'Login berhasil!');
         }
 
         return back()->with('error','Email atau password salah.');
@@ -45,5 +45,12 @@ class AuthController extends Controller
         $request->session()->regenerateToken();
 
         return redirect('/login')->with('success', 'Logout berhasil.');
+    }
+
+    public function authLogout()
+    {
+        Auth::logout();
+
+        return redirect()->route("login")->with("success", "Logout Berhasil");
     }
 }

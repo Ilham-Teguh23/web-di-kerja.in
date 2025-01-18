@@ -68,12 +68,8 @@
     }
 }
 
-
-
 </style>
 </head>
-
-
 
 <body>
 
@@ -133,10 +129,10 @@
         document.addEventListener("DOMContentLoaded", function() {
             var currentUrl = window.location.href;
             var navLinks = document.querySelectorAll('.side-menu__item');
-    
+
             navLinks.forEach(function(link) {
                 var linkUrl = link.getAttribute('href');
-    
+
                 if (currentUrl.indexOf(linkUrl) !== -1) {
                     link.classList.add('active');
                     var parentSubMenu = link.closest('.slide-menu');
@@ -171,10 +167,10 @@
         function openSubMenus() {
             var currentUrl = window.location.href;
             var navLinks = document.querySelectorAll('.side-menu__item');
-    
+
             navLinks.forEach(function(link) {
                 var linkUrl = link.getAttribute('href');
-    
+
                 if (currentUrl.indexOf(linkUrl) !== -1) {
                     var parentMenu = link.closest('.has-sub');
                     while (parentMenu) {
@@ -188,10 +184,10 @@
             });
         }
         document.addEventListener("DOMContentLoaded", function() {
-            openSubMenus(); 
+            openSubMenus();
         });
     </script>
-    
+
 
     @include('layout.partials.custom_switcherjs')
 

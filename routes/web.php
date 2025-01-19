@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ContactMessageController;
+use App\Http\Controllers\Master\BenefitController;
 use App\Http\Controllers\Master\FAQController;
 use App\Http\Controllers\Master\LandingPageController;
 use App\Http\Controllers\Master\TestimonialController;
@@ -44,5 +45,10 @@ Route::middleware(['web', 'auth'])->group(function () {
         // FAQ
         Route::get("/faq/datatable", [FAQController::class, "datatable"])->name("faq.datatable");
         Route::resource("faq", FAQController::class);
+
+        // Benefit
+        Route::put("/benefit/{id}/update-status", [BenefitController::class, "updateStatus"])->name("benefit.updateStatus");
+        Route::get("/benefit/datatable", [BenefitController::class, "datatable"])->name("benefit.datatable");
+        Route::resource("benefit", BenefitController::class);
     });
 });

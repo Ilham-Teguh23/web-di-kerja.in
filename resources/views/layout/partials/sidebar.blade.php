@@ -48,6 +48,30 @@
                 </li>
                 <!-- End::slide -->
 
+                <li class="slide__category">
+                    <span class="category-name">Menu</span>
+                </li>
+
+                <li class="slide has-sub">
+                    <a href="javascript:void(0);" class="side-menu__item">
+                        <i class="fe fe-users side-menu__icon"></i>
+                        <span class="side-menu__label">Master</span>
+                        <i class="fe fe-chevron-right side-menu__angle"></i>
+                    </a>
+                    <ul class="slide-menu child1">
+                        <li class="slide side-menu__label1">
+                            <a href="javascript:void(0)">Master</a>
+                        </li>
+                        <li class="slide">
+                            <a href="{{ route('testimonials.index') }}" class="side-menu__item">Testimonial</a>
+                        </li>
+                    </ul>
+                </li>
+
+                <li class="slide__category">
+                    <span class="category-name">Account</span>
+                </li>
+
                 <li class="slide has-sub">
                     <a href="javascript:void(0);" class="side-menu__item">
                         <i class="fe fe-users side-menu__icon"></i>

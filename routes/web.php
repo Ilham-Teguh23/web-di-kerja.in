@@ -13,15 +13,20 @@ use App\Http\Controllers\Master\UsersController;
 Route::get("/", [LandingPageController::class,  "index"]);
 Route::post('/sending-message', [LandingPageController::class, 'store'])->name('contact-message-store');
 
-Route::prefix("auth")->group(function() {
-    Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
-    Route::post('/login', [LoginController::class, 'login'])->name('login.post');
-    Route::get("/logout", [DashboardController::class, "authLogout"])->name("auth.logout");
+Route::group(["middleware" => ["guest"]], function() {
+    Route::prefix("auth")->group(function() {
+        Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
+        Route::post('/login', [LoginController::class, 'login'])->name('login.post');
+    });
 });
 
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 Route::middleware(['web', 'auth'])->group(function () {
+
+    Route::prefix("auth")->group(function() {
+        Route::get("/logout", [DashboardController::class, "authLogout"])->name("auth.logout");
+    });
     Route::prefix("master")->group(function() {
         Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
         Route::get('contact-message/datatable', [ContactMessageController::class, 'datatable'])->name('contact-message.datatable');

@@ -3,11 +3,12 @@
 
 <head>
 
-    <!-- Meta Data -->
     <meta charset="UTF-8">
     <meta name='viewport' content='width=device-width, initial-scale=1.0'>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title> Sash – Bootstrap 5 Admin &amp; Dashboard Template </title>
+    <title>
+        di-kerja.in - Login Website
+    </title>
     <meta name="Description" content="Bootstrap Responsive Admin Web Dashboard HTML5 Template">
     <meta name="Author" content="Spruko Technologies Private Limited">
     <meta name="keywords" content="admin dashboard,dashboard design htmlbootstrap admin template,html admin panel,admin dashboard html,admin panel html template,bootstrap dashboard,html admin template,html dashboard,html admin dashboard template,bootstrap dashboard template,dashboard html template,bootstrap admin panel,dashboard admin bootstrap,bootstrap admin dashboard">
@@ -43,25 +44,25 @@
                             <img src="{{ asset('assets-images/logo_aplikasi.png') }}" alt="logo" style="width: 250px; height: 250px;">
                         </a>
                     </div>
-                    
-                    
+
+
                     <div class="card custom-card">
-                        
-                        <div class="card-body p-5">
+
+                        <div class="p-5 card-body">
                             @if (session('success'))
                                 <div class="alert alert-success alert-dismissible fade show" role="alert">
                                     <strong>Success!</strong> {{ session('success') }}
                                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                                 </div>
                             @endif
-        
+
                             @if (session('error'))
                                 <div class="alert alert-danger alert-dismissible fade show" role="alert">
                                     <strong>Error!</strong> {{ session('error') }}
                                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                                 </div>
                             @endif
-                            <p class="h5 fw-semibold mb-2 text-center">Login</p>
+                            <p class="mb-2 text-center h5 fw-semibold">Login</p>
                             <form method="POST" action="{{ route('login') }}">
                                 @csrf
                                 <div class="row gy-3">
@@ -69,11 +70,11 @@
                                         <label for="signin-username" class="form-label text-default">Username</label>
                                         <input type="text" class="form-control form-control-lg" id="signin-username" name="username" placeholder="Username" required>
                                     </div>
-                                    <div class="col-xl-12 mb-2">
+                                    <div class="mb-2 col-xl-12">
                                         <label for="signin-password" class="form-label text-default">Password</label>
                                         <div class="input-group">
                                             <input type="password" class="form-control form-control-lg" id="signin-password" name="password" placeholder="Password" required>
-                                            <button class="btn btn-light" type="button" onclick="createpassword('signin-password',this)" id="button-addon2"><i class="ri-eye-off-line align-middle"></i></button>
+                                            <button class="btn btn-light" type="button" onclick="createpassword('signin-password',this)" id="button-addon2"><i class="align-middle ri-eye-off-line"></i></button>
                                         </div>
                                         <div class="mt-2">
                                             <div class="form-check">
@@ -84,7 +85,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-xl-12 d-grid mt-2">
+                                    <div class="mt-2 col-xl-12 d-grid">
                                         <button type="submit" class="btn btn-lg btn-primary">Login</button>
                                     </div>
                                 </div>
@@ -112,7 +113,7 @@
             });
         }, 5000); // 5000 ms = 5 seconds
     </script>
-    
+
 
 </body>
 

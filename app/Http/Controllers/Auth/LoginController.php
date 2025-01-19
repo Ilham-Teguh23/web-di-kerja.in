@@ -5,34 +5,42 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class LoginController extends Controller
 {
-    /**
-     * Show the login form.
-     */
     public function showLoginForm()
     {
-        return view('auth.sign-in'); // View untuk form login
+        return view('auth.sign-in');
     }
 
-    /**
-     * Handle login request.
-     */
     public function login(Request $request)
     {
-        // Validasi input
-        $request->validate([
-            'username' => 'required',
-            'password' => 'required|min:6',
-        ]);
+        try {
 
-        // Coba autentikasi
-        if (Auth::attempt($request->only('username', 'password'))) {
-            // Redirect ke halaman setelah login
-            return redirect()->intended('/master/dashboard')->with('success', 'Login berhasil!');
+            $request->validate([
+                'username' => 'required',
+                'password' => 'required|min:6',
+            ]);
+
+            $credentials = [
+                'username' => $request->username,
+                'password' => $request->password,
+            ];
+
+            if (Auth::attempt($credentials)) {
+
+                return redirect()->intended('/master/dashboard')->with('success', 'Login berhasil!');
+
+            } else {
+                return redirect()->route("login")->with("error", "Gagal Login");
+            }
+
+        } catch (\Exception $e) {
+
+            DB::rollBack();
+
+            return back()->with("error", $e->getMessage());
         }
-
-        return back()->with('error','Email atau password salah.');
     }
 }

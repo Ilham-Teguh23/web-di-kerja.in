@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ContactMessageController;
+use App\Http\Controllers\Master\FAQController;
 use App\Http\Controllers\Master\LandingPageController;
 use App\Http\Controllers\Master\TestimonialController;
 use App\Http\Controllers\Master\UsersController;
@@ -34,5 +35,9 @@ Route::middleware(['web', 'auth'])->group(function () {
         Route::put("/testimonials/{id}/update-status", [TestimonialController::class, "updateStatus"])->name("testimonials.updateStatus");
         Route::get("/testimonials/datatable", [TestimonialController::class, "datatable"])->name("testimonials.datatable");
         Route::resource("testimonials", TestimonialController::class);
+
+        // FAQ
+        Route::get("/faq/datatable", [FAQController::class, "datatable"])->name("faq.datatable");
+        Route::resource("faq", FAQController::class);
     });
 });

@@ -68,6 +68,9 @@
                         <li class="slide">
                             <a href="{{ route('faq.index') }}" class="side-menu__item">FAQ</a>
                         </li>
+                        <li class="slide">
+                            <a href="{{ route('benefit.index') }}" class="side-menu__item">Benefit</a>
+                        </li>
                     </ul>
                 </li>
 

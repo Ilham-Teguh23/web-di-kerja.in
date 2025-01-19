@@ -224,10 +224,10 @@
                 <a href="#" class="header-link dropdown-toggle" id="mainHeaderProfile" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
                     <div class="d-flex align-items-center">
                         <div class="me-xxl-2 me-0">
-                            <img src="{{ asset('assets/images/faces/9.jpg') }}" alt="img" width="32" height="32" class="rounded-circle">
+                            <img src="{{ url('assets/images/faces/9.jpg') }}" alt="img" width="32" height="32" class="rounded-circle">
                         </div>
                         <div class="my-auto d-xxl-block d-none">
-                            <h6 class="mb-0 fw-semibold lh-1 fs-14">Json Taylor</h6>
+                            <h6 class="mb-0 fw-semibold lh-1 fs-14">{{ auth()->user()->name }}</h6>
                             <span class="op-7 fw-normal d-block fs-11 text-muted">Web Designer</span>
                         </div>
                     </div>

@@ -65,6 +65,9 @@
                         <li class="slide">
                             <a href="{{ route('testimonials.index') }}" class="side-menu__item">Testimonial</a>
                         </li>
+                        <li class="slide">
+                            <a href="{{ route('faq.index') }}" class="side-menu__item">FAQ</a>
+                        </li>
                     </ul>
                 </li>
 

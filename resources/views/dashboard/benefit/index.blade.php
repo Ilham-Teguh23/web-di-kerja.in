@@ -6,7 +6,7 @@
 
 @section('breadcumb')
     <div class="page-header">
-        <h1 class="my-auto page-title">Data Akun Benefit</h1>
+        <h1 class="my-auto page-title">Master Benefit</h1>
         <div>
             <ol class="mb-0 breadcrumb">
                 <li class="breadcrumb-item">

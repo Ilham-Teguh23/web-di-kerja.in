@@ -123,58 +123,28 @@
 
                 <div class="row g-5">
 
+                    @forelse ($benefit as $item)
                     <div class="col-lg-6" data-aos="fade-up" data-aos-delay="100">
                         <div class="service-item item-cyan position-relative">
                             <i class="bi bi-activity icon"></i>
                             <div>
-                                <h3>Fast Respon</h3>
+                                <h3>{{ $item["judul"] }}</h3>
                                 <p>
-                                    Kami mempunyai admin yang cukup Fast Respon dalam menjawab keluhan-keluhan / orderan
-                                    dari anda.
+                                    {{ $item["deskripsi"] }}
                                 </p>
                             </div>
                         </div>
-                    </div><!-- End Service Item -->
-
-                    <div class="col-lg-6" data-aos="fade-up" data-aos-delay="200">
-                        <div class="service-item item-orange position-relative">
-                            <i class="bi bi-broadcast icon"></i>
-                            <div>
-                                <h3>Terjangkau</h3>
-                                <p>
-                                    Kami juga mempunyai harga yang cukup terjangkau khususnya untuk kalangan Mahasiswa /
-                                    Pelajar.
-                                </p>
-                            </div>
+                    </div>
+                    @empty
+                    <div class="col-lg-12">
+                        <div class="alert alert-danger">
+                            <strong>Perhatian!</strong>.
+                            <span>
+                                Data Benefit Tidak Tersedia.
+                            </span>
                         </div>
-                    </div><!-- End Service Item -->
-
-                    <div class="col-lg-6" data-aos="fade-up" data-aos-delay="300">
-                        <div class="service-item item-teal position-relative">
-                            <i class="bi bi-easel icon"></i>
-                            <div>
-                                <h3>Terpercaya</h3>
-                                <p>
-                                    Tidak sedikit customer kami yang sudah order menjadi lulusan terbaik di Kampus nya
-                                    masing - masing.
-                                </p>
-                            </div>
-                        </div>
-                    </div><!-- End Service Item -->
-
-                    <div class="col-lg-6" data-aos="fade-up" data-aos-delay="400">
-                        <div class="service-item item-red position-relative">
-                            <i class="bi bi-bounding-box-circles icon"></i>
-                            <div>
-                                <h3>Berkualitas</h3>
-                                <p>
-                                    Dengan harga yang cukup murah, anda bisa mendapatkan kualitas website / aplikasi
-                                    dengan nuansa Premium. Karena kami tentu saja mengedepankan kualitas dan kepercayaan
-                                    Customer.
-                                </p>
-                            </div>
-                        </div>
-                    </div><!-- End Service Item -->
+                    </div>
+                    @endforelse
 
                 </div>
 
@@ -309,89 +279,23 @@
 
                         <div class="faq-container">
 
-                            <div class="faq-item faq-active">
-                                <h3>Kaaaa, apa bisa ngerjain laporan juga?</h3>
+                            @forelse ($faq as $item)
+                            <div class="faq-item {{ $loop->first ? 'faq-active' : '' }} ">
+                                <h3>{{ $item["pertanyaan"] }}</h3>
                                 <div class="faq-content">
                                     <p>
-                                        Tentu nya bisa dong, selain pembuatan aplikasi / web, kami juga bisa mengerjakan
-                                        laporan juga yaa gaes, mau Skripsi / Tugas Akhir / Magang, kami kerjakan dengan
-                                        cepat dan teliti.
+                                        {{ $item["jawaban"] }}
                                     </p>
                                 </div>
                                 <i class="faq-toggle bi bi-chevron-right"></i>
-                            </div><!-- End Faq item-->
-
-                            <div class="faq-item">
-                                <h3>Berapa tarif nya min, kalo mau order?</h3>
-                                <div class="faq-content">
-                                    <p>
-                                        Terkait harga tidak usah khawatir mahal, kami juga ramah harga terutama untuk
-                                        kalangan Mahasiswa / Anak Sekolahan. Tentu nya, harga bisa disesuaikan sesuai
-                                        kompleks dari fitur yang diinginkan.
-                                    </p>
-                                </div>
-                                <i class="faq-toggle bi bi-chevron-right"></i>
-                            </div><!-- End Faq item-->
-
-                            <div class="faq-item">
-                                <h3>Min hanya buat web ajakah atau gimana?</h3>
-                                <div class="faq-content">
-                                    <p>
-                                        Wahh tentu nya ngga dong, kami juga melayani pembuatan Aplikasi / Website, tentu
-                                        nya kami juga melayani terkait jasa pembuatan Alur Flow yaaa kawan", baik itu
-                                        UML, Flowchart, Use Case, Database, dll.
-                                    </p>
-                                </div>
-                                <i class="faq-toggle bi bi-chevron-right"></i>
-                            </div><!-- End Faq item-->
-
-                            <div class="faq-item">
-                                <h3>Kalau saya mau beresin error atau nambah fitur bisa min?</h3>
-                                <div class="faq-content">
-                                    <p>
-                                        Sangat bisa dong ka!, kami selain membuat dari 0, kami juga siap membantu
-                                        apabila ada error atau ada penambahan fitur.
-                                    </p>
-                                </div>
-                                <i class="faq-toggle bi bi-chevron-right"></i>
-                            </div><!-- End Faq item-->
-
-                            <div class="faq-item">
-                                <h3>Min, bahasa atau framework nya bisa request ngga ya?</h3>
-                                <div class="faq-content">
-                                    <p>
-                                        Tentu bisa dong yaa gaes, kami juga mempunyai beberapa anggota tim yang sudah
-                                        teruji, dengan kemampuan yang cukup dibilang mempunyai value. Alhasil jangan
-                                        perlu khawatir terkait bahasa / framework yang akan digunakan.
-                                    </p>
-                                </div>
-                                <i class="faq-toggle bi bi-chevron-right"></i>
-                            </div><!-- End Faq item-->
-
-                            <div class="faq-item">
-                                <h3>Kalau udah jadi program nya, apakah ada diajarin buat instalasi hingga running nya
-                                    min?</h3>
-                                <div class="faq-content">
-                                    <p>
-                                        Jelas dong gaes, kami akan pandu dari awal hingga running project. Bahkan kami
-                                        juga akan menjelaskan terkait fitur" atau alur nya seperti apa, jadi jangan ragu
-                                        untuk order ke kami ya.
-                                    </p>
-                                </div>
-                                <i class="faq-toggle bi bi-chevron-right"></i>
-                            </div><!-- End Faq item-->
-
-                            <div class="faq-item">
-                                <h3>Kalau mau konsultasi terkait alur atau program bisa ngga ya ka?</h3>
-                                <div class="faq-content">
-                                    <p>
-                                        Kami juga melayani terkait konsultasi alur atau program juga yaa gaes, untuk ini
-                                        kami khususkan harga nya, <strong>"GRATIS"</strong>. Kapan lagi dan dimana lagi
-                                        yang bisa dapet keuntungan ini, jadi jangan ragu ya untuk konsultasi ke kami!.
-                                    </p>
-                                </div>
-                                <i class="faq-toggle bi bi-chevron-right"></i>
-                            </div><!-- End Faq item-->
+                            </div>
+                            @empty
+                            <div class="alert alert-danger">
+                                <strong>
+                                    Perhatian!
+                                </strong>. Data FAQ Belum Tersedia
+                            </div>
+                            @endforelse
 
                         </div>
 
@@ -619,29 +523,29 @@
                         <form action="{{ route('contact-message-store') }}" method="POST" class="php-email-form" data-aos="fade-up" data-aos-delay="400">
                             @csrf
                             <div class="row gy-4">
-                        
+
                                 <div class="col-md-6">
                                     <input type="text" name="name" class="form-control" placeholder="Your Name" required>
                                 </div>
-                        
+
                                 <div class="col-md-6">
                                     <input type="email" class="form-control" name="email" placeholder="Your Email" required>
                                 </div>
-                        
+
                                 <div class="col-md-12">
                                     <input type="text" class="form-control" name="subject" placeholder="Subject" required>
                                 </div>
-                        
+
                                 <div class="col-md-12">
                                     <textarea class="form-control" name="message" rows="6" placeholder="Message" required></textarea>
                                 </div>
-                        
+
                                 <div class="text-center col-md-12">
                                     <button type="submit">Send Message</button>
                                 </div>
-                        
+
                             </div>
-                        </form>                        
+                        </form>
                     </div><!-- End Contact Form -->
 
                 </div>
@@ -708,17 +612,17 @@
         }
 
         let type = false;
-            
+
             if('{{session()->has("success")}}' == true) type = "success";
             if('{{session()->has("error")}}' == true) type = "error";
-            
+
             if(type === "success"){
                 Swal.fire({
                     icon: 'success',
                     title: 'success!',
                     text: '{{ session('success') }}'
                 });
-                
+
             }else if(type === "error") {
                 Swal.fire({
                     icon: 'error',
@@ -726,7 +630,7 @@
                     text: '{{ session('error') }}'
                 });
             }
-            
+
             function toast(message) {
                 Swal.fire({
                     toast: true,

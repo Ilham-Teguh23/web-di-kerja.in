@@ -5,10 +5,20 @@ namespace App\Http\Controllers\Master;
 use Illuminate\Http\Request;
 use App\Models\ContactMessages;
 use App\Http\Controllers\Controller;
+use App\Models\Benefit;
+use App\Models\FAQ;
 use Artesaos\SEOTools\Facades\SEOTools;
 
 class LandingPageController extends Controller
 {
+    protected $faq, $benefit;
+
+    public function __construct()
+    {
+        $this->faq = new FAQ();
+        $this->benefit = new Benefit();
+    }
+
     public function index()
     {
         // Set SEO Meta
@@ -37,7 +47,12 @@ class LandingPageController extends Controller
             'seo.meta' => SEOTools::generate()
         ]);
 
-        return view("pages.landing-page.index");
+        $data = [
+            "faq" => $this->faq->where("status", "1")->orderBy("created_at", "DESC")->get(),
+            "benefit" => $this->benefit->where("status", "1")->orderBy("created_at", "ASC")->get()
+        ];
+
+        return view("pages.landing-page.index", $data);
     }
 
     public function getLocation(Request $request)

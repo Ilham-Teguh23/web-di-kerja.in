@@ -43,8 +43,8 @@
                                 <th>No.</th>
                                 <th>Judul</th>
                                 <th>Icon</th>
-                                <th>Deskripsi</th>
                                 <th>Status</th>
+                                <th>Deskripsi</th>
                                 <th>Aksi</th>
                             </tr>
                         </thead>
@@ -170,16 +170,6 @@
                     {
                         targets: 4,
                         render: function(data, type, full, meta) {
-                            const status = full.status == "0" ? "Tidak Aktif" : "Aktif";
-                            const btnClass = full.status == "0" ? "btn-danger" : "btn-success";
-                            const nextStatus = full.status == "0" ? 1 : 0;
-
-                            return `<a href="#" class="btn ${btnClass} btn-sm" onclick="updateStatus(${full.id}, ${nextStatus})">${status}</a>`;
-                        }
-                    },
-                    {
-                        targets: 5,
-                        render: function(data, type, full, meta) {
                             return `
                         <a href="#" class="btn btn-warning btn-sm" onclick="editData(${full.id})">
                             <i class="fe fe-edit"></i> Edit
@@ -201,10 +191,10 @@
                         data: 'icon'
                     },
                     {
-                        data: "deskripsi"
+                        data: 'status'
                     },
                     {
-                        data: "status"
+                        data: 'deskripsi'
                     },
                     {
                         data: 'id'

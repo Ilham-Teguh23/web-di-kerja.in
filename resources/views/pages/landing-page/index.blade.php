@@ -263,6 +263,141 @@
 
         </section><!-- /Pricing Section -->
 
+        <section id="pricing" class="pricing section">
+
+            <!-- Section Title -->
+            <div class="container section-title" data-aos="fade-up">
+                <h2>Produk Yang Pernah Dikerjakan</h2>
+                <p>
+                    Beberapa Dokumentasi Produk Website / Aplikasi Yang Pernah Kami Buat dan Kembangkan
+                </p>
+            </div><!-- End Section Title -->
+
+            <div class="container">
+
+                <div class="row gy-4">
+
+                    <div class="col-lg-4" data-aos="zoom-in" data-aos-delay="100">
+                        <div class="pricing-item">
+                            <h3>
+                                Website Program Iklim Kota Cirebon
+                                <strong>
+                                    (Proklim)
+                                </strong>
+                            </h3>
+                            <p class="description">
+                                Sebuah website yang diperuntukkan untuk
+                                <strong>
+                                    Dinas Lingkungan Hidup (DLH) Kota Cirebon
+                                </strong> Website ini ...
+                            </p>
+                            <img src="{{ url('/katalog/Website-Proklim.jpg') }}" alt=""
+                                style="width: 100%; height: 300px">
+                            <a data-bs-toggle="modal" data-bs-target="#exampleModalProklim" class="cta-btn">
+                                Detail Produk
+                            </a>
+                        </div>
+                    </div><!-- End Pricing Item -->
+
+                    <div class="col-lg-4" data-aos="zoom-in" data-aos-delay="100">
+                        <div class="pricing-item">
+                            <h3>
+                                Website Desa Merdeka
+                            </h3>
+                            <p class="description">
+                                Sebuah website yang memiliki kerjasama dengan Desa Merdeka . Website ini berfokus pada perkembangan di lingkup  ...
+                            </p>
+                            <img src="{{ url('/katalog/Website_Desa_Merdeka.jpg') }}" alt=""
+                                style="width: 100%; height: 300px">
+                            <a data-bs-toggle="modal" data-bs-target="#exampleModalDesaMerdeka" class="cta-btn">
+                                Detail Produk
+                            </a>
+                        </div>
+                    </div><!-- End Pricing Item -->
+
+                    <div class="col-lg-4" data-aos="zoom-in" data-aos-delay="100">
+                        <div class="pricing-item">
+                            <h3>
+                                Website Inventaris Barang
+                            </h3>
+                            <p class="description">
+                                Website sederhana yang digunakan untuk disebuah Sekolah / Kampus untuk ...
+                            </p>
+                            <img src="{{ url('/katalog/Website_Inventaris_Barang.jpg') }}" alt=""
+                                style="width: 100%; height: 300px">
+                            <a class="cta-btn" data-bs-toggle="modal" data-bs-target="#exampleModalInventarisBarang">
+                                Detail Produk
+                            </a>
+                        </div>
+                    </div><!-- End Pricing Item -->
+
+                </div>
+
+                <div class="mt-4 row gy-4">
+
+                    <div class="col-lg-4" data-aos="zoom-in" data-aos-delay="100">
+                        <div class="pricing-item">
+                            <h3>
+                                Website RTQ Ulil Albab Indramayu
+                            </h3>
+                            <p class="description">
+                                Sebuah website yang diperuntukkan untuk
+                                <strong>
+                                    Rumah Tahfidz Quran (RTQ) Ulil Albab Indramayu
+                                </strong>. Website ini ...
+                            </p>
+                            <img src="{{ url('/katalog/Website_RTQ.jpg') }}" alt="" style="width: 100%; height: 300px">
+                            <a class="cta-btn" data-bs-toggle="modal" data-bs-target="#exampleModalRTQ">
+                                Detail Produk
+                            </a>
+                        </div>
+                    </div><!-- End Pricing Item -->
+
+                    <div class="col-lg-4" data-aos="zoom-in" data-aos-delay="100">
+                        <div class="pricing-item">
+                            <h3>
+                                Aplikasi Smart Health Mobile
+                            </h3>
+                            <p class="description">
+                                Smart Health Mobile merupakan
+                                <strong>
+                                    Aplikasi Pelayanan Kesehatan dan Konsultasi Masyarakat berbasis Mobile
+                                </strong> yang dimana bisa bekerja sama dengan ...
+                            </p>
+                            <img src="{{ url('/katalog/Aplikasi_Berobat_Plus.png') }}" alt=""
+                                style="width: 100%; height: 600px">
+                            <a class="cta-btn" data-bs-toggle="modal" data-bs-target="#exampleModalSmartHealth">
+                                Detail Produk
+                            </a>
+                        </div>
+                    </div><!-- End Pricing Item -->
+
+                    <div class="col-lg-4" data-aos="zoom-in" data-aos-delay="100">
+                        <div class="pricing-item">
+                            <h3>
+                                Website Study Tracer
+                            </h3>
+                            <p class="description">
+                                Website yang berfokus pada bidang Akademik,
+                                <strong>
+                                    Khususnya Informasi Seputar Tentang Alumni, seperti : ...
+                                </strong>.
+                            </p>
+                            <img src="{{ url('/katalog/Website_Study_Tracer.jpg') }}" alt=""
+                                style="width: 100%; height: 300px">
+                            <a data-bs-toggle="modal" data-bs-target="#exampleModalStudyTracer"
+                                class="cta-btn">
+                                Detail Produk
+                            </a>
+                        </div>
+                    </div><!-- End Pricing Item -->
+
+                </div>
+
+            </div>
+
+        </section><!-- /Pricing Section -->
+
         <!-- Faq Section -->
         <section id="faq" class="faq section">
 
@@ -322,7 +457,7 @@
 
                 <div class="swiper init-swiper">
                     <script type="application/json" class="swiper-config">
-            {
+                        {
               "loop": true,
               "speed": 600,
               "autoplay": {
@@ -345,7 +480,7 @@
                 }
               }
             }
-          </script>
+                    </script>
                     <div class="swiper-wrapper">
 
                         <div class="swiper-slide">
@@ -520,24 +655,29 @@
                 <div class="mt-1 row gy-4">
 
                     <div class="col-lg-12">
-                        <form action="{{ route('contact-message-store') }}" method="POST" class="php-email-form" data-aos="fade-up" data-aos-delay="400">
+                        <form action="{{ route('contact-message-store') }}" method="POST" class="php-email-form"
+                            data-aos="fade-up" data-aos-delay="400">
                             @csrf
                             <div class="row gy-4">
 
                                 <div class="col-md-6">
-                                    <input type="text" name="name" class="form-control" placeholder="Your Name" required>
+                                    <input type="text" name="name" class="form-control" placeholder="Your Name"
+                                        required>
                                 </div>
 
                                 <div class="col-md-6">
-                                    <input type="email" class="form-control" name="email" placeholder="Your Email" required>
+                                    <input type="email" class="form-control" name="email" placeholder="Your Email"
+                                        required>
                                 </div>
 
                                 <div class="col-md-12">
-                                    <input type="text" class="form-control" name="subject" placeholder="Subject" required>
+                                    <input type="text" class="form-control" name="subject" placeholder="Subject"
+                                        required>
                                 </div>
 
                                 <div class="col-md-12">
-                                    <textarea class="form-control" name="message" rows="6" placeholder="Message" required></textarea>
+                                    <textarea class="form-control" name="message" rows="6" placeholder="Message"
+                                        required></textarea>
                                 </div>
 
                                 <div class="text-center col-md-12">
@@ -556,6 +696,180 @@
 
     </main>
 
+    <!-- Website Proklim -->
+    <div class="modal fade" id="exampleModalProklim" tabindex="-1" aria-labelledby="exampleModalLabelProklim" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabelProklim">
+                        Website Program Iklim Kota Cirebon
+                        <strong>
+                            ( Proklim )
+                        </strong>
+                    </h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Sebuah website yang diperuntukkan untuk
+                    <strong>
+                        Dinas Lingkungan Hidup (DLH) Kota Cirebon
+                    </strong>. Website ini mempunyai fitur yang cukup sederhana, seperti :
+                    <ol>
+                        <li>Monitoring Data Curah Hujan Perbulan / Pertahun</li>
+                        <li>Monitoring Data Tanah Perdesa</li>
+                        <li>Monitoring Data Iklim pada Kota Cirebon</li>
+                        <li>Dan Lain - Lain</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Website Desa Merdeka -->
+    <div class="modal fade" id="exampleModalDesaMerdeka" tabindex="-1" aria-labelledby="exampleModalLabelDesaMerdeka" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabelDesaMerdeka">
+                        Website Desa Merdeka
+                    </h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Sebuah website yang memiliki kerjasama dengan
+                    <strong>
+                        Desa Merdeka
+                    </strong>. Website ini berfokus pada perkembangan di lingkup : <strong>UMKM, Industri, Komunitas, dll</strong>.
+                    <br> Selain itu Website ini mempunyai beberapa fitur, seperti :
+                    <ol>
+                        <li>Informasi Artikel Seputar UMKM, Berita Terkini, Industri</li>
+                        <li>Mengelola Data Desa, Komunitas, Industri, UMKM</li>
+                        <li>Informasi Perkembangan Desa</li>
+                        <li>Informasi Mengenai Perdagangan dan Pemasaran</li>
+                        <li>Dan Lain - Lain</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Website Inventaris Barang -->
+    <div class="modal fade" id="exampleModalInventarisBarang" tabindex="-1" aria-labelledby="exampleModalLabelInventarisBarang" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabelInventarisBarang">
+                        Website Inventaris Barang
+                    </h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Website sederhana yang digunakan untuk disebuah Sekolah / Kampus untuk mengelola
+                    <strong>
+                        Data Barang / Inventaris yang didapat dari Pihak Luar
+                    </strong>.
+                    <br> Website ini sendiri mempunyai beberapa fitur, seperti :
+                    <ol>
+                        <li>Mengelola Data Barang sesuai Kategori (Hilang, Rusak, dan Baik)</li>
+                        <li>Mengelola Data Inventaris Barang untuk Perkelas </li>
+                        <li>Mengelola Data Peminjaman / Pengembalian Barang</li>
+                        <li>Mengelola Berita Acara Kehilangan / Kerusakan Barang</li>
+                        <li>Dan Lain - Lain</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- RTQ -->
+    <div class="modal fade" id="exampleModalRTQ" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">
+                        Website RTQ Ulil Albab Indramayu
+                    </h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Sebuah website yang diperuntukkan untuk
+                    <strong>
+                        Rumah Tahfidz Quran (RTQ) Ulil Albab Indramayu
+                    </strong>. Website ini mempunyai fitur seperti :
+                    <ol>
+                        <li>Mengelola Data Santri</li>
+                        <li>Mengelola KAS Pembayaran</li>
+                        <li>Absensi Asatidz (Guru)</li>
+                        <li>Absensi Santri (Siswa)</li>
+                        <li>Pencatatan Hafalan Doa / Surat Santri</li>
+                        <li>Cetak Rapot Nilai Santri</li>
+                        <li>Monitoring Nilai / Absensi oleh Wali</li>
+                        <li>Dan Lain - Lain</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Aplikasi Smarth Health -->
+    <div class="modal fade" id="exampleModalSmartHealth" tabindex="-1" aria-labelledby="exampleModalLabelSmartHealth" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabelSmartHealth">
+                        Aplikasi Smart Health Mobile
+                    </h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Smart Health Mobile merupakan
+                    <strong>
+                        Aplikasi Pelayanan Kesehatan dan Konsultasi Masyarakat berbasis Mobile
+                    </strong> yang dimana bisa bekerja sama dengan Pihak Medis, seperti : Dokter, Apoteker, dan Perawat. Aplikasi ini juga tidak menutup kemungkinan untuk terhubung dengan Profesi Lainnya ataupun pihak Rumah Sakit.
+                    <br>
+                    Aplikasi ini sendiri mempunyai fitur seperti :
+                    <ol>
+                        <li>Konsultasi Dokter / Perawat</li>
+                        <li>Jadwal Temu Janji Dokter / Perawat</li>
+                        <li>Rawat Jalan</li>
+                        <li>Artikel Seputar Kesehatan</li>
+                        <li>Transaksi Pembelian Obat</li>
+                        <li>Dan Lain - Lain</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Website Study Tracer -->
+    <div class="modal fade" id="exampleModalStudyTracer" tabindex="-1" aria-labelledby="exampleModalLabelStudyTracer" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabelStudyTracer">
+                        Website Study Tracer
+                    </h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Website yang berfokus pada bidang Akademik,
+                    <strong>
+                        Khususnya Informasi Seputar Tentang Alumni, seperti : Info mengenai Lowongan Pekerjaan dan Info mengenai Dunia Kerja  / Perusahaan
+                    </strong>
+                    <br>
+                    Website ini memiliki beberapa fitur yang cukup unik , diantaranya :
+                    <ol>
+                        <li>Mengelola Data Alumni</li>
+                        <li>Mengelola Data Kuisioner Seputar Dunia Kerja / Perusahaan</li>
+                        <li>Rekomendasi Lowongan Kerja Alumni </li>
+                        <li>Riwayat Pekerjaan / Perguruan Tinggi Selanjutnya</li>
+                        <li>Dan Lain - Lain</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+
     @include('pages.landing-page.layouts.components.footer.footer')
 
     <a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center"><i
@@ -566,7 +880,7 @@
 
     @include('pages.landing-page.layouts.js.style')
 
-    <script>
+    {{-- <script>
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(function(position) {
                 const lat = position.coords.latitude;
@@ -642,7 +956,7 @@
                     timer: 2000
                 });
             }
-    </script>
+    </script> --}}
 
 </body>
 

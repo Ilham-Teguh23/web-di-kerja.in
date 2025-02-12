@@ -71,6 +71,9 @@
                         <li class="slide">
                             <a href="{{ route('benefit.index') }}" class="side-menu__item">Benefit</a>
                         </li>
+                        <li class="slide">
+                            <a href="{{ route('katalog.index') }}" class="side-menu__item">Katalog</a>
+                        </li>
                     </ul>
                 </li>
 

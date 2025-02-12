@@ -7,12 +7,17 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ContactMessageController;
 use App\Http\Controllers\Master\BenefitController;
 use App\Http\Controllers\Master\FAQController;
+use App\Http\Controllers\Master\KatalogController;
 use App\Http\Controllers\Master\LandingPageController;
 use App\Http\Controllers\Master\TestimonialController;
 use App\Http\Controllers\Master\UsersController;
+use App\Http\Controllers\ProductController;
 
 Route::get("/", [LandingPageController::class,  "index"]);
 Route::post('/sending-message', [LandingPageController::class, 'store'])->name('contact-message-store');
+Route::prefix("produk")->group(function() {
+    Route::get("{slug}", [ProductController::class, "detail"]);
+});
 
 Route::group(["middleware" => ["guest"]], function() {
     Route::prefix("auth")->group(function() {
@@ -36,6 +41,10 @@ Route::middleware(['web', 'auth'])->group(function () {
         // Users
         Route::get("/users/datatable", [UsersController::class, "datatable"])->name("users.datatable");
         Route::resource("users", UsersController::class);
+
+        // Katalog
+        Route::get("/katalog/datatable", [KatalogController::class, "datatable"])->name("katalog.datatable");
+        Route::resource("katalog", KatalogController::class);
 
         // Testimonials
         Route::put("/testimonials/{id}/update-status", [TestimonialController::class, "updateStatus"])->name("testimonials.updateStatus");

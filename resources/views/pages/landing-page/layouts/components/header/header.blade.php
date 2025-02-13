@@ -14,6 +14,7 @@
                 <li><a href="{{ url('/') }}#about">Tentang Kami</a></li>
                 <li><a href="{{ url('/') }}#services">Keunggulan</a></li>
                 <li><a href="{{ url('/') }}#pricing">Harga</a></li>
+                <li><a href="{{ url('/') }}#produk">Produk</a></li>
                 <li><a href="{{ url('/') }}#contact">Kontak</a></li>
             </ul>
             <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>

@@ -263,7 +263,7 @@
 
         </section><!-- /Pricing Section -->
 
-        <section id="pricing" class="pricing section">
+        <section id="produk" class="pricing section">
 
             <!-- Section Title -->
             <div class="container section-title" data-aos="fade-up">

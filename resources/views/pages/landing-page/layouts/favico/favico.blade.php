@@ -1,2 +1,2 @@
-<link href="{{ url('/landing-page') }}/assets/img/favicon.png" rel="icon">
-<link href="{{ url('/landing-page') }}/assets/img/apple-touch-icon.png" rel="apple-touch-icon">
+<link href="{{ url('/') }}/assets-images/logo_aplikasi.png" rel="icon">
+<link href="{{ url('/') }}/assets-images/logo_aplikasi.png" rel="apple-touch-icon">

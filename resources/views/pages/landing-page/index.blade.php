@@ -228,8 +228,9 @@
                             <h3>
                                 Skripsi / Tugas Akhir / Magang
                             </h3>
-                            <p class="description">Ullam mollitia quasi nobis soluta in voluptatum et sint palora dex
-                                strater</p>
+                            <p class="description">
+                                Menerima Jasa Pembuatan Website / Aplikasi baik dari awal ataupun melanjutkan
+                            </p>
                             <h4>
                                 <sup>Rp.</sup>399.000
                                 <span> / Mulai Dari</span>
@@ -242,6 +243,102 @@
                                 <li><i class="bi bi-check"></i> <span>Free Konsultasi Alur Proses</span></li>
                                 <li><i class="bi bi-check"></i> <span>Free Template</span></li>
                                 <li><i class="bi bi-check"></i> <span>Free Pemasangan Program</span></li>
+                                <li><i class="bi bi-check"></i> <span>Free Penambahan Fitur (Syarat dan Ketentuan
+                                        Berlaku)</span></li>
+                                <li><i class="bi bi-check"></i> <span>Free Video Demo Program</span></li>
+                                <li>
+                                    <i class="bi bi-check"></i>
+                                    <span>Gratis Revisi Max: 5x (Tergantung Kompleksitas) </span>
+                                </li>
+                                <li>
+                                    <i class="bi bi-check"></i>
+                                    <span>Fast Respon</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div><!-- End Pricing Item -->
+
+                </div>
+
+                <div class="mt-4 row gy-4">
+
+                    <div class="col-lg-4" data-aos="zoom-in" data-aos-delay="100">
+                        <div class="pricing-item">
+                            <h3>Paket Mentoring</h3>
+                            <p class="description">
+                                Dilakukan secara online (melalui Video), untuk tema bisa disesuaikan kebutuhan
+                            </p>
+                            <h4>
+                                <sup>Rp.</sup>299.000
+                                <span> / Mulai Dari</span>
+                            </h4>
+                            <a target="_blank"
+                                href="https://api.whatsapp.com/send?phone=081214707143&text=Hallo Admin, Saya ingin bertanya mengenai Paket Mentoring, itu bagaimana ya sistem nya?"
+                                class="cta-btn">Hubungi Admin</a>
+                            <ul>
+                                <li><i class="bi bi-check"></i> <span>Konsultasi Program</span></li>
+                                <li><i class="bi bi-check"></i> <span>Konsultasi Alur</span></li>
+                                <li><i class="bi bi-check"></i> <span>Konsultasi Flow Database</span></li>
+                                <li><i class="bi bi-check"></i> <span>Video Dilakukan Bertahap</span></li>
+                                <li><i class="bi bi-check"></i> <span>Bisa dilakukan secara bersamaan / private</span></li>
+                                <li>
+                                    <i class="bi bi-check"></i>
+                                    <span>Fast Respon</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div><!-- End Pricing Item -->
+
+                    <div class="col-lg-4" data-aos="zoom-in" data-aos-delay="200">
+                        <div class="pricing-item featured">
+                            <p class="popular">Populer</p>
+                            <h3>Penulisan Laporan</h3>
+                            <p class="description">
+                                Menerima jasa penulisan laporan, seperti :
+                                <strong>
+                                    Tugas Akhir, Skripsi, Tugas Kuliah ataupun Proposal
+                                </strong>
+                            </p>
+                            <h4>
+                                <sup>Rp.</sup>99.000<span> / Mulai dari</span>
+                            </h4>
+                            <a target="_blank"
+                                href="https://api.whatsapp.com/send?phone=081214707143&text=Hallo Admin, Saya ingin bertanya mengenai penulisan laporan, kira-kira kalau dari awal bisa ngga ya?"
+                                class="cta-btn">Hubungi Admin</a>
+                            <ul>
+                                <li><i class="bi bi-check"></i> <span>Free Konsultasi Alur Proses</span></li>
+                                <li><i class="bi bi-check"></i> <span>Free Konsultasi Jurnal / Artikel</span></li>
+                                <li><i class="bi bi-check"></i> <span>Penulisan Sesuai Panduan Yang Dibutuhkan</span></li>
+                                <li><i class="bi bi-check"></i> <span>Minim Plagiarisme</span></li>
+                                <li>
+                                    <i class="bi bi-check"></i>
+                                    <span>Fast Respon</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div><!-- End Pricing Item -->
+
+                    <div class="col-lg-4" data-aos="zoom-in" data-aos-delay="300">
+                        <div class="pricing-item">
+                            <h3>
+                                Pengembangan Website
+                            </h3>
+                            <p class="description">
+                                Kami menerima juga untuk melakukan
+                                <strong>
+                                    Pengembangan Website
+                                </strong> yang sudah berjalan.
+                            </p>
+                            <h4>
+                                <sup>Rp.</sup>149.000
+                                <span> / Mulai Dari</span>
+                            </h4>
+                            <a target="_blank"
+                                href="https://api.whatsapp.com/send?phone=081214707143&text=Hallo Admin, Saya ingin bertanya tentang pengembangan website, kira-kira bisa ngga ya min?"
+                                class="cta-btn">Hubungi Admin</a>
+                            <ul>
+                                <li><i class="bi bi-check"></i> <span>Free Konsultasi Flow Database</span></li>
+                                <li><i class="bi bi-check"></i> <span>Free Konsultasi Alur Proses</span></li>
                                 <li><i class="bi bi-check"></i> <span>Free Penambahan Fitur (Syarat dan Ketentuan
                                         Berlaku)</span></li>
                                 <li><i class="bi bi-check"></i> <span>Free Video Demo Program</span></li>

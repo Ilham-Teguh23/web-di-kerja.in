@@ -280,7 +280,8 @@
                                 <li><i class="bi bi-check"></i> <span>Konsultasi Alur</span></li>
                                 <li><i class="bi bi-check"></i> <span>Konsultasi Flow Database</span></li>
                                 <li><i class="bi bi-check"></i> <span>Video Dilakukan Bertahap</span></li>
-                                <li><i class="bi bi-check"></i> <span>Bisa dilakukan secara bersamaan / private</span></li>
+                                <li><i class="bi bi-check"></i> <span>Bisa dilakukan secara bersamaan / private</span>
+                                </li>
                                 <li>
                                     <i class="bi bi-check"></i>
                                     <span>Fast Respon</span>
@@ -308,7 +309,8 @@
                             <ul>
                                 <li><i class="bi bi-check"></i> <span>Free Konsultasi Alur Proses</span></li>
                                 <li><i class="bi bi-check"></i> <span>Free Konsultasi Jurnal / Artikel</span></li>
-                                <li><i class="bi bi-check"></i> <span>Penulisan Sesuai Panduan Yang Dibutuhkan</span></li>
+                                <li><i class="bi bi-check"></i> <span>Penulisan Sesuai Panduan Yang Dibutuhkan</span>
+                                </li>
                                 <li><i class="bi bi-check"></i> <span>Minim Plagiarisme</span></li>
                                 <li>
                                     <i class="bi bi-check"></i>
@@ -402,7 +404,8 @@
                                 Website Desa Merdeka
                             </h3>
                             <p class="description">
-                                Sebuah website yang memiliki kerjasama dengan Desa Merdeka . Website ini berfokus pada perkembangan di lingkup  ...
+                                Sebuah website yang memiliki kerjasama dengan Desa Merdeka . Website ini berfokus pada
+                                perkembangan di lingkup ...
                             </p>
                             <img src="{{ url('/katalog/Website_Desa_Merdeka.jpg') }}" alt=""
                                 style="width: 100%; height: 300px">
@@ -482,8 +485,7 @@
                             </p>
                             <img src="{{ url('/katalog/Website_Study_Tracer.jpg') }}" alt=""
                                 style="width: 100%; height: 300px">
-                            <a data-bs-toggle="modal" data-bs-target="#exampleModalStudyTracer"
-                                class="cta-btn">
+                            <a data-bs-toggle="modal" data-bs-target="#exampleModalStudyTracer" class="cta-btn">
                                 Detail Produk
                             </a>
                         </div>
@@ -752,8 +754,8 @@
                 <div class="mt-1 row gy-4">
 
                     <div class="col-lg-12">
-                        <form action="{{ route('contact-message-store') }}" method="POST" class="php-email-form"
-                            data-aos="fade-up" data-aos-delay="400">
+                        <form id="contact-form" action="{{ route('contact-message-store') }}" method="POST"
+                            class="php-email-form" data-aos="fade-up" data-aos-delay="400">
                             @csrf
                             <div class="row gy-4">
 
@@ -794,7 +796,8 @@
     </main>
 
     <!-- Website Proklim -->
-    <div class="modal fade" id="exampleModalProklim" tabindex="-1" aria-labelledby="exampleModalLabelProklim" aria-hidden="true">
+    <div class="modal fade" id="exampleModalProklim" tabindex="-1" aria-labelledby="exampleModalLabelProklim"
+        aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -823,7 +826,8 @@
     </div>
 
     <!-- Website Desa Merdeka -->
-    <div class="modal fade" id="exampleModalDesaMerdeka" tabindex="-1" aria-labelledby="exampleModalLabelDesaMerdeka" aria-hidden="true">
+    <div class="modal fade" id="exampleModalDesaMerdeka" tabindex="-1" aria-labelledby="exampleModalLabelDesaMerdeka"
+        aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -836,7 +840,8 @@
                     Sebuah website yang memiliki kerjasama dengan
                     <strong>
                         Desa Merdeka
-                    </strong>. Website ini berfokus pada perkembangan di lingkup : <strong>UMKM, Industri, Komunitas, dll</strong>.
+                    </strong>. Website ini berfokus pada perkembangan di lingkup : <strong>UMKM, Industri, Komunitas,
+                        dll</strong>.
                     <br> Selain itu Website ini mempunyai beberapa fitur, seperti :
                     <ol>
                         <li>Informasi Artikel Seputar UMKM, Berita Terkini, Industri</li>
@@ -851,7 +856,8 @@
     </div>
 
     <!-- Website Inventaris Barang -->
-    <div class="modal fade" id="exampleModalInventarisBarang" tabindex="-1" aria-labelledby="exampleModalLabelInventarisBarang" aria-hidden="true">
+    <div class="modal fade" id="exampleModalInventarisBarang" tabindex="-1"
+        aria-labelledby="exampleModalLabelInventarisBarang" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -909,7 +915,8 @@
     </div>
 
     <!-- Aplikasi Smarth Health -->
-    <div class="modal fade" id="exampleModalSmartHealth" tabindex="-1" aria-labelledby="exampleModalLabelSmartHealth" aria-hidden="true">
+    <div class="modal fade" id="exampleModalSmartHealth" tabindex="-1" aria-labelledby="exampleModalLabelSmartHealth"
+        aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -922,7 +929,9 @@
                     Smart Health Mobile merupakan
                     <strong>
                         Aplikasi Pelayanan Kesehatan dan Konsultasi Masyarakat berbasis Mobile
-                    </strong> yang dimana bisa bekerja sama dengan Pihak Medis, seperti : Dokter, Apoteker, dan Perawat. Aplikasi ini juga tidak menutup kemungkinan untuk terhubung dengan Profesi Lainnya ataupun pihak Rumah Sakit.
+                    </strong> yang dimana bisa bekerja sama dengan Pihak Medis, seperti : Dokter, Apoteker, dan Perawat.
+                    Aplikasi ini juga tidak menutup kemungkinan untuk terhubung dengan Profesi Lainnya ataupun pihak
+                    Rumah Sakit.
                     <br>
                     Aplikasi ini sendiri mempunyai fitur seperti :
                     <ol>
@@ -939,7 +948,8 @@
     </div>
 
     <!-- Website Study Tracer -->
-    <div class="modal fade" id="exampleModalStudyTracer" tabindex="-1" aria-labelledby="exampleModalLabelStudyTracer" aria-hidden="true">
+    <div class="modal fade" id="exampleModalStudyTracer" tabindex="-1" aria-labelledby="exampleModalLabelStudyTracer"
+        aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -951,7 +961,8 @@
                 <div class="modal-body">
                     Website yang berfokus pada bidang Akademik,
                     <strong>
-                        Khususnya Informasi Seputar Tentang Alumni, seperti : Info mengenai Lowongan Pekerjaan dan Info mengenai Dunia Kerja  / Perusahaan
+                        Khususnya Informasi Seputar Tentang Alumni, seperti : Info mengenai Lowongan Pekerjaan dan Info
+                        mengenai Dunia Kerja / Perusahaan
                     </strong>
                     <br>
                     Website ini memiliki beberapa fitur yang cukup unik , diantaranya :
@@ -1054,6 +1065,36 @@
                 });
             }
     </script> --}}
+
+    <script>
+        document.getElementById("contact-form").addEventListener("submit", function(event) {
+            event.preventDefault(); // Mencegah submit form langsung
+
+            // Ambil data dari input form
+            let name = document.querySelector("input[name='name']").value;
+            let email = document.querySelector("input[name='email']").value;
+            let subject = document.querySelector("input[name='subject']").value;
+            let message = document.querySelector("textarea[name='message']").value;
+
+            // Nomor WhatsApp tujuan (ganti dengan nomor yang sesuai)
+            let phone = "6281214707143"; // Format internasional, tanpa tanda +
+
+            // Format pesan WhatsApp
+            let text = `Halo Admin di-kerja.in, ada pesan baru dari website:%0A
+Nama: ${name}%0A
+Email: ${email}%0A
+Subjek: ${subject}%0A
+Pesan: ${message}`;
+
+            // Redirect ke WhatsApp
+            window.open(`https://wa.me/${phone}?text=${text}`, "_blank");
+
+            // Submit form ke Laravel setelah 3 detik (agar user sempat kirim WhatsApp)
+            setTimeout(() => {
+                event.target.submit();
+            }, 3000);
+        });
+    </script>
 
 </body>
 

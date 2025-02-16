@@ -1,6 +1,6 @@
-<footer id="footer" class="footer position-relative light-background">
+<footer id="footer" class="footer position-relative light-background" style="padding-bottom: 0px">
 
-    <div class="container footer-top">
+    {{-- <div class="container footer-top">
         <div class="row gy-4">
             <div class="col-lg-12 col-md-12 footer-about" style="text-align: center">
                 <a href="index.html" class="logo">
@@ -34,9 +34,9 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> --}}
 
-    <div class="container mt-4 text-center copyright">
+    <div class="container text-center copyright">
         <p>
             ©<span>Copyright 2024</span>
             <strong class="px-1 sitename">

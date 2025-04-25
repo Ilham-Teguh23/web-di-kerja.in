@@ -716,14 +716,14 @@
                 Swal.fire({
                     icon: 'success',
                     title: 'success!',
-                    text: '{{ session('success') }}'
+                    text: '{{ session(`success`) }}',
                 });
                 
             }else if(type === "error") {
                 Swal.fire({
                     icon: 'error',
                     title: 'Error!',
-                    text: '{{ session('error') }}'
+                    text: '{{ session(`error`) }}',
                 });
             }
             

@@ -6,12 +6,17 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ContactMessageController;
 use App\Http\Controllers\Master\BenefitController;
+use App\Http\Controllers\Master\DetailConsultantController;
 use App\Http\Controllers\Master\FAQController;
+use App\Http\Controllers\Master\FavoriteItemController;
 use App\Http\Controllers\Master\KatalogController;
 use App\Http\Controllers\Master\LandingPageController;
+use App\Http\Controllers\Master\PriceItemController;
 use App\Http\Controllers\Master\TestimonialController;
 use App\Http\Controllers\Master\UsersController;
+use App\Http\Controllers\PackageItemController;
 use App\Http\Controllers\ProductController;
+use App\Models\PackageItem;
 
 Route::get("/", [LandingPageController::class,  "index"]);
 Route::post('/sending-message', [LandingPageController::class, 'store'])->name('contact-message-store');
@@ -59,5 +64,25 @@ Route::middleware(['web', 'auth'])->group(function () {
         Route::put("/benefit/{id}/update-status", [BenefitController::class, "updateStatus"])->name("benefit.updateStatus");
         Route::get("/benefit/datatable", [BenefitController::class, "datatable"])->name("benefit.datatable");
         Route::resource("benefit", BenefitController::class);
+
+        // PackageItem
+        Route::get("/package-item/datatable", [PackageItemController::class, "datatable"])->name("package-item.datatable");
+        Route::get('/package-item/price-options', [PackageItemController::class, 'getPriceOptions'])->name('package-item.price-options');
+        Route::get('/package-item/favorite-item-options', [PackageItemController::class, 'getFavoriteItemOptions'])->name('package-item.favorite-item-options');
+        Route::get('/package-item/item-consultant-options', [PackageItemController::class, 'getItemConsultantOptions'])->name('package-item.item-consultant-options');
+        Route::post('/package-item/update-status-favorite/{id}', [PackageItemController::class, 'updateStatus'])->name('package-item.iupdate-status-favorite-item');
+        Route::resource("package-item", PackageItemController::class);
+
+        // Meta Data Favorite Item
+        Route::get("/favorite-item/datatable", [FavoriteItemController::class, "datatable"])->name("favorite-item.datatable");
+        Route::resource("favorite-item", FavoriteItemController::class);
+
+        // Meta Data Price Item
+        Route::get("/price-item/datatable", [PriceItemController::class, "datatable"])->name("price-item.datatable");
+        Route::resource("price-item", PriceItemController::class);
+
+        // Meta Data Konsultasi Item
+        Route::get("/detail-consultant/datatable", [DetailConsultantController::class, "datatable"])->name("detail-consultant.datatable");
+        Route::resource("detail-consultant", DetailConsultantController::class);
     });
 });

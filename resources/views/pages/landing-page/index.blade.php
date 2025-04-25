@@ -17,6 +17,29 @@
 
     @include('pages.landing-page.layouts.css.style')
 
+    <style>
+        .promo-bg {
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    color: white;
+    padding: 20px;
+    border-radius: 12px;
+    position: relative;
+    z-index: 1;
+}
+
+.promo-bg::before {
+    content: "";
+    background-color: rgba(0, 0, 0, 0.6); /* overlay agar teks tetap terlihat */
+    position: absolute;
+    inset: 0;
+    border-radius: 12px;
+    z-index: -1;
+}
+
+    </style>
+
 </head>
 
 <body class="index-page">
@@ -168,30 +191,25 @@
                 <div class="row gy-4">
 
                     <div class="col-lg-4" data-aos="zoom-in" data-aos-delay="100">
-                        <div class="pricing-item">
+                        <div class="pricing-item promo-bg" style="background-image: url('https://picsum.photos/300/900');">
                             <h3>Konsultasi Alur / Program</h3>
                             <p class="description">
-                                Konsultasi ini bersifat <strong>GRATIS</strong>, tentunya <strong>Syarat dan Ketentuan
-                                    Berlaku</strong>
+                                Konsultasi ini bersifat <strong>GRATIS</strong>, tentunya <strong>Syarat dan Ketentuan Berlaku</strong>
                             </p>
-                            <h4>
-                                <sup>Rp.</sup>0
-                            </h4>
+                            <h4><sup>Rp.</sup>0</h4>
                             <a target="_blank"
-                                href="https://api.whatsapp.com/send?phone=081214707143&text=Hallo Admin, Saya ingin bertanya mengenai Konsultasi Alur / Program"
-                                class="cta-btn">Hubungi Admin</a>
+                               href="https://api.whatsapp.com/send?phone=081214707143&text=Hallo Admin, Saya ingin bertanya mengenai Konsultasi Alur / Program"
+                               class="cta-btn">Hubungi Admin</a>
                             <ul>
-                                <li><i class="bi bi-check"></i> <span>Konsultasi Program</span></li>
-                                <li><i class="bi bi-check"></i> <span>Konsultasi Alur</span></li>
-                                <li><i class="bi bi-check"></i> <span>Konsultasi Flow Database</span></li>
-                                <li><i class="bi bi-check"></i> <span>Konsultasi Error</span></li>
-                                <li>
-                                    <i class="bi bi-check"></i>
-                                    <span>Fast Respon</span>
-                                </li>
+                                <li><i class="bi bi-check"></i> Konsultasi Program</li>
+                                <li><i class="bi bi-check"></i> Konsultasi Alur</li>
+                                <li><i class="bi bi-check"></i> Konsultasi Flow Database</li>
+                                <li><i class="bi bi-check"></i> Konsultasi Error</li>
+                                <li><i class="bi bi-check"></i> Fast Respon</li>
                             </ul>
                         </div>
-                    </div><!-- End Pricing Item -->
+                    </div>
+                    
 
                     <div class="col-lg-4" data-aos="zoom-in" data-aos-delay="200">
                         <div class="pricing-item featured">

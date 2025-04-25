@@ -1,19 +1,19 @@
 @extends('layout.index')
 
-@section('title', 'Benefit')
+@section('title', 'Favorite Item')
 
 @section('css')
 
 @section('breadcumb')
     <div class="page-header">
-        <h1 class="my-auto page-title">Master Benefit</h1>
+        <h1 class="my-auto page-title">Favorite Item</h1>
         <div>
             <ol class="mb-0 breadcrumb">
                 <li class="breadcrumb-item">
                     <a href="javascript:void(0)">Home</a>
                 </li>
                 <li class="breadcrumb-item active" aria-current="page">
-                    Benefit
+                    Favorite Item
                 </li>
             </ol>
         </div>
@@ -27,7 +27,7 @@
             <div class="card custom-card">
                 <div class="card-header justify-content-between">
                     <div class="card-title">
-                        Data Benefit
+                        Favorite Item
                     </div>
                     <div class="prism-toggle">
                         <button type="button" class="btn btn-sm btn-primary-light" data-bs-toggle="modal"
@@ -41,10 +41,7 @@
                         <thead>
                             <tr>
                                 <th>No.</th>
-                                <th>Judul</th>
-                                <th>Icon</th>
-                                <th>Status</th>
-                                <th>Deskripsi</th>
+                                <th>Nama</th>
                                 <th>Aksi</th>
                             </tr>
                         </thead>
@@ -70,18 +67,9 @@
                 <form id="tambahData">
                     <div class="modal-body">
                         <div class="form-group">
-                            <label for="judul" class="form-label">Judul</label>
-                            <input type="text" class="form-control" id="judul" name="judul"
-                                placeholder="Masukkan Judul">
-                        </div>
-                        <div class="mt-3 form-group">
-                            <label for="icon" class="form-label">Ikon</label>
-                            <input type="text" class="form-control" id="icon" name="icon"
-                                placeholder="Masukkan Ikon">
-                        </div>
-                        <div class="mt-3 form-group">
-                            <label for="deskripsi" class="form-label">Deskripsi</label>
-                            <textarea name="deskripsi" class="form-control" id="deskripsi" rows="5" placeholder="Masukkan Deskripsi"></textarea>
+                            <label for="name" class="form-label">Nama</label>
+                            <input type="text" class="form-control" id="name" name="name"
+                                placeholder="Masukkan Nama">
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -111,18 +99,9 @@
                 <form id="editData">
                     <div class="modal-body">
                         <div class="form-group">
-                            <label for="editJudul" class="form-label">Judul</label>
-                            <input type="text" class="form-control" id="editJudul" name="editJudul"
-                                placeholder="Masukkan Judul">
-                        </div>
-                        <div class="mt-3 form-group">
-                            <label for="editIcon" class="form-label">Ikon</label>
-                            <input type="text" class="form-control" id="editIcon" name="editIcon"
-                                placeholder="Masukkan Ikon">
-                        </div>
-                        <div class="mt-3 form-group">
-                            <label for="editDeskripsi" class="form-label">Deskripsi</label>
-                            <textarea name="editDeskripsi" class="form-control" id="editDeskripsi" rows="5" placeholder="Masukkan Deskripsi"></textarea>
+                            <label for="editName" class="form-label">Nama</label>
+                            <input type="text" class="form-control" id="editName" name="editName"
+                                placeholder="Masukkan Nama">
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -150,6 +129,8 @@
     <script src="https://cdn.datatables.net/buttons/2.2.3/js/dataTables.buttons.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.print.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.html5.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 
     <script>
         var table;
@@ -160,7 +141,7 @@
                 processing: true,
                 serverSide: true,
                 autoWidth: false,
-                ajax: "{{ route('benefit.datatable') }}",
+                ajax: "{{ route('favorite-item.datatable') }}",
                 columnDefs: [{
                         targets: 0,
                         render: function(data, type, full, meta) {
@@ -168,7 +149,7 @@
                         }
                     },
                     {
-                        targets: 5,
+                        targets: 2,
                         render: function(data, type, full, meta) {
                             return `
                         <a href="#" class="btn btn-warning btn-sm" onclick="editData(${full.id})">
@@ -185,16 +166,7 @@
                         data: null
                     },
                     {
-                        data: 'judul'
-                    },
-                    {
-                        data: 'icon'
-                    },
-                    {
-                        data: 'status'
-                    },
-                    {
-                        data: 'deskripsi'
+                        data: 'name'
                     },
                     {
                         data: 'id'
@@ -207,40 +179,14 @@
             });
         });
 
-        function updateStatus(id, status) {
-            if (confirm("Apakah Anda yakin ingin mengubah status?")) {
-                $.ajax({
-                    url: "{{ url('/master/testimonials') }}/" + id + "/update-status",
-                    type: "PUT",
-                    data: {
-                        status: status,
-                        _token: $('meta[name="csrf-token"]').attr('content')
-                    },
-                    success: function(response) {
-                        if (response.status == true) {
-                            alert(response.message);
-                            table.ajax.reload()
-                        } else {
-                            alert(response.message);
-                        }
-                    },
-                    error: function(xhr, status, error) {
-                        alert("Terjadi kesalahan: " + error);
-                    }
-                });
-            }
-        }
-
 
         function editData(id) {
             $.ajax({
-                url: "{{ url('master/benefit') }}/" + id,
+                url: "{{ url('master/favorite-item') }}/" + id,
                 type: "GET",
                 success: function(response) {
                     if (response.status === true) {
-                        $('#editJudul').val(response.data.judul);
-                        $('#editIcon').val(response.data.icon);
-                        $('#editDeskripsi').val(response.data.deskripsi)
+                        $('#editName').val(response.data.name);
                         $('#editData').data('id', id);
 
                         $('#modalEditData').modal('show');
@@ -255,40 +201,66 @@
         }
 
         function hapusData(id) {
+            Swal.fire({
+                title: 'Apakah Anda yakin?',
+                text: "Data yang dihapus tidak dapat dikembalikan!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Ya, hapus!',
+                cancelButtonText: 'Batal'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: "{{ url('master/favorite-item') }}/" + id,
+                        type: "DELETE",
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        },
+                        success: function(response) {
+                            if (response.status === true) {
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'Berhasil!',
+                                    text: response.message,
+                                    timer: 1500,
+                                    showConfirmButton: false
+                                });
 
-            if (confirm("Apakah Yakin Ingin Menghapus Data Ini?")) {
-                $.ajax({
-                    url: "{{ url('master/benefit') }}/" + id,
-                    type: "DELETE",
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    },
-                    success: function(response) {
-                        if (response.status === true) {
-                            alert(response.message)
-                            table.ajax.reload()
-                        } else {
-                            alert('Data tidak ditemukan');
+                                $("#tambahData")[0].reset();
+                                $('#modalTambahData').modal('hide');
+                                table.ajax.reload();
+                            } else {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Gagal!',
+                                    text: 'Data tidak ditemukan.'
+                                });
+                            }
+                        },
+                        error: function(xhr) {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Terjadi Kesalahan',
+                                text: xhr.responseText
+                            });
                         }
-                    },
-                    error: function(xhr) {
-                        alert('Terjadi kesalahan: ' + xhr.responseText);
-                    }
-                });
-            }
+                    });
+                }
+            });
         }
+
 
         $("#simpanData").on("click", function(e) {
             e.preventDefault();
 
             let formData = {
-                judul: $("#judul").val(),
-                icon: $("#icon").val(),
-                deskripsi: $("#deskripsi").val()
+                name: $("#name").val(),
             };
 
             $.ajax({
-                url: "{{ url('master/benefit') }}",
+                url: "{{ url('master/favorite-item') }}",
                 type: "POST",
                 data: formData,
                 headers: {
@@ -296,16 +268,25 @@
                 },
                 success: function(response) {
                     if (response.status === true) {
-                        alert(response.message);
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Berhasil',
+                            text: response.message,
+                            showConfirmButton: false,
+                            timer: 1500
+                        });
 
                         $("#tambahData")[0].reset();
-                        $("#modalTambahData").modal("hide");
-
+                        $('#modalTambahData').modal('hide');
                         table.ajax.reload();
                     }
                 },
                 error: function(xhr) {
-                    alert("Terjadi kesalahan: " + xhr.responseText);
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Terjadi Kesalahan',
+                        text: xhr.responseText
+                    });
                 }
             });
         });
@@ -313,16 +294,14 @@
         $("#updateData").on("click", function(e) {
             e.preventDefault();
 
-            let id = $("#editData").data('id')
+            let id = $("#editData").data('id');
 
             let formData = {
-                judul: $("#editJudul").val(),
-                icon: $("#editIcon").val(),
-                deskripsi: $("#editDeskripsi").val()
+                name: $("#editName").val(),
             };
 
             $.ajax({
-                url: "{{ url('master/benefit') }}/" + id,
+                url: "{{ url('master/favorite-item') }}/" + id,
                 type: "PUT",
                 data: formData,
                 headers: {
@@ -330,17 +309,28 @@
                 },
                 success: function(response) {
                     if (response.status === true) {
-                        alert(response.message);
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Berhasil',
+                            text: response.message,
+                            showConfirmButton: false,
+                            timer: 1500
+                        });
+
                         $("#editData")[0].reset();
                         $('#modalEditData').modal('hide');
-
                         table.ajax.reload();
                     }
                 },
                 error: function(xhr) {
-                    alert('Terjadi kesalahan: ' + xhr.responseText);
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Terjadi Kesalahan',
+                        text: xhr.responseText
+                    });
                 }
             });
         });
+
     </script>
 @endsection

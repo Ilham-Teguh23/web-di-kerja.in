@@ -5,6 +5,8 @@ namespace Database\Seeders;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Database\Seeders\MetaFavoriteItemSeeder;
+use Database\Seeders\MetaConsultationServiceItemSeeder;
 
 class DatabaseSeeder extends Seeder
 {
@@ -17,6 +19,11 @@ class DatabaseSeeder extends Seeder
 
         $this->call([
             UserSeeder::class,
+            MetaConsultationServiceItemSeeder::class,
+            MetaFavoriteItemSeeder::class,
+            MetaPricePackageServiceSeeder::class,
+            PackageServiceSeeder::class,
+            PackageServiceConsultationSeeder::class,
         ]);
     }
 }

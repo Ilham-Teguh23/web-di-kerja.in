@@ -29,70 +29,92 @@
                 <!-- Start::slide__category -->
                 <li class="slide__category"><span class="category-name">Main</span></li>
                 <!-- End::slide__category -->
-
+    
                 <!-- Start::slide -->
-                <li class="slide">
-                    <a href="{{ route('dashboard') }}" class="side-menu__item">
+                <li class="slide {{ request()->routeIs('dashboard') ? 'active' : '' }}">
+                    <a href="{{ route('dashboard') }}" class="side-menu__item {{ request()->routeIs('dashboard') ? 'active' : '' }}">
                         <i class="fe fe-home side-menu__icon"></i>
                         <span class="side-menu__label">Dashboard</span>
                     </a>
                 </li>
                 <!-- End::slide -->
-
+    
                 <!-- Start::slide -->
-                <li class="slide">
-                    <a href="{{ route('contact-message.index') }}" class="side-menu__item">
+                <li class="slide {{ request()->routeIs('contact-message.index') ? 'active' : '' }}">
+                    <a href="{{ route('contact-message.index') }}" class="side-menu__item {{ request()->routeIs('contact-message.index') ? 'active' : '' }}">
                         <i class="fe fe-message-square side-menu__icon"></i>
                         <span class="side-menu__label">Contact Message</span>
                     </a>
                 </li>
                 <!-- End::slide -->
 
+                <!-- Start::slide -->
+                <li class="slide {{ request()->routeIs('package-item.index') ? 'active' : '' }}">
+                    <a href="{{ route('package-item.index') }}" class="side-menu__item {{ request()->routeIs('package-item.index') ? 'active' : '' }}">
+                        <i class="fe fe-package side-menu__icon"></i>
+                        <span class="side-menu__label">Paket Item</span>
+                    </a>
+                </li>
+                <!-- End::slide -->
+    
                 <li class="slide__category">
                     <span class="category-name">Menu</span>
                 </li>
-
-                <li class="slide has-sub">
+    
+                <li class="slide has-sub {{ request()->routeIs('testimonials.*', 'faq.*', 'benefit.*', 'katalog.*') ? 'open' : '' }}">
                     <a href="javascript:void(0);" class="side-menu__item">
                         <i class="fe fe-users side-menu__icon"></i>
                         <span class="side-menu__label">Master</span>
                         <i class="fe fe-chevron-right side-menu__angle"></i>
                     </a>
                     <ul class="slide-menu child1">
-                        <li class="slide side-menu__label1">
-                            <a href="javascript:void(0)">Master</a>
+                        <li class="slide">
+                            <a href="{{ route('testimonials.index') }}" class="side-menu__item {{ request()->routeIs('testimonials.*') ? 'active' : '' }}">Testimonial</a>
                         </li>
                         <li class="slide">
-                            <a href="{{ route('testimonials.index') }}" class="side-menu__item">Testimonial</a>
+                            <a href="{{ route('faq.index') }}" class="side-menu__item {{ request()->routeIs('faq.*') ? 'active' : '' }}">FAQ</a>
                         </li>
                         <li class="slide">
-                            <a href="{{ route('faq.index') }}" class="side-menu__item">FAQ</a>
+                            <a href="{{ route('benefit.index') }}" class="side-menu__item {{ request()->routeIs('benefit.*') ? 'active' : '' }}">Benefit</a>
                         </li>
                         <li class="slide">
-                            <a href="{{ route('benefit.index') }}" class="side-menu__item">Benefit</a>
-                        </li>
-                        <li class="slide">
-                            <a href="{{ route('katalog.index') }}" class="side-menu__item">Katalog</a>
+                            <a href="{{ route('katalog.index') }}" class="side-menu__item {{ request()->routeIs('katalog.*') ? 'active' : '' }}">Katalog</a>
                         </li>
                     </ul>
                 </li>
 
+                <li class="slide has-sub {{ request()->routeIs('favorite-item.*', 'price-item.*', 'detail-consultant.*') ? 'open' : '' }}">
+                    <a href="javascript:void(0);" class="side-menu__item">
+                        <i class="fe fe-settings side-menu__icon"></i>
+                        <span class="side-menu__label">Meta Data</span>
+                        <i class="fe fe-chevron-right side-menu__angle"></i>
+                    </a>
+                    <ul class="slide-menu child1">
+                        <li class="slide">
+                            <a href="{{ route('favorite-item.index') }}" class="side-menu__item {{ request()->routeIs('favorite-item.*') ? 'active' : '' }}">Favorite Item</a>
+                        </li>
+                        <li class="slide">
+                            <a href="{{ route('price-item.index') }}" class="side-menu__item {{ request()->routeIs('price-item.*') ? 'active' : '' }}">Harga Item</a>
+                        </li>
+                        <li class="slide">
+                            <a href="{{ route('detail-consultant.index') }}" class="side-menu__item {{ request()->routeIs('detail-consultant.*') ? 'active' : '' }}">Detail Konsultasi</a>
+                        </li>
+                    </ul>
+                </li>
+    
                 <li class="slide__category">
                     <span class="category-name">Account</span>
                 </li>
-
-                <li class="slide has-sub">
+    
+                <li class="slide has-sub {{ request()->routeIs('users.*') ? 'open' : '' }}">
                     <a href="javascript:void(0);" class="side-menu__item">
                         <i class="fe fe-users side-menu__icon"></i>
                         <span class="side-menu__label">Akun</span>
                         <i class="fe fe-chevron-right side-menu__angle"></i>
                     </a>
                     <ul class="slide-menu child1">
-                        <li class="slide side-menu__label1">
-                            <a href="javascript:void(0)">Akun</a>
-                        </li>
                         <li class="slide">
-                            <a href="{{ route('users.index') }}" class="side-menu__item">Users</a>
+                            <a href="{{ route('users.index') }}" class="side-menu__item {{ request()->routeIs('users.*') ? 'active' : '' }}">Users</a>
                         </li>
                     </ul>
                 </li>
@@ -105,6 +127,7 @@
         </nav>
         <!-- End::nav -->
     </div>
+    
     <!-- End::main-sidebar -->
 
 </aside>

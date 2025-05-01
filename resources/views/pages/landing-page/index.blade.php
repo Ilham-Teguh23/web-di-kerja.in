@@ -19,24 +19,24 @@
 
     <style>
         .promo-bg {
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    color: white;
-    padding: 20px;
-    border-radius: 12px;
-    position: relative;
-    z-index: 1;
-}
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            color: white;
+            padding: 20px;
+            border-radius: 12px;
+            position: relative;
+            z-index: 1;
+        }
 
-.promo-bg::before {
-    content: "";
-    background-color: rgba(0, 0, 0, 0.6); /* overlay agar teks tetap terlihat */
-    position: absolute;
-    inset: 0;
-    border-radius: 12px;
-    z-index: -1;
-}
+        .promo-bg::before {
+            content: "";
+            background-color: rgba(0, 0, 0, 0.6); /* overlay agar teks tetap terlihat */
+            position: absolute;
+            inset: 0;
+            border-radius: 12px;
+            z-index: -1;
+        }
 
     </style>
 

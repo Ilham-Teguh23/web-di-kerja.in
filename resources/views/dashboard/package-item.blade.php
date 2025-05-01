@@ -4,8 +4,17 @@
 
 @section('css')
 
-<link href="https://cdn.jsdelivr.net/npm/quill@1.3.7/dist/quill.snow.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.snow.css" rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.3/min/dropzone.min.css">
+
+<style>
+    .dropzone .dz-preview .dz-image img {
+        max-width: 120px;
+        max-height: 120px;
+        object-fit: cover; 
+    }
+</style>
 
 @section('breadcumb')
     <div class="page-header">
@@ -86,6 +95,13 @@
                             <div id="editor" style="height: 200px;"></div>
                             <input type="hidden" name="deskripsi" id="deskripsi">
                         </div>
+
+                        <!-- Upload Gambar (Dropzone) -->
+                        <div class="form-group mb-3">
+                            <label class="form-label">Upload Gambar</label>
+                            <div class="dropzone" id="dropzoneArea"></div>
+                        </div>
+
     
                         <!-- Select Biasa -->
                         <div class="form-group mb-3">
@@ -127,12 +143,39 @@
                 </div>
                 <form id="editData">
                     <div class="modal-body">
-                        <div class="form-group">
+                        <div class="form-group mb-3">
                             <label for="editName" class="form-label">Nama</label>
-                            <input type="text" class="form-control" id="editName" name="editName"
-                                placeholder="Masukkan Nama">
+                            <input type="text" class="form-control" id="editName" name="editName" placeholder="Masukkan Nama">
                         </div>
-                    </div>
+
+                    <!-- Quill Editor -->
+                        <div class="form-group mb-3">
+                            <label for="editEditor" class="form-label">Deskripsi</label>
+                            <div id="editEditor" style="height: 200px;"></div>
+                            <input type="hidden" name="editDescription" id="editDescription">
+                        </div>
+
+                        <!-- Upload Gambar (Dropzone) -->
+                        <div class="form-group mb-3">
+                            <label class="form-label">Upload Gambar</label>
+                            <div class="dropzone" id="editDropzoneArea"></div>
+                        </div>
+
+
+                        <!-- Select Biasa -->
+                        <div class="form-group mb-3">
+                            <label for="editPrice" class="form-label">Harga</label>
+                            <select class="form-control" name="editPrice" id="editPrice">
+                                <option value="">Pilih salah satu</option>
+                            </select>                            
+                        </div>
+                        <!-- Select2 Multiple -->
+                        <div class="form-group mb-3">
+                            <label for="editConsultant" class="form-label">Konsultasi</label>
+                            <select class="form-control select2" name="editConsultant[]" id="editConsultant" multiple data-placeholder="Pilih Konsultan">
+                            </select>                                                     
+                        </div>   
+                    </div> 
                     <div class="modal-footer">
                         <button type="reset" class="btn btn-danger btn-sm" id="resetEditData">
                             Reset
@@ -184,23 +227,34 @@
     <script src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.print.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.html5.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script src="https://cdn.jsdelivr.net/npm/quill@1.3.7/dist/quill.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.3/min/dropzone.min.js"></script>
 
 
     <script>
-        let quill;
+        Dropzone.autoDiscover = false;
 
+        let myDropzone;
+        let uploadedFileName = null;
+
+        $('.select2').select2();
+
+        const quill = new Quill('#editor', {
+            theme: 'snow'
+        });
+
+        const quillEditor = new Quill('#editEditor', {
+            theme: 'snow'
+        });
+        
+        
         $('#modalTambahData').on('shown.bs.modal', function () {
-            if (!quill) {
-                quill = new Quill('#editor', {
-                    theme: 'snow'
-                });
-            }
 
+            // Inisialisasi Select2 untuk konsultasi (selalu dijalankan untuk case baru)
             $('#consultant').select2({
                 dropdownParent: $('#modalTambahData'),
-                placeholder: $('#consultant').data('placeholder'),
+                placeholder: $('#consultant').data('placeholder') || "Pilih Konsultan",
                 allowClear: true,
                 width: '100%',
                 ajax: {
@@ -221,17 +275,17 @@
                 }
             });
 
-            // Load Data Harga (price)
+            // Load data harga ke select price
             $.ajax({
                 url: "{{ route('package-item.price-options') }}",
                 type: 'GET',
                 dataType: 'json',
                 success: function (response) {
-                    let $price = $('#price');
+                    const $price = $('#price');
                     $price.empty().append('<option value="">Pilih salah satu</option>');
 
                     $.each(response, function (i, item) {
-                        let formattedPrice = new Intl.NumberFormat('id-ID', {
+                        const formattedPrice = new Intl.NumberFormat('id-ID', {
                             style: 'currency',
                             currency: 'IDR',
                             minimumFractionDigits: 0
@@ -241,20 +295,89 @@
                     });
                 },
                 error: function () {
-                    alert("Gagal mengambil data harga dari server.");
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Gagal',
+                        text: 'Tidak dapat mengambil data harga dari server.'
+                    });
                 }
             });
-        });
 
-        // Tombol simpan: ambil isi quill dan simpan ke input hidden
-        $('#simpanData').on('click', function () {
-            let deskripsi = quill.root.innerHTML;
-            $('#deskripsi').val(deskripsi);
+            if (myDropzone) {
+                myDropzone.destroy(); // reset jika sudah ada
+                $('#dropzoneArea').html(''); // clear previous
+            }
 
-            // Debug - tampilkan semua data dari form
-            console.log($('#tambahData').serialize());
+            myDropzone = new Dropzone("#dropzoneArea", {
+                url: "{{ route('package-item.upload-image') }}",
+                maxFiles: 1,
+                acceptedFiles: "image/*",
+                addRemoveLinks: true,
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                success: function (file, response) {
+                    console.log('Upload berhasil:', response);
+                    uploadedFileName = response.filename;
 
-            // TODO: Kirim via AJAX atau submit biasa
+                    $('<input>').attr({
+                        type: 'hidden',
+                        name: 'uploaded_image',
+                        value: uploadedFileName
+                    }).appendTo('#tambahData');
+
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Upload Berhasil!',
+                        text: 'Gambar berhasil diunggah.',
+                        timer: 1500,
+                        showConfirmButton: false
+                    });
+                },
+                error: function (file, response) {
+                    console.error('Upload gagal:', response);
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Upload Gagal',
+                        text: typeof response === 'string' ? response : 'Terjadi kesalahan saat mengunggah gambar.'
+                    });
+                },
+                removedfile: function (file) {
+                    if (isResettingDropzone) {
+                        let previewElement = file.previewElement;
+                        if (previewElement != null) {
+                            previewElement.parentNode.removeChild(previewElement);
+                        }
+                        return;
+                    }
+
+                    if (uploadedFileName) {
+                        $.ajax({
+                            url: "{{ route('package-item.delete-uploaded-image') }}",
+                            type: 'POST',
+                            data: {
+                                _token: $('meta[name="csrf-token"]').attr('content'),
+                                filename: uploadedFileName
+                            },
+                            success: function (res) {
+                                console.log("File berhasil dihapus:", res);
+                                uploadedFileName = null;
+                                $('#tambahData input[name="uploaded_image"]').remove();
+                            },
+                            error: function (xhr) {
+                                console.error("Gagal menghapus file:", xhr.responseText);
+                            }
+                        });
+                    }
+
+                    // Hapus preview file dari dropzone
+                    let previewElement = file.previewElement;
+                    if (previewElement != null) {
+                        previewElement.parentNode.removeChild(previewElement);
+                    }
+                }
+            });
+
         });
 
         var table;
@@ -379,83 +502,504 @@
         }
 
 
-    function toggleFavorite(packageId) {
-        $('#favoritePackageId').val(packageId); // Simpan id paket ke hidden input
-        $('#favoriteSelect').empty().append('<option value="">Loading...</option>');
+        function toggleFavorite(packageId) {
+            $('#favoritePackageId').val(packageId); // Simpan id paket ke hidden input
+            $('#favoriteSelect').empty().append('<option value="">Loading...</option>');
 
-        $.ajax({
-            url: "{{ route('package-item.favorite-item-options') }}",
-            type: 'GET',
-            dataType: 'json',
-            success: function (response) {
-                const $favorite = $('#favoriteSelect');
-                $favorite.empty().append('<option value="">Tidak Aktif</option>');
+            $.ajax({
+                url: "{{ route('package-item.favorite-item-options') }}",
+                type: 'GET',
+                dataType: 'json',
+                success: function (response) {
+                    const $favorite = $('#favoriteSelect');
+                    $favorite.empty().append('<option value="">Tidak Aktif</option>');
 
-                $.each(response, function (i, item) {
-                    $favorite.append(`<option value="${item.id}">${item.name}</option>`);
-                });
+                    $.each(response, function (i, item) {
+                        $favorite.append(`<option value="${item.id}">${item.name}</option>`);
+                    });
 
-                $('#modalSetFavorite').modal('show');
-            },
-            error: function () {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Gagal',
-                    text: 'Gagal mengambil data favorite dari server.'
-                });
-            }
-        });
-    }
-
-    $('#saveFavorite').on('click', function () {
-    const packageId = $('#favoritePackageId').val();
-    const selectedFavorite = $('#favoriteSelect').val();
-
-    $.ajax({
-        url: "{{ route('package-item.iupdate-status-favorite-item', ':id') }}".replace(':id', packageId),
-        type: 'POST',
-        data: {
-            _token: $('meta[name="csrf-token"]').attr('content'),
-            favorite_id: selectedFavorite || null
-        },
-        success: function (response) {
-            if (response.status) {
-                $('#modalSetFavorite').modal('hide'); // ✅ tutup modal
-
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Berhasil!',
-                    text: response.message,
-                    timer: 1500,
-                    showConfirmButton: false
-                });
-
-                table.ajax.reload(null, false); // ✅ reload datatable
-            } else {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Gagal!',
-                    text: response.message
-                });
-            }
-        },
-        error: function () {
-            Swal.fire({
-                icon: 'error',
-                title: 'Kesalahan!',
-                text: 'Terjadi kesalahan saat menyimpan data.'
+                    $('#modalSetFavorite').modal('show');
+                },
+                error: function () {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Gagal',
+                        text: 'Gagal mengambil data favorite dari server.'
+                    });
+                }
             });
         }
-    });
-});
+
+        $('#saveFavorite').on('click', function () {
+            const packageId = $('#favoritePackageId').val();
+            const selectedFavorite = $('#favoriteSelect').val();
+
+            $.ajax({
+                url: "{{ route('package-item.iupdate-status-favorite-item', ':id') }}".replace(':id', packageId),
+                type: 'POST',
+                data: {
+                    _token: $('meta[name="csrf-token"]').attr('content'),
+                    favorite_id: selectedFavorite || null
+                },
+                success: function (response) {
+                    if (response.status) {
+                        $('#modalSetFavorite').modal('hide'); // ✅ tutup modal
+
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Berhasil!',
+                            text: response.message,
+                            timer: 1500,
+                            showConfirmButton: false
+                        });
+
+                        table.ajax.reload(null, false); // ✅ reload datatable
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Gagal!',
+                            text: response.message
+                        });
+                    }
+                },
+                error: function () {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Kesalahan!',
+                        text: 'Terjadi kesalahan saat menyimpan data.'
+                    });
+                }
+            });
+        });
+
+        $("#simpanData").on("click", function (e) {
+            e.preventDefault();
+
+            const deskripsi = quill?.root.innerHTML || '';
+            $("#deskripsi").val(deskripsi);
+
+            let formData = new FormData($("#tambahData")[0]);
+            
+
+            $.ajax({
+                url: "{{ url('master/package-item') }}",
+                type: "POST",
+                data: formData,
+                processData: false,
+                contentType: false,
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                beforeSend: function () {
+                    $("#simpanData").prop("disabled", true).html("Menyimpan...");
+                },
+                success: function (response) {
+                    if (response.status === true) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Berhasil',
+                            text: response.message,
+                            timer: 1500,
+                            showConfirmButton: false
+                        }).then(() => {
+                            $("#tambahData")[0].reset();
+                            $('#consultant').val(null).trigger('change');
+                            $('#modalTambahData').modal('hide');
+                            table.ajax.reload(null, false);
+
+                            if (quill) quill.setContents([]);
+                            if (myDropzone) myDropzone.removeAllFiles(true);
+                        });
+                    } else {
+                        Swal.fire({
+                            icon: 'warning',
+                            title: 'Gagal',
+                            text: response.message || 'Gagal menyimpan data.'
+                        });
+                    }
+                },
+                error: function (xhr) {
+                    console.error(xhr.responseText);
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Terjadi Kesalahan',
+                        text: xhr.responseJSON?.message || 'Gagal memproses permintaan.'
+                    });
+                },
+                complete: function () {
+                    $("#simpanData").prop("disabled", false).html('<i class="fe fe-save"></i> Simpan');
+                }
+            });
+        });
+
+        function hapusData(id) {
+            console.log(id);
+            
+            Swal.fire({
+                title: 'Apakah Anda yakin?',
+                text: "Data yang dihapus tidak dapat dikembalikan!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Ya, hapus!',
+                cancelButtonText: 'Batal'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: "{{ url('master/package-item') }}/" + id,
+                        type: "DELETE",
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        },
+                        success: function(response) {
+                            if (response.status === true) {
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'Berhasil!',
+                                    text: response.message,
+                                    timer: 1500,
+                                    showConfirmButton: false
+                                });
+
+                                $("#tambahData")[0].reset();
+                                $('#modalTambahData').modal('hide');
+                                table.ajax.reload();
+                            } else {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Gagal!',
+                                    text: 'Data tidak ditemukan.'
+                                });
+                            }
+                        },
+                        error: function(xhr) {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Terjadi Kesalahan',
+                                text: xhr.responseText
+                            });
+                        }
+                    });
+                }
+            });
+        }
+
+        function loadPriceOptions(selectedId = null) {
+            $.ajax({
+                url: "{{ route('package-item.price-options') }}",
+                type: 'GET',
+                dataType: 'json',
+                success: function (response) {
+                    const $price = $('#editPrice');
+                    $price.empty().append('<option value="">Pilih salah satu</option>');
+
+                    $.each(response, function (i, item) {
+                        const formattedPrice = new Intl.NumberFormat('id-ID', {
+                            style: 'currency',
+                            currency: 'IDR',
+                            minimumFractionDigits: 0
+                        }).format(item.price);
+
+                        $price.append(`<option value="${item.id}">${formattedPrice}</option>`);
+                    });
+
+                    if (selectedId) {
+                        $price.val(selectedId).trigger('change');
+                    }
+                },
+                error: function () {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Gagal',
+                        text: 'Tidak dapat mengambil data harga dari server.'
+                    });
+                }
+            });
+        }
+
+        function loadItemConsultant(selectedIds = []) {
+            $('#editConsultant').select2({
+                dropdownParent: $('#modalEditData'),
+                    placeholder: $('#consultant').data('placeholder') || "Pilih Konsultan",
+                    allowClear: true,
+                    width: '100%',
+                    ajax: {
+                        url: "{{ route('package-item.item-consultant-options') }}",
+                        dataType: 'json',
+                        delay: 250,
+                        processResults: function (data) {
+                            return {
+                                results: $.map(data, function (item) {
+                                    return {
+                                        id: item.id,
+                                        text: item.name
+                                    };
+                                })
+                            };
+                        },
+                        cache: true
+                    }
+                });
+
+
+            if (selectedIds.length > 0) {
+                $.ajax({
+                    url: "{{ route('package-item.item-consultant-options') }}",
+                    type: "GET",
+                    success: function (response) {
+                        const selectedOptions = response.filter(item => selectedIds.includes(item.id));
+                        selectedOptions.forEach(function (consultant) {
+                            const option = new Option(consultant.name, consultant.id, true, true);
+                            $('#editConsultant').append(option).trigger('change');
+                        });
+                    }
+                });
+            }
+        }
+
+        function editData(id) {
+
+            var isResettingDropzone = false;
+            var uploadedFileName = null;
+            var manualDelete = false;
+            $.ajax({
+                url: "{{ url('master/package-item') }}/" + id,
+                type: "GET",
+                success: function (response) {
+                    if (response.status === true) {
+                        const data = response.data;
+                        
+
+                        $('#editData').data('id', id);
+                        $('#editName').val(data.name);
+
+                        if (quillEditor) {
+                            quillEditor.root.innerHTML = data.description ?? '';
+                        }
+
+                        loadPriceOptions(data.meta_price_package_service_id);
+
+                        if (data.package_consultation && Array.isArray(data.package_consultation)) {
+                            
+                            const consultantIds = data.package_consultation.map(item => item.consultation_detail_id);
+                            
+                            loadItemConsultant(consultantIds);
+                        }
+
+
+                        editDropzone = new Dropzone("#editDropzoneArea", {
+                            url: "{{ route('package-item.upload-image') }}",
+                            maxFiles: 1,
+                            acceptedFiles: "image/*",
+                            addRemoveLinks: true,
+                            headers: {
+                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                            },
+                            init: function() {
+                                var dz = this;
+
+                                dz.on("maxfilesexceeded", function(file) {
+                                    dz.removeAllFiles();
+                                    dz.addFile(file);
+                                });
+
+                                dz.on("success", function(file, response) {
+                                    console.log('Upload response:', response);
+
+                                    if (response.status === true || response.success === true) {
+                                        const newFileName = response.filename;
+
+                                        if (response.file_url) {
+                                            dz.emit("thumbnail", file, response.path);
+                                        }
+
+                                        if (uploadedFileName && uploadedFileName !== newFileName && !manualDelete) {
+                                            $.ajax({
+                                                url: "{{ route('package-item.delete-uploaded-image') }}",
+                                                type: "POST",
+                                                data: {
+                                                    _token: $('meta[name="csrf-token"]').attr('content'),
+                                                    filename: uploadedFileName
+                                                },
+                                                success: function(res) {
+                                                    console.log('Gambar lama berhasil dihapus setelah upload:', res);
+                                                },
+                                                error: function(err) {
+                                                    console.error('Gagal menghapus gambar lama setelah upload:', err.responseText);
+                                                }
+                                            });
+                                        }
+
+                                        uploadedFileName = newFileName;
+                                        manualDelete = false;
+
+                                        $('#modalEditData input[name="uploaded_image"]').remove();
+                                        $('<input>').attr({
+                                            type: 'hidden',
+                                            name: 'uploaded_image',
+                                            value: newFileName
+                                        }).appendTo('#modalEditData form');
+
+                                        Swal.fire({
+                                            icon: 'success',
+                                            title: 'Upload Berhasil!',
+                                            text: 'Gambar berhasil diunggah.',
+                                            timer: 1500,
+                                            showConfirmButton: false
+                                        });
+                                    } else {
+                                        Swal.fire({
+                                            icon: 'error',
+                                            title: 'Upload Gagal!',
+                                            text: response.message || 'Terjadi kesalahan saat mengunggah gambar.',
+                                            showConfirmButton: true
+                                        });
+                                        dz.removeFile(file);
+                                    }
+                                });
+
+
+                                dz.on("removedfile", function(file) {
+                                    $('#modalEditData input[name="uploaded_image"]').remove();
+
+                                    if (uploadedFileName) {
+                                        const filenameToDelete = uploadedFileName;
+
+                                        uploadedFileName = null;
+
+                                        $.ajax({
+                                            url: "{{ route('package-item.delete-uploaded-image') }}",
+                                            type: "POST",
+                                            data: {
+                                                _token: $('meta[name="csrf-token"]').attr('content'),
+                                                filename: filenameToDelete
+                                            },
+                                            success: function(response) {
+                                                console.log('File berhasil dihapus saat file dihapus manual:', response);
+                                            },
+                                            error: function(xhr) {
+                                                console.warn('File sudah tidak ada (sudah terhapus sebelumnya):', xhr.responseText);
+                                            }
+                                        });
+                                    }
+                                });
+                            }
+                        });
+
+                        if (data.image_path) {
+                            const mockFile = {
+                                name: 'Gambar Sebelumnya',
+                                size: 123456,
+                                type: 'image/*',
+                                accepted: true
+                            };
+
+                            const imageUrl = "{{ asset('storage/image_item_package') }}/" + data.image_path;
+
+                            editDropzone.emit("addedfile", mockFile);
+                            editDropzone.emit("thumbnail", mockFile, imageUrl);
+                            editDropzone.emit("complete", mockFile);
+
+                            editDropzone.files.push(mockFile);
+
+                            $('#modalEditData input[name="uploaded_image"]').remove();
+                            $('<input>').attr({
+                                type: 'hidden',
+                                name: 'uploaded_image',
+                                value: data.image_path
+                            }).appendTo('#modalEditData form');
+
+                            uploadedFileName = data.image_path;
+                        }
 
 
 
+                        $('#modalEditData').modal('show');
+                        } else {
+                            Swal.fire({
+                                icon: 'warning',
+                                title: 'Data Tidak Ditemukan'
+                            });
+                        }
+                    },
+                    error: function (xhr) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Terjadi Kesalahan',
+                        text: xhr.responseText
+                    });
+                }
+            });
+        }
 
+        $("#updateData").on("click", function(e) {
+            e.preventDefault();
 
+            let id = $("#editData").data('id');
 
+            const deskripsi = quillEditor?.root.innerHTML || '';
+            $("#editDescription").val(deskripsi);
 
+            let formData = new FormData();
 
+            formData.append('name', $("#editName").val());
+            formData.append('deskripsi', $("#editDescription").val());
+
+            if (uploadedFileName) {
+                formData.append('uploaded_image', uploadedFileName);
+            }
+
+            formData.append('price', $("#editPrice").val());
+
+            let consultantSelected = $("#editConsultant").val();
+            if (consultantSelected && consultantSelected.length > 0) {
+                consultantSelected.forEach(function(item) {
+                    formData.append('consultant[]', item);
+                });
+            }
+
+            formData.append('_method', 'PUT');
+
+            $.ajax({
+                url: "{{ url('master/package-item') }}/" + id,
+                type: "POST",
+                data: formData,
+                processData: false,
+                contentType: false,
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                success: function(response) {
+                    if (response.status === true) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Berhasil',
+                            text: response.message,
+                            timer: 1500,
+                            showConfirmButton: false
+                        }).then(() => {
+                            $("#editData")[0].reset();
+                            $('#editConsultant').val(null).trigger('change');
+                            $('#modalEditData').modal('hide');
+
+                            table.ajax.reload(null, false);
+
+                            if (quillEditor) quillEditor.setContents([]);
+                            if (editDropzone) editDropzone.removeAllFiles(true);
+                        });
+                    }
+                },
+                error: function(xhr) {
+                    console.error(xhr.responseText);
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Terjadi Kesalahan',
+                        text: xhr.responseJSON?.message || 'Gagal memproses permintaan.'
+                    });
+                }
+            });
+        });
 
     </script>
 @endsection

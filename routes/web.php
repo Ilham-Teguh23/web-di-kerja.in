@@ -67,6 +67,8 @@ Route::middleware(['web', 'auth'])->group(function () {
 
         // PackageItem
         Route::get("/package-item/datatable", [PackageItemController::class, "datatable"])->name("package-item.datatable");
+        Route::post('/package-item/upload-image', [PackageItemController::class, 'uploadImage'])->name('package-item.upload-image');
+        Route::post('/package-item/delete-uploaded-image', [PackageItemController::class, 'deleteUploadedImage'])->name('package-item.delete-uploaded-image');
         Route::get('/package-item/price-options', [PackageItemController::class, 'getPriceOptions'])->name('package-item.price-options');
         Route::get('/package-item/favorite-item-options', [PackageItemController::class, 'getFavoriteItemOptions'])->name('package-item.favorite-item-options');
         Route::get('/package-item/item-consultant-options', [PackageItemController::class, 'getItemConsultantOptions'])->name('package-item.item-consultant-options');

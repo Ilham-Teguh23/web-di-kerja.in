@@ -398,6 +398,15 @@
                         }
                     },
                     {
+                        targets: 2,
+                        render: function(data, type, full, meta) {
+                            let htmlDecoded = data.replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&').replace(/&quot;/g, '"').replace(/&#039;/g, "'");
+
+                            let textOnly = htmlDecoded.replace(/<\/?[^>]+(>|$)/g, "");
+                            return textOnly ? textOnly : 'No description';
+                        }
+                    },
+                    {
                         targets: 3,
                         render: function (data, type, full, meta) {
                             let nominal = full.price?.price ?? 0;
@@ -938,8 +947,5 @@
                 }
             });
         });
-
-
-
     </script>
 @endsection

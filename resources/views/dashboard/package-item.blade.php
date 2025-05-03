@@ -251,7 +251,6 @@
         
         $('#modalTambahData').on('shown.bs.modal', function () {
 
-            // Inisialisasi Select2 untuk konsultasi (selalu dijalankan untuk case baru)
             $('#consultant').select2({
                 dropdownParent: $('#modalTambahData'),
                 placeholder: $('#consultant').data('placeholder') || "Pilih Konsultan",
@@ -275,7 +274,6 @@
                 }
             });
 
-            // Load data harga ke select price
             $.ajax({
                 url: "{{ route('package-item.price-options') }}",
                 type: 'GET',
@@ -303,81 +301,84 @@
                 }
             });
 
-            if (myDropzone) {
-                myDropzone.destroy(); // reset jika sudah ada
-                $('#dropzoneArea').html(''); // clear previous
-            }
+            if ($("#dropzoneArea").length) {
+                Dropzone.autoDiscover = false;
 
-            myDropzone = new Dropzone("#dropzoneArea", {
-                url: "{{ route('package-item.upload-image') }}",
-                maxFiles: 1,
-                acceptedFiles: "image/*",
-                addRemoveLinks: true,
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                },
-                success: function (file, response) {
-                    console.log('Upload berhasil:', response);
-                    uploadedFileName = response.filename;
+                var uploadedFileName = '';
 
-                    $('<input>').attr({
-                        type: 'hidden',
-                        name: 'uploaded_image',
-                        value: uploadedFileName
-                    }).appendTo('#tambahData');
+                var myDropzone = new Dropzone("#dropzoneArea", {
+                    url: "{{ route('package-item.upload-image') }}",
+                    maxFiles: 1,
+                    acceptedFiles: "image/*",
+                    addRemoveLinks: true,
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    success: function (file, response) {
+                        if (uploadedFileName) {
+                            $.ajax({
+                                url: "{{ route('package-item.delete-uploaded-image') }}",
+                                type: 'POST',
+                                data: {
+                                    _token: $('meta[name="csrf-token"]').attr('content'),
+                                    filename: uploadedFileName 
+                                },
+                                success: function (res) {
 
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Upload Berhasil!',
-                        text: 'Gambar berhasil diunggah.',
-                        timer: 1500,
-                        showConfirmButton: false
-                    });
-                },
-                error: function (file, response) {
-                    console.error('Upload gagal:', response);
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Upload Gagal',
-                        text: typeof response === 'string' ? response : 'Terjadi kesalahan saat mengunggah gambar.'
-                    });
-                },
-                removedfile: function (file) {
-                    if (isResettingDropzone) {
-                        let previewElement = file.previewElement;
-                        if (previewElement != null) {
-                            previewElement.parentNode.removeChild(previewElement);
+                                    uploadedFileName = response.filename;
+                                    $('<input>').attr({
+                                        type: 'hidden',
+                                        name: 'uploaded_image',
+                                        value: uploadedFileName
+                                    }).appendTo('#tambahData');
+
+                                    Swal.fire({
+                                        icon: 'success',
+                                        title: 'Upload Berhasil!',
+                                        text: 'Gambar berhasil diunggah.',
+                                        timer: 1500,
+                                        showConfirmButton: false
+                                    });
+                                },
+                                error: function (xhr) {
+                                    console.error("Gagal menghapus file lama:", xhr.responseText);
+                                    Swal.fire({
+                                        icon: 'error',
+                                        title: 'Gagal Menghapus File Lama',
+                                        text: 'Terjadi kesalahan saat menghapus file lama.'
+                                    });
+                                }
+                            });
+                        } else {
+                            uploadedFileName = response.filename;
+                            $('<input>').attr({
+                                type: 'hidden',
+                                name: 'uploaded_image',
+                                value: uploadedFileName
+                            }).appendTo('#tambahData');
+
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Upload Berhasil!',
+                                text: 'Gambar berhasil diunggah.',
+                                timer: 1500,
+                                showConfirmButton: false
+                            });
                         }
-                        return;
-                    }
-
-                    if (uploadedFileName) {
-                        $.ajax({
-                            url: "{{ route('package-item.delete-uploaded-image') }}",
-                            type: 'POST',
-                            data: {
-                                _token: $('meta[name="csrf-token"]').attr('content'),
-                                filename: uploadedFileName
-                            },
-                            success: function (res) {
-                                console.log("File berhasil dihapus:", res);
-                                uploadedFileName = null;
-                                $('#tambahData input[name="uploaded_image"]').remove();
-                            },
-                            error: function (xhr) {
-                                console.error("Gagal menghapus file:", xhr.responseText);
-                            }
+                    },
+                    removedfile: function(file) {
+                                file.previewElement.remove();
+                    },
+                    error: function (file, response) {
+                        console.error('Upload gagal:', response);
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Upload Gagal',
+                            text: typeof response === 'string' ? response : 'Terjadi kesalahan saat mengunggah gambar.'
                         });
                     }
-
-                    // Hapus preview file dari dropzone
-                    let previewElement = file.previewElement;
-                    if (previewElement != null) {
-                        previewElement.parentNode.removeChild(previewElement);
-                    }
-                }
-            });
-
+                });
+            }
         });
 
         var table;
@@ -436,7 +437,7 @@
                         }
                     },
                     {
-                        targets: 6, // Kolom Aksi
+                        targets: 6,
                         render: function (data, type, full, meta) {
                             return `
                                 <a href="#" class="btn btn-warning btn-sm" onclick="editData(${full.id})">
@@ -450,13 +451,13 @@
                     },
                 ],
                 columns: [
-                    { data: null },                     // No
-                    { data: 'name' },                   // Nama
-                    { data: 'description' },            // Deskripsi
-                    { data: 'price.price' },            // Harga (relasi)
-                    { data: 'favorite_item' },     // Favorite (relasi)
-                    { data: 'package_consultation' },   // Konsultasi (many-to-many)
-                    { data: 'id' }                      // Aksi
+                    { data: null },              
+                    { data: 'name' },        
+                    { data: 'description' },       
+                    { data: 'price.price' },    
+                    { data: 'favorite_item' },  
+                    { data: 'package_consultation' },  
+                    { data: 'id' }
                 ],
                 language: {
                     searchPlaceholder: 'Search...',
@@ -503,7 +504,7 @@
 
 
         function toggleFavorite(packageId) {
-            $('#favoritePackageId').val(packageId); // Simpan id paket ke hidden input
+            $('#favoritePackageId').val(packageId);
             $('#favoriteSelect').empty().append('<option value="">Loading...</option>');
 
             $.ajax({
@@ -543,7 +544,7 @@
                 },
                 success: function (response) {
                     if (response.status) {
-                        $('#modalSetFavorite').modal('hide'); // ✅ tutup modal
+                        $('#modalSetFavorite').modal('hide');
 
                         Swal.fire({
                             icon: 'success',
@@ -553,7 +554,7 @@
                             showConfirmButton: false
                         });
 
-                        table.ajax.reload(null, false); // ✅ reload datatable
+                        table.ajax.reload(null, false);
                     } else {
                         Swal.fire({
                             icon: 'error',
@@ -605,10 +606,12 @@
                             $("#tambahData")[0].reset();
                             $('#consultant').val(null).trigger('change');
                             $('#modalTambahData').modal('hide');
-                            table.ajax.reload(null, false);
 
                             if (quill) quill.setContents([]);
                             if (myDropzone) myDropzone.removeAllFiles(true);
+
+                            table.ajax.reload(null, false);
+
                         });
                     } else {
                         Swal.fire({
@@ -760,9 +763,9 @@
 
         function editData(id) {
 
-            var isResettingDropzone = false;
             var uploadedFileName = null;
             var manualDelete = false;
+
             $.ajax({
                 url: "{{ url('master/package-item') }}/" + id,
                 type: "GET",
@@ -788,131 +791,83 @@
                         }
 
 
-                        editDropzone = new Dropzone("#editDropzoneArea", {
-                            url: "{{ route('package-item.upload-image') }}",
-                            maxFiles: 1,
-                            acceptedFiles: "image/*",
-                            addRemoveLinks: true,
-                            headers: {
-                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                            },
-                            init: function() {
-                                var dz = this;
+                        if (!window.dropzoneInitialized) {
+                            editDropzone = new Dropzone("#editDropzoneArea", {
+                                url: "{{ route('package-item.upload-image') }}",
+                                maxFiles: 1,
+                                acceptedFiles: "image/*",
+                                addRemoveLinks: true,
+                                headers: {
+                                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                                },
+                                init: function() {
+                                    var dz = this;
 
-                                dz.on("maxfilesexceeded", function(file) {
-                                    dz.removeAllFiles();
-                                    dz.addFile(file);
-                                });
+                                    var mockFile = {
+                                        name: data.image_path,
+                                        size: 12345,
+                                        url: '/storage/image_item_package/' + data.image_path 
+                                    };
 
-                                dz.on("success", function(file, response) {
-                                    console.log('Upload response:', response);
+                                    dz.emit("addedfile", mockFile);  
+                                    dz.emit("thumbnail", mockFile, mockFile.url); 
+                                    dz.emit("complete", mockFile); 
 
-                                    if (response.status === true || response.success === true) {
-                                        const newFileName = response.filename;
+                                    dz.files.push(mockFile);
 
-                                        if (response.file_url) {
-                                            dz.emit("thumbnail", file, response.path);
+                                    dz.on("addedfile", function(file) {
+                                        if (dz.files.length > 1) {
+                                            dz.removeFile(dz.files[0]);
                                         }
+                                    });
 
-                                        if (uploadedFileName && uploadedFileName !== newFileName && !manualDelete) {
-                                            $.ajax({
-                                                url: "{{ route('package-item.delete-uploaded-image') }}",
-                                                type: "POST",
-                                                data: {
-                                                    _token: $('meta[name="csrf-token"]').attr('content'),
-                                                    filename: uploadedFileName
-                                                },
-                                                success: function(res) {
-                                                    console.log('Gambar lama berhasil dihapus setelah upload:', res);
-                                                },
-                                                error: function(err) {
-                                                    console.error('Gagal menghapus gambar lama setelah upload:', err.responseText);
-                                                }
+                                    dz.on("maxfilesexceeded", function (file) {
+                                        if (dz.files.length > 1) {
+                                            dz.removeFile(dz.files[0]);
+                                        }
+                                        dz.addFile(file);
+                                    });
+
+                                    dz.on("success", function(file, response) {
+
+                                        if (response.status === true || response.success === true) {
+                                            const newFileName = response.filename;
+
+                                            uploadedFileName = newFileName;
+
+                                            $('#modalEditData input[name="uploaded_image"]').remove();
+                                            $('<input>').attr({
+                                                type: 'hidden',
+                                                name: 'uploaded_image',
+                                                value: newFileName
+                                            }).appendTo('#modalEditData form');
+
+                                            Swal.fire({
+                                                icon: 'success',
+                                                title: 'Upload Berhasil!',
+                                                text: 'Gambar berhasil diunggah.',
+                                                timer: 1500,
+                                                showConfirmButton: false
                                             });
+                                        } else {
+                                            Swal.fire({
+                                                icon: 'error',
+                                                title: 'Upload Gagal!',
+                                                text: response.message || 'Terjadi kesalahan saat mengunggah gambar.',
+                                                showConfirmButton: true
+                                            });
+                                            dz.removeFile(file);
                                         }
+                                    });
 
-                                        uploadedFileName = newFileName;
-                                        manualDelete = false;
+                                    dz.on("removedfile", function(file) {
+                                        file.previewElement.remove();
+                                    });
+                                }
+                            });
 
-                                        $('#modalEditData input[name="uploaded_image"]').remove();
-                                        $('<input>').attr({
-                                            type: 'hidden',
-                                            name: 'uploaded_image',
-                                            value: newFileName
-                                        }).appendTo('#modalEditData form');
-
-                                        Swal.fire({
-                                            icon: 'success',
-                                            title: 'Upload Berhasil!',
-                                            text: 'Gambar berhasil diunggah.',
-                                            timer: 1500,
-                                            showConfirmButton: false
-                                        });
-                                    } else {
-                                        Swal.fire({
-                                            icon: 'error',
-                                            title: 'Upload Gagal!',
-                                            text: response.message || 'Terjadi kesalahan saat mengunggah gambar.',
-                                            showConfirmButton: true
-                                        });
-                                        dz.removeFile(file);
-                                    }
-                                });
-
-
-                                dz.on("removedfile", function(file) {
-                                    $('#modalEditData input[name="uploaded_image"]').remove();
-
-                                    if (uploadedFileName) {
-                                        const filenameToDelete = uploadedFileName;
-
-                                        uploadedFileName = null;
-
-                                        $.ajax({
-                                            url: "{{ route('package-item.delete-uploaded-image') }}",
-                                            type: "POST",
-                                            data: {
-                                                _token: $('meta[name="csrf-token"]').attr('content'),
-                                                filename: filenameToDelete
-                                            },
-                                            success: function(response) {
-                                                console.log('File berhasil dihapus saat file dihapus manual:', response);
-                                            },
-                                            error: function(xhr) {
-                                                console.warn('File sudah tidak ada (sudah terhapus sebelumnya):', xhr.responseText);
-                                            }
-                                        });
-                                    }
-                                });
-                            }
-                        });
-
-                        if (data.image_path) {
-                            const mockFile = {
-                                name: 'Gambar Sebelumnya',
-                                size: 123456,
-                                type: 'image/*',
-                                accepted: true
-                            };
-
-                            const imageUrl = "{{ asset('storage/image_item_package') }}/" + data.image_path;
-
-                            editDropzone.emit("addedfile", mockFile);
-                            editDropzone.emit("thumbnail", mockFile, imageUrl);
-                            editDropzone.emit("complete", mockFile);
-
-                            editDropzone.files.push(mockFile);
-
-                            $('#modalEditData input[name="uploaded_image"]').remove();
-                            $('<input>').attr({
-                                type: 'hidden',
-                                name: 'uploaded_image',
-                                value: data.image_path
-                            }).appendTo('#modalEditData form');
-
-                            uploadedFileName = data.image_path;
+                            window.dropzoneInitialized = true;
                         }
-
 
 
                         $('#modalEditData').modal('show');
@@ -937,27 +892,10 @@
             e.preventDefault();
 
             let id = $("#editData").data('id');
-
             const deskripsi = quillEditor?.root.innerHTML || '';
             $("#editDescription").val(deskripsi);
 
-            let formData = new FormData();
-
-            formData.append('name', $("#editName").val());
-            formData.append('deskripsi', $("#editDescription").val());
-
-            if (uploadedFileName) {
-                formData.append('uploaded_image', uploadedFileName);
-            }
-
-            formData.append('price', $("#editPrice").val());
-
-            let consultantSelected = $("#editConsultant").val();
-            if (consultantSelected && consultantSelected.length > 0) {
-                consultantSelected.forEach(function(item) {
-                    formData.append('consultant[]', item);
-                });
-            }
+            var formData = new FormData($('#modalEditData form')[0]);
 
             formData.append('_method', 'PUT');
 
@@ -980,13 +918,13 @@
                             showConfirmButton: false
                         }).then(() => {
                             $("#editData")[0].reset();
+                            
                             $('#editConsultant').val(null).trigger('change');
                             $('#modalEditData').modal('hide');
-
+                            
                             table.ajax.reload(null, false);
-
+                            
                             if (quillEditor) quillEditor.setContents([]);
-                            if (editDropzone) editDropzone.removeAllFiles(true);
                         });
                     }
                 },
@@ -1000,6 +938,8 @@
                 }
             });
         });
+
+
 
     </script>
 @endsection

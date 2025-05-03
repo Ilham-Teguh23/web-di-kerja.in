@@ -147,46 +147,45 @@ class PackageItemController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'name' => 'required|string',
-            'deskripsi' => 'nullable|string',
-            'price' => 'nullable|exists:meta_price_package_service,id',
+            'editName' => 'required|string',
+            'editDescription' => 'nullable|string',
+            'editPrice' => 'nullable|exists:meta_price_package_service,id',
             'uploaded_image' => 'nullable|string',
-            'consultant' => 'nullable|array'
+            'editConsultant' => 'nullable|array'
         ]);
-
+        
         try {
             DB::beginTransaction();
-
+            
             $package = PackageItem::findOrFail($id);
-
+            
             $imageFilename = $request->uploaded_image;
-
-            // Kalau ada perubahan gambar baru
+            
             if ($imageFilename && $imageFilename !== $package->image_path) {
-                // Hapus file lama pakai unlink
                 if (!empty($package->image_path)) {
                     $oldFilePath = public_path('storage/image_item_package/' . $package->image_path);
                     if (file_exists($oldFilePath)) {
                         unlink($oldFilePath); // <-- pakai unlink di sini
                     }
                 }
-
+                
                 // Set image baru
                 $package->image_path = $imageFilename;
+                // dd($package);
             }
 
             // Update data lain
-            $package->name = $request->name;
-            $package->description = $request->deskripsi;
-            $package->meta_price_package_service_id = $request->price;
+            $package->name = $request->editName;
+            $package->description = $request->editDescription;
+            $package->meta_price_package_service_id = $request->editPrice;
             $package->save();
 
             // Hapus semua relasi konsultasi lama
             PackageServiceConsultation::where('package_service_id', $id)->delete();
 
             // Insert relasi konsultasi baru
-            if ($request->has('consultant')) {
-                foreach ($request->consultant as $consultantId) {
+            if ($request->has('editConsultant')) {
+                foreach ($request->editConsultant as $consultantId) {
                     PackageServiceConsultation::create([
                         'package_service_id' => $package->id,
                         'consultation_detail_id' => $consultantId
@@ -334,6 +333,17 @@ class PackageItemController extends Controller
         }
 
         try {
+            // Jika ada file lama, hapus file lama terlebih dahulu
+            if ($request->has('old_filename')) {
+                $oldFileName = $request->input('old_filename');
+                $oldFilePath = public_path($dir . $oldFileName);
+
+                if (File::exists($oldFilePath)) {
+                    File::delete($oldFilePath); // Hapus file lama
+                }
+            }
+
+            // Pindahkan file baru ke direktori tujuan
             $file->move(dirname($fullPath), $encryptedName);
         } catch (\Exception $e) {
             return response()->json([
@@ -358,17 +368,39 @@ class PackageItemController extends Controller
 }
 
 
-    public function deleteUploadedImage(Request $request)
+public function deleteUploadedImage(Request $request)
 {
     $filename = $request->input('filename');
-    $path = public_path('storage/image_item_package/' . $filename); // GANTI INI
 
-    if (file_exists($path)) {
-        unlink($path);
-        return response()->json(['status' => true, 'message' => 'File berhasil dihapus.']);
+    if (!$filename) {
+        return response()->json([
+            'status' => false,
+            'message' => 'Nama file tidak diberikan.'
+        ], 400);
     }
 
-    return response()->json(['status' => false, 'message' => 'File tidak ditemukan: ' . $path], 404);
+    $path = public_path('storage/image_item_package/' . $filename);
+
+    if (File::exists($path)) {
+        try {
+            File::delete($path);
+
+            return response()->json([
+                'status' => true,
+                'message' => 'File berhasil dihapus.'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Gagal menghapus file: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    return response()->json([
+        'status' => false,
+        'message' => 'File tidak ditemukan: ' . $path
+    ], 404);
 }
 
     

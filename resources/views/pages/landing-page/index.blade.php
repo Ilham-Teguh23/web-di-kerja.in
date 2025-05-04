@@ -38,6 +38,29 @@
             z-index: -1;
         }
 
+                /* Menetapkan ukuran tetap untuk kotak */
+                .fixed-size-box {
+    width: 100%;        /* Lebar kotak sesuai kolom */
+    height: 200px;      /* Tinggi kotak tetap (bisa disesuaikan) */
+    background-color: #f4f4f4; /* Warna latar belakang kotak, bisa diganti */
+    border-radius: 10px; /* Sudut kotak melengkung, bisa dihilangkan jika tidak diperlukan */
+    display: flex;
+    flex-direction: row; /* Menyusun ikon secara horizontal */
+    justify-content: center; /* Menyusun ikon di tengah secara horizontal */
+    align-items: center; /* Menyusun ikon di tengah secara vertikal */
+    text-align: center;
+}
+
+.fixed-size-box i {
+    font-size: 30px; /* Ukuran font untuk ikon */
+}
+
+.fixed-size-box i:last-child {
+    margin-right: 0; /* Menghilangkan margin pada ikon terakhir */
+}
+
+
+
     </style>
 
 </head>
@@ -59,7 +82,7 @@
                     <p data-aos="fade-up" data-aos-delay="100">
                         Jasa Pembuatan Website dan Aplikasi Termurah dan Terpercaya.
                     </p>
-                    <img src="{{ url('/landing-page') }}/assets/img/hero-services-img.webp" class="img-fluid hero-img"
+                    <img src="{{ url('/landing-page') }}/assets/img/hero-services-img.png" class="img-fluid hero-img"
                         alt="" data-aos="zoom-out" data-aos-delay="300">
                 </div>
             </div>
@@ -733,10 +756,9 @@
             <div class="container" data-aos="fade-up" data-aos-delay="100">
 
                 <div class="row gy-4">
-
-                    <div class="col-lg-6">
-                        <div class="info-item d-flex flex-column justify-content-center align-items-center"
-                            data-aos="fade-up" data-aos-delay="200">
+                    <!-- Kolom pertama -->
+                    <div class="col-lg-3">
+                        <div class="info-item d-flex flex-column justify-content-center align-items-center fixed-size-box" data-aos="fade-up" data-aos-delay="200">
                             <i class="bi bi-geo-alt"></i>
                             <h3>Alamat</h3>
                             <p style="text-align: center">
@@ -744,30 +766,51 @@
                             </p>
                         </div>
                     </div>
-
+                
+                    <!-- Kolom kedua -->
                     <div class="col-lg-3 col-md-6">
-                        <div class="info-item d-flex flex-column justify-content-center align-items-center"
-                            data-aos="fade-up" data-aos-delay="300">
+                        <div class="info-item d-flex flex-column justify-content-center align-items-center fixed-size-box" data-aos="fade-up" data-aos-delay="300">
                             <i class="bi bi-telephone"></i>
                             <h3>Narahubung</h3>
-                            <p>
-                                0812-1470-7143
-                            </p>
+                            <p>0812-1470-7143</p>
                         </div>
                     </div>
-
+                
+                    <!-- Kolom ketiga -->
                     <div class="col-lg-3 col-md-6">
-                        <div class="info-item d-flex flex-column justify-content-center align-items-center"
-                            data-aos="fade-up" data-aos-delay="400">
+                        <div class="info-item d-flex flex-column justify-content-center align-items-center fixed-size-box" data-aos="fade-up" data-aos-delay="400">
                             <i class="bi bi-envelope"></i>
                             <h3>Email</h3>
-                            <p>
-                                mimin.dikerjain@gmail.com
-                            </p>
+                            <p>mimin.dikerjain@gmail.com</p>
                         </div>
                     </div>
-
+                
+                    <!-- Kolom baru dengan ikon sosial media -->
+                    <div class="col-lg-3 col-md-6">
+                        <div class="info-item d-flex flex-column justify-content-center align-items-center fixed-size-box" data-aos="fade-up" data-aos-delay="500">
+                            <!-- Ikon Sosial Media -->
+                            <div class="d-flex justify-content-center align-items-center">
+                                <!-- Facebook Icon -->
+                                <i class="bi bi-facebook" style="font-size: 30px; color: #4267B2; margin-right: 10px;"></i> <!-- Facebook Icon -->
+                            
+                                <!-- Instagram Icon -->
+                                <i class="bi bi-instagram" style="font-size: 30px; color: #E4405F; margin-right: 10px;"></i> <!-- Instagram Icon -->
+                            
+                                <!-- X (formerly Twitter) Icon -->
+                                <i class="bi bi-x" style="font-size: 30px; color: #1D9BF0; margin-right: 10px;"></i> <!-- X (formerly Twitter) Icon -->
+                            
+                                <!-- TikTok Icon -->
+                                <i class="bi bi-tiktok" style="font-size: 30px; color: #010101;"></i> <!-- TikTok Icon -->
+                            </div>
+                            
+                            <!-- Teks h3 untuk Sosmed Center -->
+                            <h3>Sosmed Center</h3>
+                        </div>
+                    </div>                    
                 </div>
+                
+                
+                
 
                 <div class="mt-1 row gy-4">
 

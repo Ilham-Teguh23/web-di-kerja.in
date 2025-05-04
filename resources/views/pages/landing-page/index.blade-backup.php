@@ -36,7 +36,7 @@
                     <p data-aos="fade-up" data-aos-delay="100">
                         Jasa Pembuatan Website dan Aplikasi Termurah dan Terpercaya.
                     </p>
-                    <img src="{{ url('/landing-page') }}/assets/img/hero-services-img.webp" class="img-fluid hero-img"
+                    <img src="{{ url('/landing-page') }}/assets/img/hero-services-img.png" class="img-fluid hero-img"
                         alt="" data-aos="zoom-out" data-aos-delay="300">
                 </div>
             </div>

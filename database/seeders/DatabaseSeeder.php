@@ -2,6 +2,8 @@
 
 namespace Database\Seeders;
 
+use App\Models\AboutListSuperiority;
+use App\Models\ListSuperiority;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -24,6 +26,11 @@ class DatabaseSeeder extends Seeder
             MetaPricePackageServiceSeeder::class,
             PackageServiceSeeder::class,
             PackageServiceConsultationSeeder::class,
+            AboutSeeder::class,
+            ListSuperioritySeeder::class,
+            AboutListSuperioritySeeder::class,
+            ContactSeeder::class,
+            TestimonialProductSeeder::class,
         ]);
     }
 }

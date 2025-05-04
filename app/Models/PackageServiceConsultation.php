@@ -8,6 +8,8 @@ class PackageServiceConsultation extends Model
 {
     protected $table = "package_service_consultations";
 
+    protected $keyType = 'string';
+
     protected $guarded = [''];
 
     public function detailConsultant()

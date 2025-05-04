@@ -1,19 +1,19 @@
 @extends('layout.index')
 
-@section('title', 'Testimonials')
+@section('title', 'Testimonials Customer')
 
 @section('css')
 
 @section('breadcumb')
     <div class="page-header">
-        <h1 class="my-auto page-title">Data Akun Testimonials</h1>
+        <h1 class="my-auto page-title">Data Akun Testimonial Pelanggan</h1>
         <div>
             <ol class="mb-0 breadcrumb">
                 <li class="breadcrumb-item">
                     <a href="javascript:void(0)">Home</a>
                 </li>
                 <li class="breadcrumb-item active" aria-current="page">
-                    Testimonials
+                    Testimonial Pelanggan
                 </li>
             </ol>
         </div>
@@ -27,7 +27,7 @@
             <div class="card custom-card">
                 <div class="card-header justify-content-between">
                     <div class="card-title">
-                        Data Testimonials
+                        Data Testimonial Pelanggan
                     </div>
                     <div class="prism-toggle">
                         <button type="button" class="btn btn-sm btn-primary-light" data-bs-toggle="modal"
@@ -41,9 +41,7 @@
                         <thead>
                             <tr>
                                 <th>No.</th>
-                                <th>Nama</th>
-                                <th>Role</th>
-                                <th>Deskripsi</th>
+                                <th>Gambar</th>
                                 <th>Status</th>
                                 <th>Aksi</th>
                             </tr>
@@ -69,19 +67,9 @@
                 </div>
                 <form id="tambahData">
                     <div class="modal-body">
-                        <div class="form-group">
-                            <label for="nama" class="form-label">Nama</label>
-                            <input type="text" class="form-control" id="nama" name="nama"
-                                placeholder="Masukkan Nama">
-                        </div>
-                        <div class="mt-3 form-group">
-                            <label for="role" class="form-label">Role</label>
-                            <input type="text" class="form-control" id="role" name="role"
-                                placeholder="Masukkan Role">
-                        </div>
-                        <div class="mt-3 form-group">
-                            <label for="deskripsi" class="form-label">Deskripsi</label>
-                            <textarea name="deskripsi" class="form-control" id="deskripsi" rows="5" placeholder="Masukkan Deskripsi"></textarea>
+                        <div class="form-group mb-3">
+                            <label class="form-label">Upload Gambar</label>
+                            <div class="dropzone" id="dropzoneArea"></div>
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -110,20 +98,9 @@
                 </div>
                 <form id="editData">
                     <div class="modal-body">
-                        <div class="form-group">
-                            <label for="editNama" class="form-label">Nama</label>
-                            <input type="text" class="form-control" id="editNama" name="editNama"
-                                placeholder="Masukkan Nama">
-                        </div>
                         <div class="mt-3 form-group">
-                            <label for="editRole" class="form-label">Role</label>
-                            <input type="text" class="form-control" id="editRole" name="editRole"
-                                placeholder="Masukkan Role">
-                        </div>
-                        <div class="mt-3 form-group">
-                            <label for="editDeskripsi" class="form-label">Deskripsi</label>
-                            <textarea name="editDeskripsi" class="form-control" id="editDeskripsi" rows="5"
-                                placeholder="Masukkan Deskripsi"></textarea>
+                            <label class="form-label">Upload Gambar</label>
+                            <div class="editDropzone" id="editDropzoneArea"></div>
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -161,7 +138,7 @@
                 processing: true,
                 serverSide: true,
                 autoWidth: false,
-                ajax: "{{ route('testimonials.datatable') }}",
+                ajax: "{{ route('testimonials-customer.datatable') }}",
                 columnDefs: [{
                         targets: 0,
                         render: function(data, type, full, meta) {

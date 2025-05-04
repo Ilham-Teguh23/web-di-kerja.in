@@ -56,20 +56,41 @@
                     </a>
                 </li>
                 <!-- End::slide -->
+
+                <!-- Start::slide -->
+                <li class="slide {{ request()->routeIs('testimonials-product.index') ? 'active' : '' }}">
+                    <a href="{{ route('testimonials-product.index') }}" class="side-menu__item {{ request()->routeIs('testimonials-product.index') ? 'active' : '' }}">
+                        <i class="fe fe-star side-menu__icon"></i>
+                        <span class="side-menu__label">Testimoni Produk</span>
+                    </a>
+                </li>
+                <!-- End::slide -->
+
+                <!-- Start::slide -->
+                <li class="slide {{ request()->routeIs('testimonials-customer.index') ? 'active' : '' }}">
+                    <a href="{{ route('testimonials-customer.index') }}" class="side-menu__item {{ request()->routeIs('testimonials-customer.index') ? 'active' : '' }}">
+                        <i class="fe fe-users side-menu__icon"></i>
+                        <span class="side-menu__label">Testimoni Pelanggan</span>
+                    </a>
+                </li>
+                <!-- End::slide -->
     
                 <li class="slide__category">
                     <span class="category-name">Menu</span>
                 </li>
     
-                <li class="slide has-sub {{ request()->routeIs('testimonials.*', 'faq.*', 'benefit.*', 'katalog.*') ? 'open' : '' }}">
+                <li class="slide has-sub {{ request()->routeIs('image-hero.*', 'about.*', 'testimonials-customer.*', 'testimonials-product.*', 'faq.*', 'benefit.*', 'katalog.*', 'contact.*') ? 'open' : '' }}">
                     <a href="javascript:void(0);" class="side-menu__item">
-                        <i class="fe fe-users side-menu__icon"></i>
+                        <i class="fe fe-user-check side-menu__icon"></i>
                         <span class="side-menu__label">Master</span>
                         <i class="fe fe-chevron-right side-menu__angle"></i>
                     </a>
                     <ul class="slide-menu child1">
                         <li class="slide">
-                            <a href="{{ route('testimonials.index') }}" class="side-menu__item {{ request()->routeIs('testimonials.*') ? 'active' : '' }}">Testimonial</a>
+                            <a href="{{ route('image-hero.index') }}" class="side-menu__item {{ request()->routeIs('image-hero.*') ? 'active' : '' }}">Hero Image</a>
+                        </li>
+                        <li class="slide">
+                            <a href="{{ route('about.index') }}" class="side-menu__item {{ request()->routeIs('about.*') ? 'active' : '' }}">Tentang Kami</a>
                         </li>
                         <li class="slide">
                             <a href="{{ route('faq.index') }}" class="side-menu__item {{ request()->routeIs('faq.*') ? 'active' : '' }}">FAQ</a>
@@ -80,10 +101,13 @@
                         <li class="slide">
                             <a href="{{ route('katalog.index') }}" class="side-menu__item {{ request()->routeIs('katalog.*') ? 'active' : '' }}">Katalog</a>
                         </li>
+                        <li class="slide">
+                            <a href="{{ route('contact.index') }}" class="side-menu__item {{ request()->routeIs('contact.*') ? 'active' : '' }}">Kontak</a>
+                        </li>
                     </ul>
                 </li>
 
-                <li class="slide has-sub {{ request()->routeIs('favorite-item.*', 'price-item.*', 'detail-consultant.*') ? 'open' : '' }}">
+                <li class="slide has-sub {{ request()->routeIs('favorite-item.*', 'price-item.*', 'detail-consultant.*', 'superiority.*',) ? 'open' : '' }}">
                     <a href="javascript:void(0);" class="side-menu__item">
                         <i class="fe fe-settings side-menu__icon"></i>
                         <span class="side-menu__label">Meta Data</span>
@@ -98,6 +122,9 @@
                         </li>
                         <li class="slide">
                             <a href="{{ route('detail-consultant.index') }}" class="side-menu__item {{ request()->routeIs('detail-consultant.*') ? 'active' : '' }}">Detail Konsultasi</a>
+                        </li>
+                        <li class="slide">
+                            <a href="{{ route('superiority.index') }}" class="side-menu__item {{ request()->routeIs('superiority.*') ? 'active' : '' }}">Setting About</a>
                         </li>
                     </ul>
                 </li>

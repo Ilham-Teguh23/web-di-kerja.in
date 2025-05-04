@@ -8,5 +8,7 @@ class MetaDataDetailConsultant extends Model
 {
     protected $table = "meta_consultation_details";
 
+    protected $keyType = 'string';
+
     protected $guarded = [''];
 }

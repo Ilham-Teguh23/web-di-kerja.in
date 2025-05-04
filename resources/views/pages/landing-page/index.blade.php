@@ -38,27 +38,6 @@
             z-index: -1;
         }
 
-                /* Menetapkan ukuran tetap untuk kotak */
-                .fixed-size-box {
-    width: 100%;        /* Lebar kotak sesuai kolom */
-    height: 200px;      /* Tinggi kotak tetap (bisa disesuaikan) */
-    background-color: #f4f4f4; /* Warna latar belakang kotak, bisa diganti */
-    border-radius: 10px; /* Sudut kotak melengkung, bisa dihilangkan jika tidak diperlukan */
-    display: flex;
-    flex-direction: row; /* Menyusun ikon secara horizontal */
-    justify-content: center; /* Menyusun ikon di tengah secara horizontal */
-    align-items: center; /* Menyusun ikon di tengah secara vertikal */
-    text-align: center;
-}
-
-.fixed-size-box i {
-    font-size: 30px; /* Ukuran font untuk ikon */
-}
-
-.fixed-size-box i:last-child {
-    margin-right: 0; /* Menghilangkan margin pada ikon terakhir */
-}
-
 
 
     </style>
@@ -431,13 +410,49 @@
                                     Dinas Lingkungan Hidup (DLH) Kota Cirebon
                                 </strong> Website ini ...
                             </p>
-                            <img src="{{ url('/katalog/Website-Proklim.jpg') }}" alt=""
-                                style="width: 100%; height: 300px">
+                    
+                            <!-- Wrapper untuk gambar yang dapat di-scroll -->
+                            <div class="card-body">
+                                <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
+                                    <div class="carousel-indicators">
+                                        <button type="button" data-bs-target="#carouselExampleIndicators"
+                                            data-bs-slide-to="0" class="active" aria-current="true"
+                                            aria-label="Slide 1"></button>
+                                        <button type="button" data-bs-target="#carouselExampleIndicators"
+                                            data-bs-slide-to="1" aria-label="Slide 2"></button>
+                                        <button type="button" data-bs-target="#carouselExampleIndicators"
+                                            data-bs-slide-to="2" aria-label="Slide 3"></button>
+                                    </div>
+                                    <div class="carousel-inner">
+                                        <div class="carousel-item active">
+                                            <img src="../assets/images/media/media-25.jpg" class="d-block w-100" alt="...">
+                                        </div>
+                                        <div class="carousel-item">
+                                            <img src="../assets/images/media/media-29.jpg" class="d-block w-100" alt="...">
+                                        </div>
+                                        <div class="carousel-item">
+                                            <img src="../assets/images/media/media-30.jpg" class="d-block w-100" alt="...">
+                                        </div>
+                                    </div>
+                                    <button class="carousel-control-prev" type="button"
+                                        data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
+                                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                        <span class="visually-hidden">Previous</span>
+                                    </button>
+                                    <button class="carousel-control-next" type="button"
+                                        data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
+                                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                        <span class="visually-hidden">Next</span>
+                                    </button>
+                                </div>
+                            </div>
+                    
                             <a data-bs-toggle="modal" data-bs-target="#exampleModalProklim" class="cta-btn">
                                 Detail Produk
                             </a>
                         </div>
                     </div><!-- End Pricing Item -->
+                    
 
                     <div class="col-lg-4" data-aos="zoom-in" data-aos-delay="100">
                         <div class="pricing-item">

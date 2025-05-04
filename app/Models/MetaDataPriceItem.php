@@ -8,5 +8,7 @@ class MetaDataPriceItem extends Model
 {
     protected $table = "meta_price_package_service";
 
+    protected $keyType = 'string';
+
     protected $guarded = [''];
 }

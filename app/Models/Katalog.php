@@ -8,5 +8,7 @@ class Katalog extends Model
 {
     protected $table = "katalog";
 
+    protected $keyType = 'string';
+
     protected $guarded = [''];
 }

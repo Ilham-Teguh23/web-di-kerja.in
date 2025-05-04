@@ -8,5 +8,7 @@ class TestimonialCustomer extends Model
 {
     protected $table = "testimonial_customer";
 
+    protected $keyType = 'string';
+
     protected $guarded = [''];
 }

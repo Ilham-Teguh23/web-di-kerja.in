@@ -8,6 +8,8 @@ class PackageItem extends Model
 {
     protected $table = "package_service";
 
+    protected $keyType = 'string';
+
     protected $guarded = [''];
 
     public function packageConsultation()

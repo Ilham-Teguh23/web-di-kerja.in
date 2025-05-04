@@ -8,5 +8,7 @@ class Benefit extends Model
 {
     protected $table = "benefit";
 
+    protected $keyType = 'string';
+
     protected $guarded = [''];
 }

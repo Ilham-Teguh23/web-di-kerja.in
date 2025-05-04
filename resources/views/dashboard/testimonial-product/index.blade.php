@@ -1,19 +1,22 @@
 @extends('layout.index')
 
-@section('title', 'Testimonials')
+@section('title', 'Testimonials Product')
 
 @section('css')
 
+<link href="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.snow.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.3/min/dropzone.min.css">
+
 @section('breadcumb')
     <div class="page-header">
-        <h1 class="my-auto page-title">Data Akun Testimonials</h1>
+        <h1 class="my-auto page-title">Data Akun Testimonial Produk</h1>
         <div>
             <ol class="mb-0 breadcrumb">
                 <li class="breadcrumb-item">
                     <a href="javascript:void(0)">Home</a>
                 </li>
                 <li class="breadcrumb-item active" aria-current="page">
-                    Testimonials
+                    Testimonial Produk
                 </li>
             </ol>
         </div>
@@ -27,7 +30,7 @@
             <div class="card custom-card">
                 <div class="card-header justify-content-between">
                     <div class="card-title">
-                        Data Testimonials
+                        Data Testimonial Produk
                     </div>
                     <div class="prism-toggle">
                         <button type="button" class="btn btn-sm btn-primary-light" data-bs-toggle="modal"
@@ -42,7 +45,6 @@
                             <tr>
                                 <th>No.</th>
                                 <th>Nama</th>
-                                <th>Role</th>
                                 <th>Deskripsi</th>
                                 <th>Status</th>
                                 <th>Aksi</th>
@@ -69,19 +71,20 @@
                 </div>
                 <form id="tambahData">
                     <div class="modal-body">
-                        <div class="form-group">
-                            <label for="nama" class="form-label">Nama</label>
-                            <input type="text" class="form-control" id="nama" name="nama"
-                                placeholder="Masukkan Nama">
+                        <div class="form-group mb-3">
+                            <label for="editorName" class="form-label">Nama</label>
+                            <div id="editorName" style="height: 200px;"></div>
+                            <input type="hidden" name="name" id="name">
                         </div>
-                        <div class="mt-3 form-group">
-                            <label for="role" class="form-label">Role</label>
-                            <input type="text" class="form-control" id="role" name="role"
-                                placeholder="Masukkan Role">
+                        <div class="form-group mb-3">
+                            <label for="editorDeskripsi" class="form-label">Deskripsi</label>
+                            <div id="editorDeskripsi" style="height: 200px;"></div>
+                            <input type="hidden" name="deskripsi" id="deskripsi">
                         </div>
-                        <div class="mt-3 form-group">
-                            <label for="deskripsi" class="form-label">Deskripsi</label>
-                            <textarea name="deskripsi" class="form-control" id="deskripsi" rows="5" placeholder="Masukkan Deskripsi"></textarea>
+                        <!-- Upload Gambar (Dropzone) -->
+                        <div class="form-group mb-3">
+                            <label class="form-label">Upload Gambar</label>
+                            <div class="dropzone" id="dropzoneArea"></div>
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -111,19 +114,18 @@
                 <form id="editData">
                     <div class="modal-body">
                         <div class="form-group">
-                            <label for="editNama" class="form-label">Nama</label>
-                            <input type="text" class="form-control" id="editNama" name="editNama"
-                                placeholder="Masukkan Nama">
+                            <label for="editEditorName" class="form-label">Nama</label>
+                            <div id="editEditorName" style="height: 200px;"></div>
+                            <input type="hidden" name="editName" id="editEditorName">
                         </div>
                         <div class="mt-3 form-group">
-                            <label for="editRole" class="form-label">Role</label>
-                            <input type="text" class="form-control" id="editRole" name="editRole"
-                                placeholder="Masukkan Role">
+                            <label for="editEditorDeskripsi" class="form-label">Deskripsi</label>
+                            <div id="editEditorDeskripsi" style="height: 200px;"></div>
+                            <input type="hidden" name="editDeskripsi" id="editEditorDeskripsi">
                         </div>
                         <div class="mt-3 form-group">
-                            <label for="editDeskripsi" class="form-label">Deskripsi</label>
-                            <textarea name="editDeskripsi" class="form-control" id="editDeskripsi" rows="5"
-                                placeholder="Masukkan Deskripsi"></textarea>
+                            <label class="form-label">Upload Gambar</label>
+                            <div class="editDropzone" id="editDropzoneArea"></div>
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -151,9 +153,112 @@
     <script src="https://cdn.datatables.net/buttons/2.2.3/js/dataTables.buttons.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.print.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.html5.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.3/min/dropzone.min.js"></script>
 
     <script>
+
         var table;
+        var myDropzone;
+
+        Dropzone.autoDiscover = false;
+
+        const quillName = new Quill('#editorName', {
+            theme: 'snow'
+        });
+
+        const quillDeskripsi = new Quill('#editorDeskripsi', {
+            theme: 'snow'
+        });
+
+
+        $('#modalTambahData').on('shown.bs.modal', function () {
+
+            if (Dropzone.instances.length > 0) {
+                Dropzone.instances.forEach(function(dropzone) {
+                    dropzone.destroy();
+                });
+            }
+
+            if ($("#dropzoneArea").length) {
+                
+                var uploadedFileName = '';
+
+                var myDropzone = new Dropzone("#dropzoneArea", {
+                    url: "{{ route('testimonials-product.upload-image') }}",
+                    maxFiles: 1,
+                    acceptedFiles: "image/*",
+                    addRemoveLinks: true,
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    success: function (file, response) {
+                        if (uploadedFileName) {
+                            $.ajax({
+                                url: "{{ route('testimonials-product.delete-uploaded-image') }}",
+                                type: 'POST',
+                                data: {
+                                    _token: $('meta[name="csrf-token"]').attr('content'),
+                                    filename: uploadedFileName 
+                                },
+                                success: function (res) {
+
+                                    uploadedFileName = response.filename;
+                                    $('<input>').attr({
+                                        type: 'hidden',
+                                        name: 'uploaded_image',
+                                        value: uploadedFileName
+                                    }).appendTo('#tambahData');
+
+                                    Swal.fire({
+                                        icon: 'success',
+                                        title: 'Upload Berhasil!',
+                                        text: 'Gambar berhasil diunggah.',
+                                        timer: 1500,
+                                        showConfirmButton: false
+                                    });
+                                },
+                                error: function (xhr) {
+                                    console.error("Gagal menghapus file lama:", xhr.responseText);
+                                    Swal.fire({
+                                        icon: 'error',
+                                        title: 'Gagal Menghapus File Lama',
+                                        text: 'Terjadi kesalahan saat menghapus file lama.'
+                                    });
+                                }
+                            });
+                        } else {
+                            uploadedFileName = response.filename;
+                            $('<input>').attr({
+                                type: 'hidden',
+                                name: 'uploaded_image',
+                                value: uploadedFileName
+                            }).appendTo('#tambahData');
+
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Upload Berhasil!',
+                                text: 'Gambar berhasil diunggah.',
+                                timer: 1500,
+                                showConfirmButton: false
+                            });
+                        }
+                    },
+                    removedfile: function(file) {
+                                file.previewElement.remove();
+                    },
+                    error: function (file, response) {
+                        console.error('Upload gagal:', response);
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Upload Gagal',
+                            text: typeof response === 'string' ? response : 'Terjadi kesalahan saat mengunggah gambar.'
+                        });
+                    }
+                });
+            }
+        });
 
         $(document).ready(function() {
             table = $("#datatable").DataTable({
@@ -161,7 +266,7 @@
                 processing: true,
                 serverSide: true,
                 autoWidth: false,
-                ajax: "{{ route('testimonials.datatable') }}",
+                ajax: "{{ route('testimonials-product.datatable') }}",
                 columnDefs: [{
                         targets: 0,
                         render: function(data, type, full, meta) {
@@ -169,7 +274,25 @@
                         }
                     },
                     {
-                        targets: 4,
+                        targets: 1,
+                        render: function(data, type, full, meta) {
+                            let htmlDecoded = data.replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&').replace(/&quot;/g, '"').replace(/&#039;/g, "'");
+
+                            let textOnly = htmlDecoded.replace(/<\/?[^>]+(>|$)/g, "");
+                            return textOnly ? textOnly : 'No Name';
+                        }
+                    },
+                    {
+                        targets: 2,
+                        render: function(data, type, full, meta) {
+                            let htmlDecoded = data.replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&').replace(/&quot;/g, '"').replace(/&#039;/g, "'");
+
+                            let textOnly = htmlDecoded.replace(/<\/?[^>]+(>|$)/g, "");
+                            return textOnly ? textOnly : 'No description';
+                        }
+                    },
+                    {
+                        targets: 3,
                         render: function(data, type, full, meta) {
                             const status = full.status == "0" ? "Tidak Aktif" : "Aktif";
                             const btnClass = full.status == "0" ? "btn-danger" : "btn-success";
@@ -179,7 +302,7 @@
                         }
                     },
                     {
-                        targets: 5,
+                        targets: 4,
                         render: function(data, type, full, meta) {
                             return `
                         <a href="#" class="btn btn-warning btn-sm" onclick="editData(${full.id})">
@@ -197,9 +320,6 @@
                     },
                     {
                         data: 'nama'
-                    },
-                    {
-                        data: 'role'
                     },
                     {
                         data: 'deskripsi'
@@ -289,34 +409,67 @@
             }
         }
 
-        $("#simpanData").on("click", function(e) {
+        $("#simpanData").on("click", function (e) {
             e.preventDefault();
 
-            let formData = {
-                nama: $("#nama").val(),
-                role: $("#role").val(),
-                deskripsi: $("#deskripsi").val()
-            };
+            const name = quillName?.root.innerHTML || '';
+            $("#name").val(name);
+            
+            const deskripsi = quillDeskripsi?.root.innerHTML || '';
+            $("#deskripsi").val(deskripsi);
+
+            let formData = new FormData($("#tambahData")[0]);
+            
 
             $.ajax({
-                url: "{{ url('master/testimonials') }}",
+                url: "{{ url('master/testimonials-product') }}",
                 type: "POST",
                 data: formData,
+                processData: false,
+                contentType: false,
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
-                success: function(response) {
+                beforeSend: function () {
+                    $("#simpanData").prop("disabled", true).html("Menyimpan...");
+                },
+                success: function (response) {
                     if (response.status === true) {
-                        alert(response.message);
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Berhasil',
+                            text: response.message,
+                            timer: 1500,
+                            showConfirmButton: false
+                        }).then(() => {
+                            $("#tambahData")[0].reset();
+                            $('#modalTambahData').modal('hide');
 
-                        $("#tambahData")[0].reset();
-                        $("#modalTambahData").modal("hide");
+                            if (quillName) quillName.setContents([]);
+                            if (quillDeskripsi) quillDeskripsi.setContents([]);
+                            if (myDropzone) myDropzone.removeAllFiles(true);
 
-                        table.ajax.reload();
+                            table.ajax.reload()
+
+                        });
+                    } else {
+                        Swal.fire({
+                            icon: 'warning',
+                            title: 'Gagal',
+                            text: response.message || 'Gagal menyimpan data.'
+                        });
                     }
                 },
-                error: function(xhr) {
-                    alert("Terjadi kesalahan: " + xhr.responseText);
+                error: function (xhr) {
+                    console.error(xhr.responseText);
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Terjadi Kesalahan',
+                        text: xhr.responseJSON?.message || 'Gagal memproses permintaan.'
+                    });
+                },
+                complete: function () {
+                    $("#simpanData").prop("disabled", false).html('<i class="fe fe-save"></i> Simpan');
                 }
             });
         });

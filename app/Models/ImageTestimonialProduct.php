@@ -4,9 +4,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class MetaDataFavoriteItem extends Model
+class ImageTestimonialProduct extends Model
 {
-    protected $table = "meta_favorite_item";
+    protected $table = "image_testimonial_product";
 
     protected $keyType = 'string';
 

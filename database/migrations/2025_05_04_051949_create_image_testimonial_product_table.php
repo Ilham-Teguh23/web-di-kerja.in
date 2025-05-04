@@ -11,11 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('testimonial_product', function (Blueprint $table) {
+        Schema::create('image_testimonial_product', function (Blueprint $table) {
             $table->id();
-            $table->string("nama");
-            $table->text("deskripsi");
-            $table->enum("status", ['1', '0']);
+            $table->foreignId('testimonial_product_id')->constrained('testimonial_product')->onDelete('cascade');
+            $table->string("gambar")->nullable();
             $table->timestamps();
         });
     }
@@ -25,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('testimonial_product');
+        Schema::dropIfExists('image_testimonial_product');
     }
 };

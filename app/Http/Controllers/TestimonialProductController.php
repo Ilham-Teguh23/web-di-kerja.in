@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\TestimonialProduct;
 use Illuminate\Http\Request;
+use Yajra\DataTables\DataTables;
+use App\Models\TestimonialProduct;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\File;
 
 class TestimonialProductController extends Controller
 {
@@ -25,33 +28,39 @@ class TestimonialProductController extends Controller
 
     public function store(Request $request)
     {
-        try {
+        // dd($request->all());
+        $request->validate([
+            'name' => 'required|string',
+            'deskripsi' => 'nullable|string',
+            'uploaded_image' => 'nullable|string',
+        ]);
 
+        try {
             DB::beginTransaction();
 
+            $imageFilename = $request->uploaded_image;
+
             $this->testimonialProduct->create([
-                "nama" => $request->nama,
-                "role" => $request->role,
-                "deskripsi" => $request->deskripsi,
+                'nama' => $request->name,
+                'deskripsi' => $request->deskripsi,
+                'gambar' => $imageFilename,
                 "status" => "0"
             ]);
 
             DB::commit();
 
             return response()->json([
-                "status" => true,
-                "message" => "Data Berhasil di Tambah"
+                'status' => true,
+                'message' => 'Data berhasil disimpan'
             ]);
-
         } catch (\Exception $e) {
-
             DB::rollBack();
-
+        
             return response()->json([
-                "status" => false,
-                "message" => $e->getMessage()
-            ]);
-        }
+                'status' => false,
+                'message' => 'Terjadi kesalahan: ' . $e->getMessage()
+            ], 500);
+        }        
     }
 
     public function show($id)
@@ -165,9 +174,96 @@ class TestimonialProductController extends Controller
         }
     }
 
+    public function uploadImage(Request $request)
+    {
+        if ($request->hasFile('file')) {
+            $file = $request->file('file');
+
+            $extension = $file->getClientOriginalExtension();
+            $encryptedName = md5($file->getClientOriginalName() . time()) . '.' . $extension;
+
+            $dir = 'storage/testimonial-product/';
+            $relativePath = $dir . $encryptedName;
+            $fullPath = public_path($relativePath);
+
+            if (!File::exists(dirname($fullPath))) {
+                File::makeDirectory(dirname($fullPath), 0755, true);
+            }
+
+            try {
+                // Jika ada file lama, hapus file lama terlebih dahulu
+                if ($request->has('old_filename')) {
+                    $oldFileName = $request->input('old_filename');
+                    $oldFilePath = public_path($dir . $oldFileName);
+
+                    if (File::exists($oldFilePath)) {
+                        File::delete($oldFilePath); // Hapus file lama
+                    }
+                }
+
+                // Pindahkan file baru ke direktori tujuan
+                $file->move(dirname($fullPath), $encryptedName);
+            } catch (\Exception $e) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Gagal menyimpan file: ' . $e->getMessage()
+                ], 500);
+            }
+
+            $publicPath = asset($relativePath);
+
+            return response()->json([
+                'status' => true,
+                'filename' => $encryptedName,
+                'path' => $publicPath
+            ]);
+        }
+
+        return response()->json([
+            'status' => false,
+            'message' => 'Tidak ada file yang diunggah.'
+        ], 400);
+    }
+
+
+    public function deleteUploadedImage(Request $request)
+    {
+        $filename = $request->input('filename');
+
+        if (!$filename) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Nama file tidak diberikan.'
+            ], 400);
+        }
+
+        $path = public_path('storage/testimonial-product/' . $filename);
+
+        if (File::exists($path)) {
+            try {
+                File::delete($path);
+
+                return response()->json([
+                    'status' => true,
+                    'message' => 'File berhasil dihapus.'
+                ]);
+            } catch (\Exception $e) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Gagal menghapus file: ' . $e->getMessage()
+                ], 500);
+            }
+        }
+
+        return response()->json([
+            'status' => false,
+            'message' => 'File tidak ditemukan: ' . $path
+        ], 404);
+    }
+
     public function datatable(Request $request)
     {
-        $data = Testimonial::orderBy('created_at', 'desc')->get();
+        $data = TestimonialProduct::orderBy('created_at', 'desc')->get();
 
         return DataTables::of($data)->make();
     }

@@ -8,5 +8,7 @@ class HeroImage extends Model
 {
     protected $table = "image_hero";
 
+    protected $keyType = 'string';
+
     protected $guarded = [''];
 }

@@ -8,5 +8,7 @@ class TestimonialProduct extends Model
 {
     protected $table = "testimonial_product";
 
+    protected $keyType = 'string';
+
     protected $guarded = [''];
 }

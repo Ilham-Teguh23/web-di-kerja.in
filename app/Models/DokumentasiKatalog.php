@@ -8,5 +8,7 @@ class DokumentasiKatalog extends Model
 {
     protected $table = "dokumentasi_katalog";
 
+    protected $keyType = 'string';
+
     protected $guarded = [''];
 }

@@ -253,17 +253,15 @@ class TestimonialProductController extends Controller
             }
 
             try {
-                // Jika ada file lama, hapus file lama terlebih dahulu
                 if ($request->has('old_filename')) {
                     $oldFileName = $request->input('old_filename');
                     $oldFilePath = public_path($dir . $oldFileName);
 
                     if (File::exists($oldFilePath)) {
-                        File::delete($oldFilePath); // Hapus file lama
+                        File::delete($oldFilePath);
                     }
                 }
 
-                // Pindahkan file baru ke direktori tujuan
                 $file->move(dirname($fullPath), $encryptedName);
             } catch (\Exception $e) {
                 return response()->json([

@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\TestimonialCustomer;
 use Illuminate\Http\Request;
+use Yajra\DataTables\DataTables;
+use Illuminate\Support\Facades\DB;
+use App\Models\TestimonialCustomer;
+use Illuminate\Support\Facades\File;
 
 class TestimonialCustomerController extends Controller
 {
@@ -25,33 +28,35 @@ class TestimonialCustomerController extends Controller
 
     public function store(Request $request)
     {
-        try {
+        // dd($request->all());
+        $request->validate([
+            'uploaded_image' => 'nullable|string',
+        ]);
 
+        try {
             DB::beginTransaction();
 
-            $this->testimonialCustomers->create([
-                "nama" => $request->nama,
-                "role" => $request->role,
-                "deskripsi" => $request->deskripsi,
-                "status" => "0"
+            $imageFilename = $request->uploaded_image;
+
+            TestimonialCustomer::create([
+                'gambar' => $imageFilename,
+                'status' => '0'
             ]);
 
             DB::commit();
 
             return response()->json([
-                "status" => true,
-                "message" => "Data Berhasil di Tambah"
+                'status' => true,
+                'message' => 'Data berhasil disimpan'
             ]);
-
         } catch (\Exception $e) {
-
             DB::rollBack();
-
+        
             return response()->json([
-                "status" => false,
-                "message" => $e->getMessage()
-            ]);
-        }
+                'status' => false,
+                'message' => 'Terjadi kesalahan: ' . $e->getMessage()
+            ], 500);
+        }        
     }
 
     public function show($id)
@@ -83,41 +88,68 @@ class TestimonialCustomerController extends Controller
 
     public function update(Request $request, $id)
     {
+        // dd($request->all())  ;
+        $request->validate([
+            'uploaded_image' => 'nullable|string',
+        ]);
+        
         try {
-
             DB::beginTransaction();
+            
+            $package = TestimonialCustomer::findOrFail($id);
+            
+            $imageFilename = $request->uploaded_image;
+            
+            if ($imageFilename && $imageFilename !== $package->gambar) {
+                if (!empty($package->gambar)) {
+                    $oldFilePath = public_path('storage/testimonial-costumer/' . $package->gambar);
+                    if (file_exists($oldFilePath)) {
+                        unlink($oldFilePath); // <-- pakai unlink di sini
+                    }
+                }
+                
+                $package->gambar = $imageFilename;
+            }
 
-            $this->testimonialCustomers->where("id", $id)->update([
-                "nama" => $request->nama,
-                "role" => $request->role,
-                "deskripsi" => $request->deskripsi
-            ]);
+            $package->save();
 
             DB::commit();
 
             return response()->json([
-                "status" => true,
-                "message" => "Update Data Success"
+                'status' => true,
+                'message' => 'Data berhasil diupdate'
             ]);
-
         } catch (\Exception $e) {
-
             DB::rollBack();
 
             return response()->json([
-                "status" => false,
-                "message" => $e->getMessage()
-            ]);
+                'status' => false,
+                'message' => 'Terjadi kesalahan: ' . $e->getMessage()
+            ], 500);
         }
     }
 
     public function destroy($id)
     {
         try {
-
             DB::beginTransaction();
 
-            $this->testimonialCustomers->where("id", $id)->delete();
+            $item = $this->testimonialCustomers->where("id", $id)->first();
+
+            if ($item) {
+                if (!empty($item->gambar)) {
+                    $filename = basename($item->gambar);
+                    $filePath = public_path('storage/testimonial-costumer/' . $filename);
+
+                    if (File::exists($filePath)) {
+                        File::delete($filePath);
+                    }
+                }
+
+                $item->delete();
+            }
+
+            
 
             DB::commit();
 
@@ -127,7 +159,6 @@ class TestimonialCustomerController extends Controller
             ]);
 
         } catch (\Exception $e) {
-
             DB::rollBack();
 
             return response()->json([
@@ -139,6 +170,7 @@ class TestimonialCustomerController extends Controller
 
     public function updateStatus(Request $request, $id)
     {
+        // dd($request);
         try {
 
             DB::beginTransaction();
@@ -182,17 +214,15 @@ class TestimonialCustomerController extends Controller
             }
 
             try {
-                // Jika ada file lama, hapus file lama terlebih dahulu
                 if ($request->has('old_filename')) {
                     $oldFileName = $request->input('old_filename');
                     $oldFilePath = public_path($dir . $oldFileName);
 
                     if (File::exists($oldFilePath)) {
-                        File::delete($oldFilePath); // Hapus file lama
+                        File::delete($oldFilePath);
                     }
                 }
 
-                // Pindahkan file baru ke direktori tujuan
                 $file->move(dirname($fullPath), $encryptedName);
             } catch (\Exception $e) {
                 return response()->json([

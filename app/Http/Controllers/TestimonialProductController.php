@@ -7,6 +7,7 @@ use Yajra\DataTables\DataTables;
 use App\Models\TestimonialProduct;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
+use App\Models\ImageTestimonialProduct;
 
 class TestimonialProductController extends Controller
 {
@@ -28,24 +29,29 @@ class TestimonialProductController extends Controller
 
     public function store(Request $request)
     {
-        // dd($request->all());
         $request->validate([
             'name' => 'required|string',
-            'deskripsi' => 'nullable|string',
-            'uploaded_image' => 'nullable|string',
+            'deskripsi' => 'required|string',
+            'uploaded_images' => 'nullable|array'
         ]);
 
+        DB::beginTransaction();
+
         try {
-            DB::beginTransaction();
-
-            $imageFilename = $request->uploaded_image;
-
-            $this->testimonialProduct->create([
-                'nama' => $request->name,
-                'deskripsi' => $request->deskripsi,
-                'gambar' => $imageFilename,
-                "status" => "0"
+            $testimonial = TestimonialProduct::create([
+                'nama' => $request->input('name'),
+                'deskripsi' => $request->input('deskripsi'),
+                'status' => '0'
             ]);
+
+            if ($request->has('uploaded_images')) {
+                foreach ($request->uploaded_images as $image) {
+                    ImageTestimonialProduct::create([
+                        'testimonial_product_id' => $testimonial->id,
+                        'gambar' => $image
+                    ]);
+                }
+            }
 
             DB::commit();
 
@@ -53,14 +59,16 @@ class TestimonialProductController extends Controller
                 'status' => true,
                 'message' => 'Data berhasil disimpan'
             ]);
+
         } catch (\Exception $e) {
             DB::rollBack();
-        
+
             return response()->json([
-                'status' => false,
-                'message' => 'Terjadi kesalahan: ' . $e->getMessage()
+                'success' => false,
+                'message' => 'Gagal menyimpan data.',
+                'error' => $e->getMessage()
             ], 500);
-        }        
+        }
     }
 
     public function show($id)
@@ -69,7 +77,11 @@ class TestimonialProductController extends Controller
 
             DB::beginTransaction();
 
-            $data = $this->testimonialProduct->where("id", $id)->first();
+            $data = $this->testimonialProduct
+                ->with(['imageProduct'])
+                ->where("id", $id)
+                ->first();
+
 
             DB::commit();
 
@@ -92,41 +104,91 @@ class TestimonialProductController extends Controller
 
     public function update(Request $request, $id)
     {
-        try {
+        $request->validate([
+            'editName' => 'required|string',
+            'editDeskripsi' => 'nullable|string',
+            'uploaded_images' => 'nullable|array'
+        ]);
 
+        try {
             DB::beginTransaction();
 
-            $this->testimonialProduct->where("id", $id)->update([
-                "nama" => $request->nama,
-                "role" => $request->role,
-                "deskripsi" => $request->deskripsi
-            ]);
+            $package = $this->testimonialProduct
+                ->with(['imageProduct'])
+                ->where("id", $id)
+                ->firstOrFail();
+
+            $oldImageNames = $package->imageProduct->pluck('gambar')->toArray();
+
+            $imagesToDelete = $oldImageNames;
+
+            foreach ($imagesToDelete as $fileName) {
+                $path = public_path('storage/testimonial-product/' . $fileName);
+                if (file_exists($path)) {
+                    unlink($path);
+                }
+            }
+
+            $package->imageProduct()->delete();
+
+            $uploadedImages = $request->uploaded_images ?? [];
+            foreach ($uploadedImages as $newImage) {
+                $package->imageProduct()->create([
+                    'gambar' => $newImage
+                ]);
+            }
+
+            $package->nama = $request->editName;
+            $package->deskripsi  = $request->editDeskripsi;
+            $package->save();
 
             DB::commit();
 
             return response()->json([
-                "status" => true,
-                "message" => "Update Data Success"
+                'status' => true,
+                'message' => 'Data berhasil diperbarui dan gambar lama dihapus'
             ]);
-
         } catch (\Exception $e) {
-
             DB::rollBack();
 
+            if (!empty($request->uploaded_images)) {
+                foreach ($request->uploaded_images as $newImg) {
+                    $path = public_path('storage/testimonial-product/' . $newImg);
+                    if (file_exists($path)) {
+                        unlink($path);
+                    }
+                }
+            }
+
             return response()->json([
-                "status" => false,
-                "message" => $e->getMessage()
-            ]);
+                'status' => false,
+                'message' => 'Gagal memperbarui data: ' . $e->getMessage()
+            ], 500);
         }
     }
+
+
 
     public function destroy($id)
     {
         try {
-
             DB::beginTransaction();
 
-            $this->testimonialProduct->where("id", $id)->delete();
+            $item = $this->testimonialProduct
+                ->with('imageProduct')
+                ->where("id", $id)
+                ->first();
+
+            if ($item) {
+                foreach ($item->imageProduct as $image) {
+                    $filePath = public_path('storage/testimonial-product/' . $image->gambar);
+                    if (File::exists($filePath)) {
+                        File::delete($filePath);
+                    }
+                    $image->delete();
+                }
+                $item->delete();
+            }
 
             DB::commit();
 
@@ -136,7 +198,6 @@ class TestimonialProductController extends Controller
             ]);
 
         } catch (\Exception $e) {
-
             DB::rollBack();
 
             return response()->json([
@@ -145,6 +206,7 @@ class TestimonialProductController extends Controller
             ]);
         }
     }
+
 
     public function updateStatus(Request $request, $id)
     {

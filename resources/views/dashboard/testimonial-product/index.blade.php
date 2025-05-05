@@ -7,6 +7,13 @@
 <link href="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.snow.css" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.3/min/dropzone.min.css">
 
+<style>
+    .dropzone .dz-preview .dz-image img {
+        max-width: 120px;
+        max-height: 120px;
+        object-fit: cover; 
+    }
+</style>
 @section('breadcumb')
     <div class="page-header">
         <h1 class="my-auto page-title">Data Akun Testimonial Produk</h1>
@@ -116,16 +123,16 @@
                         <div class="form-group">
                             <label for="editEditorName" class="form-label">Nama</label>
                             <div id="editEditorName" style="height: 200px;"></div>
-                            <input type="hidden" name="editName" id="editEditorName">
+                            <input type="hidden" name="editName" id="editName">
                         </div>
                         <div class="mt-3 form-group">
                             <label for="editEditorDeskripsi" class="form-label">Deskripsi</label>
                             <div id="editEditorDeskripsi" style="height: 200px;"></div>
-                            <input type="hidden" name="editDeskripsi" id="editEditorDeskripsi">
+                            <input type="hidden" name="editDeskripsi" id="editDeskripsi">
                         </div>
                         <div class="mt-3 form-group">
                             <label class="form-label">Upload Gambar</label>
-                            <div class="editDropzone" id="editDropzoneArea"></div>
+                            <div class="dropzone" id="editDropzoneArea"></div>
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -172,6 +179,13 @@
             theme: 'snow'
         });
 
+        const quillEditName = new Quill('#editEditorName', {
+            theme: 'snow'
+        });
+
+        const quillEditDeskripsi = new Quill('#editEditorDeskripsi', {
+            theme: 'snow'
+        });
 
         $('#modalTambahData').on('shown.bs.modal', function () {
 
@@ -182,71 +196,36 @@
             }
 
             if ($("#dropzoneArea").length) {
-                
-                var uploadedFileName = '';
+
+                var uploadedFileNames = [];
 
                 var myDropzone = new Dropzone("#dropzoneArea", {
                     url: "{{ route('testimonials-product.upload-image') }}",
-                    maxFiles: 1,
+                    maxFiles: 10,
                     acceptedFiles: "image/*",
                     addRemoveLinks: true,
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     },
                     success: function (file, response) {
-                        if (uploadedFileName) {
-                            $.ajax({
-                                url: "{{ route('testimonials-product.delete-uploaded-image') }}",
-                                type: 'POST',
-                                data: {
-                                    _token: $('meta[name="csrf-token"]').attr('content'),
-                                    filename: uploadedFileName 
-                                },
-                                success: function (res) {
+                        uploadedFileNames.push(response.filename);
 
-                                    uploadedFileName = response.filename;
-                                    $('<input>').attr({
-                                        type: 'hidden',
-                                        name: 'uploaded_image',
-                                        value: uploadedFileName
-                                    }).appendTo('#tambahData');
+                        $('<input>').attr({
+                            type: 'hidden',
+                            name: 'uploaded_images[]',
+                            value: response.filename
+                        }).appendTo('#tambahData');
 
-                                    Swal.fire({
-                                        icon: 'success',
-                                        title: 'Upload Berhasil!',
-                                        text: 'Gambar berhasil diunggah.',
-                                        timer: 1500,
-                                        showConfirmButton: false
-                                    });
-                                },
-                                error: function (xhr) {
-                                    console.error("Gagal menghapus file lama:", xhr.responseText);
-                                    Swal.fire({
-                                        icon: 'error',
-                                        title: 'Gagal Menghapus File Lama',
-                                        text: 'Terjadi kesalahan saat menghapus file lama.'
-                                    });
-                                }
-                            });
-                        } else {
-                            uploadedFileName = response.filename;
-                            $('<input>').attr({
-                                type: 'hidden',
-                                name: 'uploaded_image',
-                                value: uploadedFileName
-                            }).appendTo('#tambahData');
-
-                            Swal.fire({
-                                icon: 'success',
-                                title: 'Upload Berhasil!',
-                                text: 'Gambar berhasil diunggah.',
-                                timer: 1500,
-                                showConfirmButton: false
-                            });
-                        }
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Upload Berhasil!',
+                            text: 'Gambar berhasil diunggah.',
+                            timer: 1500,
+                            showConfirmButton: false
+                        });
                     },
                     removedfile: function(file) {
-                                file.previewElement.remove();
+                        file.previewElement.remove();
                     },
                     error: function (file, response) {
                         console.error('Upload gagal:', response);
@@ -258,6 +237,7 @@
                     }
                 });
             }
+
         });
 
         $(document).ready(function() {
@@ -339,75 +319,230 @@
         });
 
         function updateStatus(id, status) {
-            if (confirm("Apakah Anda yakin ingin mengubah status?")) {
-                $.ajax({
-                    url: "{{ url('/master/testimonials') }}/" + id + "/update-status",
-                    type: "PUT",
-                    data: {
-                        status: status,
-                        _token: $('meta[name="csrf-token"]').attr('content')
-                    },
-                    success: function(response) {
-                        if (response.status == true) {
-                            alert(response.message);
-                            table.ajax.reload()
-                        } else {
-                            alert(response.message);
+            Swal.fire({
+                title: 'Yakin ingin mengubah status?',
+                text: "Tindakan ini akan memperbarui data!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Ya, ubah!',
+                cancelButtonText: 'Batal',
+                reverseButtons: true
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: "{{ url('/master/testimonials-product') }}/" + id + "/update-status",
+                        type: "PUT",
+                        data: {
+                            status: status,
+                            _token: $('meta[name="csrf-token"]').attr('content')
+                        },
+                        success: function(response) {
+                            if (response.status === true) {
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'Berhasil!',
+                                    text: response.message,
+                                    timer: 1500,
+                                    showConfirmButton: false
+                                });
+                                table.ajax.reload();
+                            } else {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Gagal!',
+                                    text: response.message
+                                });
+                            }
+                        },
+                        error: function(xhr, status, error) {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Terjadi kesalahan!',
+                                text: error
+                            });
                         }
-                    },
-                    error: function(xhr, status, error) {
-                        alert("Terjadi kesalahan: " + error);
-                    }
-                });
-            }
-        }
-
-
-        function editData(id) {
-            $.ajax({
-                url: "{{ url('master/testimonials') }}/" + id,
-                type: "GET",
-                success: function(response) {
-                    if (response.status === true) {
-                        $('#editNama').val(response.data.nama);
-                        $('#editRole').val(response.data.role);
-                        $('#editDeskripsi').val(response.data.deskripsi);
-                        $('#editData').data('id', id);
-
-                        $('#modalEditData').modal('show');
-                    } else {
-                        alert('Data tidak ditemukan');
-                    }
-                },
-                error: function(xhr) {
-                    alert('Terjadi kesalahan: ' + xhr.responseText);
+                    });
                 }
             });
         }
 
-        function hapusData(id) {
 
-            if (confirm("Apakah Yakin Ingin Menghapus Data Ini?")) {
-                $.ajax({
-                    url: "{{ url('master/testimonials') }}/" + id,
-                    type: "DELETE",
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    },
-                    success: function(response) {
+
+        function editData(id) {
+
+            var uploadedFileName = null;
+            var manualDelete = false;
+
+            $.ajax({
+                url: "{{ url('master/testimonials-product') }}/" + id,
+                    type: "GET",
+                    success: function (response) {
                         if (response.status === true) {
-                            alert(response.message)
-                            table.ajax.reload()
-                        } else {
-                            alert('Data tidak ditemukan');
-                        }
-                    },
-                    error: function(xhr) {
-                        alert('Terjadi kesalahan: ' + xhr.responseText);
+                            const data = response.data;
+                            
+                            console.log(data);
+                            
+
+                            $('#editData').data('id', id);
+
+                            if (quillEditName) {
+                                quillEditName.root.innerHTML = data.nama ?? '';
+                            }
+
+                            if (quillEditDeskripsi) {
+                                quillEditDeskripsi.root.innerHTML = data.deskripsi ?? '';
+                            }
+
+                            if (!window.dropzoneInitialized) {
+                                editDropzone = new Dropzone("#editDropzoneArea", {
+                                    url: "{{ route('testimonials-product.upload-image') }}",
+                                    maxFiles: 10,
+                                    acceptedFiles: "image/*",
+                                    addRemoveLinks: true,
+                                    headers: {
+                                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                                    },
+                                    init: function () {
+                                        const dz = this;
+
+                                        if (data.image_product && data.image_product.length > 0) {
+                                            data.image_product.forEach((imgObj) => {
+                                                const mockFile = {
+                                                    name: imgObj.gambar,
+                                                    size: 12345,
+                                                    url: "/storage/testimonial-product/" + imgObj.gambar
+                                                };
+
+                                                dz.emit("addedfile", mockFile);
+                                                dz.emit("thumbnail", mockFile, mockFile.url);
+                                                dz.emit("complete", mockFile);
+                                                dz.files.push(mockFile);
+
+                                                // Tambahkan juga input hidden agar disubmit
+                                                $('<input>').attr({
+                                                    type: 'hidden',
+                                                    name: 'existing_images[]',
+                                                    value: imgObj.gambar
+                                                }).appendTo('#modalEditData form');
+                                            });
+                                        }
+
+                                        dz.on("maxfilesexceeded", function (file) {
+                                            Swal.fire({
+                                                icon: 'warning',
+                                                title: 'Batas Terlampaui',
+                                                text: 'Anda hanya bisa mengunggah maksimal 10 gambar.'
+                                            });
+                                            dz.removeFile(file);
+                                        });
+
+                                        dz.on("success", function (file, response) {
+                                            if (response.status === true || response.success === true) {
+                                                const newFileName = response.filename;
+
+                                                $('<input>').attr({
+                                                    type: 'hidden',
+                                                    name: 'uploaded_images[]',
+                                                    value: newFileName
+                                                }).appendTo('#modalEditData form');
+
+                                                Swal.fire({
+                                                    icon: 'success',
+                                                    title: 'Upload Berhasil!',
+                                                    text: 'Gambar berhasil diunggah.',
+                                                    timer: 1500,
+                                                    showConfirmButton: false
+                                                });
+                                            } else {
+                                                Swal.fire({
+                                                    icon: 'error',
+                                                    title: 'Upload Gagal!',
+                                                    text: response.message || 'Terjadi kesalahan saat mengunggah gambar.'
+                                                });
+                                                dz.removeFile(file);
+                                            }
+                                        });
+
+                                        dz.on("removedfile", function (file) {
+                                            file.previewElement.remove();
+                                            $(`#modalEditData input[value="${file.name}"]`).remove();
+                                        });
+                                    }
+                                });
+
+                                window.dropzoneInitialized = true;
+                            }
+
+                            $('#modalEditData').modal('show');
+                            } else {
+                                Swal.fire({
+                                    icon: 'warning',
+                                    title: 'Data Tidak Ditemukan'
+                                });
+                            }
+                        },
+                        error: function (xhr) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Terjadi Kesalahan',
+                            text: xhr.responseText
+                        });
                     }
                 });
             }
-        }
+
+            function hapusData(id) {
+                console.log(id);
+                
+                Swal.fire({
+                    title: 'Apakah Anda yakin?',
+                    text: "Data yang dihapus tidak dapat dikembalikan!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Ya, hapus!',
+                    cancelButtonText: 'Batal'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: "{{ url('master/testimonials-product') }}/" + id,
+                            type: "DELETE",
+                            headers: {
+                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                            },
+                            success: function(response) {
+                                if (response.status === true) {
+                                    Swal.fire({
+                                        icon: 'success',
+                                        title: 'Berhasil!',
+                                        text: response.message,
+                                        timer: 1500,
+                                        showConfirmButton: false
+                                    });
+
+                                    $("#tambahData")[0].reset();
+                                    $('#modalTambahData').modal('hide');
+                                    table.ajax.reload();
+                                } else {
+                                    Swal.fire({
+                                        icon: 'error',
+                                        title: 'Gagal!',
+                                        text: 'Data tidak ditemukan.'
+                                    });
+                                }
+                            },
+                            error: function(xhr) {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Terjadi Kesalahan',
+                                    text: xhr.responseText
+                                });
+                            }
+                        });
+                    }
+                });
+            }
 
         $("#simpanData").on("click", function (e) {
             e.preventDefault();
@@ -477,32 +612,54 @@
         $("#updateData").on("click", function(e) {
             e.preventDefault();
 
-            let id = $("#editData").data('id')
+            let id = $("#editData").data('id');
 
-            let formData = {
-                nama: $("#editNama").val(),
-                role: $("#editRole").val(),
-                deskripsi: $("#editDeskripsi").val()
-            };
+            const name = quillEditName?.root.innerHTML || '';
+            $("#editName").val(name);
+
+            const deskripsi = quillEditDeskripsi?.root.innerHTML || '';
+            $("#editDeskripsi").val(deskripsi);
+
+            var formData = new FormData($('#modalEditData form')[0]);
+
+            formData.append('_method', 'PUT');
 
             $.ajax({
-                url: "{{ url('master/testimonials') }}/" + id,
-                type: "PUT",
+                url: "{{ url('master/testimonials-product') }}/" + id,
+                type: "POST",
                 data: formData,
+                processData: false,
+                contentType: false,
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
                 success: function(response) {
                     if (response.status === true) {
-                        alert(response.message);
-                        $("#editData")[0].reset();
-                        $('#modalEditData').modal('hide');
-
-                        table.ajax.reload();
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Berhasil',
+                            text: response.message,
+                            timer: 1500,
+                            showConfirmButton: false
+                        }).then(() => {
+                            $("#editData")[0].reset();
+                            
+                            $('#editConsultant').val(null).trigger('change');
+                            $('#modalEditData').modal('hide');
+                            
+                            table.ajax.reload(null, false);
+                            
+                            if (quillEditor) quillEditor.setContents([]);
+                        });
                     }
                 },
                 error: function(xhr) {
-                    alert('Terjadi kesalahan: ' + xhr.responseText);
+                    console.error(xhr.responseText);
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Terjadi Kesalahan',
+                        text: xhr.responseJSON?.message || 'Gagal memproses permintaan.'
+                    });
                 }
             });
         });

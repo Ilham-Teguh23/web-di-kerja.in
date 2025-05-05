@@ -11,4 +11,9 @@ class TestimonialProduct extends Model
     protected $keyType = 'string';
 
     protected $guarded = [''];
+
+    public function imageProduct()
+    {
+        return $this->hasMany(ImageTestimonialProduct::class, 'testimonial_product_id');
+    }
 }

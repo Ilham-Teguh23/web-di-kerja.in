@@ -1,11 +1,9 @@
 @extends('layout.index')
 
-@section('title', 'Package Item')
+@section('title', 'Hero Images')
 
 @section('css')
 
-<link href="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.snow.css" rel="stylesheet">
-<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.3/min/dropzone.min.css">
 
 <style>
@@ -18,14 +16,14 @@
 
 @section('breadcumb')
     <div class="page-header">
-        <h1 class="my-auto page-title">Paket Item</h1>
+        <h1 class="my-auto page-title">Image Hero</h1>
         <div>
             <ol class="mb-0 breadcrumb">
                 <li class="breadcrumb-item">
                     <a href="javascript:void(0)">Home</a>
                 </li>
                 <li class="breadcrumb-item active" aria-current="page">
-                    Paket Item
+                    Image Hero
                 </li>
             </ol>
         </div>
@@ -39,7 +37,7 @@
             <div class="card custom-card">
                 <div class="card-header justify-content-between">
                     <div class="card-title">
-                        Paket Item
+                        Image Hero
                     </div>
                     <div class="prism-toggle">
                         <button type="button" class="btn btn-sm btn-primary-light" data-bs-toggle="modal"
@@ -53,11 +51,8 @@
                         <thead>
                             <tr>
                                 <th>No.</th>
-                                <th>Nama</th>
-                                <th>Deskripsi</th>
-                                <th>Harga</th>
-                                <th>Paket Konsultasi Item</th>
-                                <th>Status Item</th>
+                                <th>Gambar</th>
+                                <th>Status</th>
                                 <th>Aksi</th>
                             </tr>
                         </thead>
@@ -75,51 +70,22 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h6 class="modal-title" id="modalTambahDataLabel">
+                    <h6 class="modal-title" id="exampleModalLabel1">
                         Tambah Data
                     </h6>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-    
                 <form id="tambahData">
                     <div class="modal-body">
-                        <!-- Input Nama -->
-                        <div class="form-group mb-3">
-                            <label for="name" class="form-label">Nama</label>
-                            <input type="text" class="form-control" id="name" name="name" placeholder="Masukkan Nama">
-                        </div>
-    
-                        <!-- Quill Editor -->
-                        <div class="form-group mb-3">
-                            <label for="editor" class="form-label">Deskripsi</label>
-                            <div id="editor" style="height: 200px;"></div>
-                            <input type="hidden" name="deskripsi" id="deskripsi">
-                        </div>
-
-                        <!-- Upload Gambar (Dropzone) -->
                         <div class="form-group mb-3">
                             <label class="form-label">Upload Gambar</label>
                             <div class="dropzone" id="dropzoneArea"></div>
                         </div>
-
-    
-                        <!-- Select Biasa -->
-                        <div class="form-group mb-3">
-                            <label for="price" class="form-label">Harga</label>
-                            <select class="form-control" name="price" id="price">
-                                <option value="">Pilih salah satu</option>
-                            </select>                            
-                        </div>
-                        <!-- Select2 Multiple -->
-                        <div class="form-group mb-3">
-                            <label for="consultant" class="form-label">Konsultasi</label>
-                            <select class="form-control select2" name="consultant[]" id="consultant" multiple data-placeholder="Pilih Konsultan">
-                            </select>                                                     
-                        </div>                        
                     </div>
-    
                     <div class="modal-footer">
-                        <button type="reset" class="btn btn-danger btn-sm" id="resetData">Reset</button>
+                        <button type="reset" class="btn btn-danger btn-sm" id="resetData">
+                            Reset
+                        </button>
                         <button type="button" class="btn btn-primary btn-sm" id="simpanData">
                             <i class="fe fe-save"></i> Simpan
                         </button>
@@ -128,7 +94,6 @@
             </div>
         </div>
     </div>
-    
     <!-- End Modal Tambah Data -->
 
     <!-- Edit Data -->
@@ -143,39 +108,11 @@
                 </div>
                 <form id="editData">
                     <div class="modal-body">
-                        <div class="form-group mb-3">
-                            <label for="editName" class="form-label">Nama</label>
-                            <input type="text" class="form-control" id="editName" name="editName" placeholder="Masukkan Nama">
-                        </div>
-
-                    <!-- Quill Editor -->
-                        <div class="form-group mb-3">
-                            <label for="editEditor" class="form-label">Deskripsi</label>
-                            <div id="editEditor" style="height: 200px;"></div>
-                            <input type="hidden" name="editDescription" id="editDescription">
-                        </div>
-
-                        <!-- Upload Gambar (Dropzone) -->
-                        <div class="form-group mb-3">
+                        <div class="mt-3 form-group">
                             <label class="form-label">Upload Gambar</label>
                             <div class="dropzone" id="editDropzoneArea"></div>
                         </div>
-
-
-                        <!-- Select Biasa -->
-                        <div class="form-group mb-3">
-                            <label for="editPrice" class="form-label">Harga</label>
-                            <select class="form-control" name="editPrice" id="editPrice">
-                                <option value="">Pilih salah satu</option>
-                            </select>                            
-                        </div>
-                        <!-- Select2 Multiple -->
-                        <div class="form-group mb-3">
-                            <label for="editConsultant" class="form-label">Konsultasi</label>
-                            <select class="form-control select2" name="editConsultant[]" id="editConsultant" multiple data-placeholder="Pilih Konsultan">
-                            </select>                                                     
-                        </div>   
-                    </div> 
+                    </div>
                     <div class="modal-footer">
                         <button type="reset" class="btn btn-danger btn-sm" id="resetEditData">
                             Reset
@@ -191,31 +128,6 @@
 
     <!-- End -->
 
-    <div class="modal fade" id="modalSetFavorite" tabindex="-1" aria-labelledby="modalSetFavoriteLabel" aria-hidden="true">
-        <div class="modal-dialog">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title" id="modalSetFavoriteLabel">Pilih Item Favorite</h5>
-              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
-            </div>
-            <div class="modal-body">
-              <input type="hidden" id="favoritePackageId">
-              <div class="form-group">
-                <label for="favoriteSelect">Item Favorite</label>
-                <select class="form-control" id="favoriteSelect">
-                  <option value="">Loading...</option>
-                </select>
-              </div>
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Batal</button>
-              <button type="button" class="btn btn-primary btn-sm" id="saveFavorite">Simpan</button>
-            </div>
-          </div>
-        </div>
-      </div>
-      
-
 @endsection
 
 @section('script')
@@ -226,19 +138,23 @@
     <script src="https://cdn.datatables.net/buttons/2.2.3/js/dataTables.buttons.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.print.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.html5.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script src="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.3/min/dropzone.min.js"></script>
 
-
     <script>
-        Dropzone.autoDiscover = false;
+        var myDropzone;
+        var table;
 
-        let myDropzone;
-        let uploadedFileName = null;
+        Dropzone.autoDiscover = false;
+        var uploadedFileName = null;
         
+
         $('#modalTambahData').on('shown.bs.modal', function () {
+
+            if (Dropzone.instances.length > 0) {
+                Dropzone.instances.forEach(function(dropzone) {
+                    dropzone.destroy();
+                });
+            }
 
             if ($("#dropzoneArea").length) {
                 Dropzone.autoDiscover = false;
@@ -246,7 +162,7 @@
                 var uploadedFileName = '';
 
                 var myDropzone = new Dropzone("#dropzoneArea", {
-                    url: "{{ route('package-item.upload-image') }}",
+                    url: "{{ route('image-hero.upload-image') }}",
                     maxFiles: 1,
                     acceptedFiles: "image/*",
                     addRemoveLinks: true,
@@ -256,7 +172,7 @@
                     success: function (file, response) {
                         if (uploadedFileName) {
                             $.ajax({
-                                url: "{{ route('package-item.delete-uploaded-image') }}",
+                                url: "{{ route('image-hero.delete-uploaded-image') }}",
                                 type: 'POST',
                                 data: {
                                     _token: $('meta[name="csrf-token"]').attr('content'),
@@ -318,102 +234,407 @@
                     }
                 });
             }
+
         });
 
-        var table;
-
-        $(document).ready(function () {
+        $(document).ready(function() {
             table = $("#datatable").DataTable({
                 responsive: true,
                 processing: true,
                 serverSide: true,
                 autoWidth: false,
-                ajax: "{{ route('package-item.datatable') }}",
-                columnDefs: [
-                    {
+                ajax: "{{ route('hero-image.datatable') }}",
+                columnDefs: [{
                         targets: 0,
-                        render: function (data, type, full, meta) {
+                        render: function(data, type, full, meta) {
                             return meta.row + 1;
+                        }
+                    },
+                    {
+                        targets: 1,
+                        render: function(data, type, full, meta) {
+                            if (data) {
+                                const imageUrl = `/storage/hero-image/${data}`;
+                                return `
+                                    <img src="${imageUrl}" alt="Image" width="50" height="50" class="img-thumbnail" style="cursor: pointer;" onclick="viewImage('${data}')">
+                                `;
+                            }
+                            return 'No image';
                         }
                     },
                     {
                         targets: 2,
                         render: function(data, type, full, meta) {
-                            let htmlDecoded = data.replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&').replace(/&quot;/g, '"').replace(/&#039;/g, "'");
+                            const status = full.status == "0" ? "Tidak Aktif" : "Aktif";
+                            const btnClass = full.status == "0" ? "btn-danger" : "btn-success";
+                            const nextStatus = full.status == "0" ? 1 : 0;
 
-                            let textOnly = htmlDecoded.replace(/<\/?[^>]+(>|$)/g, "");
-                            return textOnly ? textOnly : 'No description';
+                            return `<a href="#" class="btn ${btnClass} btn-sm" onclick="updateStatus(${full.id}, ${nextStatus})">${status}</a>`;
                         }
                     },
                     {
                         targets: 3,
-                        render: function (data, type, full, meta) {
-                            let nominal = full.price?.price ?? 0;
-                            return new Intl.NumberFormat('id-ID', {
-                                style: 'currency',
-                                currency: 'IDR',
-                                minimumFractionDigits: 0
-                            }).format(nominal);
-                        }
-                    },
-                    {
-                        targets: 4,
-                        render: function (data, type, full, meta) {
-                            const safeJson = btoa(JSON.stringify(full.package_consultation));
-
-
+                        render: function(data, type, full, meta) {
                             return `
-                                <button class="btn btn-info btn-sm" onclick="showConsultationModal('${safeJson}')">
-                                    Lihat Paket Konsultasi
-                                </button>
-                            `;
+                        <a href="#" class="btn btn-warning btn-sm" onclick="editData(${full.id})">
+                            <i class="fe fe-edit"></i> Edit
+                            </a>
+                        <a href="#" class="btn btn-danger btn-sm" onclick="hapusData(${full.id})">
+                            <i class="fe fe-trash"></i> Hapus
+                            </a>
+                    `;
                         }
-                    },
-                    {
-                        targets: 5,
-                        render: function (data, type, full, meta) {
-                            const isActive = full.favorite_item && full.favorite_item.name;
-
-                            const buttonClass = isActive ? 'success' : 'danger';
-                            const buttonText = isActive ? full.favorite_item.name : 'Not Active';
-
-                            return `
-                                <button class="btn btn-${buttonClass} btn-sm" onclick="toggleFavorite(${full.id})">
-                                    ${buttonText}
-                                </button>
-                            `;
-                        }
-                    },
-                    {
-                        targets: 6,
-                        render: function (data, type, full, meta) {
-                            return `
-                                <a href="#" class="btn btn-warning btn-sm" onclick="editData(${full.id})">
-                                    <i class="fe fe-edit"></i> Edit
-                                </a>
-                                <a href="#" class="btn btn-danger btn-sm" onclick="hapusData(${full.id})">
-                                    <i class="fe fe-trash"></i> Hapus
-                                </a>
-                            `;
-                        }
-                    },
+                    }
                 ],
-                columns: [
-                    { data: null },              
-                    { data: 'name' },        
-                    { data: 'description' },       
-                    { data: 'price.price' },    
-                    { data: 'favorite_item' },  
-                    { data: 'package_consultation' },  
-                    { data: 'id' }
+                columns: [{
+                        data: null
+                    },
+                    {
+                        data: 'image_path'
+                    },
+                    {
+                        data: 'status'
+                    },
+                    {
+                        data: 'id'
+                    }
                 ],
                 language: {
                     searchPlaceholder: 'Search...',
                     sSearch: ''
                 }
             });
+        });
+
+        function viewImage(imagePath) {
+            const fullImageUrl = `/storage/image-hero/${imagePath}`;
+            Swal.fire({
+                imageUrl: fullImageUrl,
+                imageAlt: 'Gambar Testimonial',
+                imageWidth: 400,
+                imageHeight: 400,
+                showCloseButton: true,
+                showConfirmButton: false
+            });
+        }
 
 
+        function updateStatus(id, status) {
+            // console.log(id);
+            
+            Swal.fire({
+                title: 'Yakin ingin mengubah status?',
+                text: "Tindakan ini akan memperbarui data!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Ya, ubah!',
+                cancelButtonText: 'Batal',
+                reverseButtons: true
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: "{{ url('/master/image-hero/') }}/" + id + "/update-status",
+                        type: "PUT",
+                        data: {
+                            status: status,
+                            _token: $('meta[name="csrf-token"]').attr('content')
+                        },
+                        success: function(response) {
+                            if (response.status === true) {
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'Berhasil!',
+                                    text: response.message,
+                                    timer: 1500,
+                                    showConfirmButton: false
+                                });
+                                table.ajax.reload();
+                            } else {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Gagal!',
+                                    text: response.message
+                                });
+                            }
+                        },
+                        error: function(xhr, status, error) {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Terjadi kesalahan!',
+                                text: error
+                            });
+                        }
+                    });
+                }
+            });
+        }
+
+
+        function editData(id) {
+
+            var uploadedFileName = null;
+            var manualDelete = false;
+
+            $.ajax({
+                url: "{{ url('master/image-hero') }}/" + id,
+                type: "GET",
+                success: function (response) {
+                    if (response.status === true) {
+                        const data = response.data;
+                        
+
+                        $('#editData').data('id', id);
+
+                        if (!window.dropzoneInitialized) {
+                            editDropzone = new Dropzone("#editDropzoneArea", {
+                                url: "{{ route('image-hero.upload-image') }}",
+                                maxFiles: 1,
+                                acceptedFiles: "image/*",
+                                addRemoveLinks: true,
+                                headers: {
+                                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                                },
+                                init: function() {
+                                    var dz = this;
+
+                                    var mockFile = {
+                                        name: data.image_path,
+                                        size: 12345,
+                                        url: '/storage/hero-image/' + data.image_path 
+                                    };
+
+                                    dz.emit("addedfile", mockFile);  
+                                    dz.emit("thumbnail", mockFile, mockFile.url); 
+                                    dz.emit("complete", mockFile); 
+
+                                    dz.files.push(mockFile);
+
+                                    dz.on("addedfile", function(file) {
+                                        if (dz.files.length > 1) {
+                                            dz.removeFile(dz.files[0]);
+                                        }
+                                    });
+
+                                    dz.on("maxfilesexceeded", function (file) {
+                                        if (dz.files.length > 1) {
+                                            dz.removeFile(dz.files[0]);
+                                        }
+                                        dz.addFile(file);
+                                    });
+
+                                    dz.on("success", function(file, response) {
+
+                                        if (response.status === true || response.success === true) {
+                                            const newFileName = response.filename;
+
+                                            uploadedFileName = newFileName;
+
+                                            $('#modalEditData input[name="uploaded_image"]').remove();
+                                            $('<input>').attr({
+                                                type: 'hidden',
+                                                name: 'uploaded_image',
+                                                value: newFileName
+                                            }).appendTo('#modalEditData form');
+
+                                            Swal.fire({
+                                                icon: 'success',
+                                                title: 'Upload Berhasil!',
+                                                text: 'Gambar berhasil diunggah.',
+                                                timer: 1500,
+                                                showConfirmButton: false
+                                            });
+                                        } else {
+                                            Swal.fire({
+                                                icon: 'error',
+                                                title: 'Upload Gagal!',
+                                                text: response.message || 'Terjadi kesalahan saat mengunggah gambar.',
+                                                showConfirmButton: true
+                                            });
+                                            dz.removeFile(file);
+                                        }
+                                    });
+
+                                    dz.on("removedfile", function(file) {
+                                        file.previewElement.remove();
+                                    });
+                                }
+                            });
+
+                            window.dropzoneInitialized = true;
+                        }
+
+
+                        $('#modalEditData').modal('show');
+                        } else {
+                            Swal.fire({
+                                icon: 'warning',
+                                title: 'Data Tidak Ditemukan'
+                            });
+                        }
+                    },
+                    error: function (xhr) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Terjadi Kesalahan',
+                        text: xhr.responseText
+                    });
+                }
+            });
+            }
+
+            function hapusData(id) {
+                console.log(id);
+                
+                Swal.fire({
+                    title: 'Apakah Anda yakin?',
+                    text: "Data yang dihapus tidak dapat dikembalikan!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Ya, hapus!',
+                    cancelButtonText: 'Batal'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: "{{ url('master/image-hero') }}/" + id,
+                            type: "DELETE",
+                            headers: {
+                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                            },
+                            success: function(response) {
+                                if (response.status === true) {
+                                    Swal.fire({
+                                        icon: 'success',
+                                        title: 'Berhasil!',
+                                        text: response.message,
+                                        timer: 1500,
+                                        showConfirmButton: false
+                                    });
+
+                                    $("#tambahData")[0].reset();
+                                    $('#modalTambahData').modal('hide');
+                                    table.ajax.reload();
+                                } else {
+                                    Swal.fire({
+                                        icon: 'error',
+                                        title: 'Gagal!',
+                                        text: 'Data tidak ditemukan.'
+                                    });
+                                }
+                            },
+                            error: function(xhr) {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Terjadi Kesalahan',
+                                    text: xhr.responseText
+                                });
+                            }
+                        });
+                    }
+                });
+            }
+
+        $("#simpanData").on("click", function (e) {
+            e.preventDefault();
+
+            let formData = new FormData($("#tambahData")[0]);
+
+            $.ajax({
+                url: "{{ url('master/image-hero') }}",
+                type: "POST",
+                data: formData,
+                processData: false,
+                contentType: false,
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                beforeSend: function () {
+                    $("#simpanData").prop("disabled", true).html("Menyimpan...");
+                },
+                success: function (response) {
+                    if (response.status === true) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Berhasil',
+                            text: response.message,
+                            timer: 1500,
+                            showConfirmButton: false
+                        }).then(() => {
+                            $("#tambahData")[0].reset();
+                            $('#modalTambahData').modal('hide');
+
+                            if (myDropzone) myDropzone.removeAllFiles(true);
+
+                            table.ajax.reload(null, false);
+
+                        });
+                    } else {
+                        Swal.fire({
+                            icon: 'warning',
+                            title: 'Gagal',
+                            text: response.message || 'Gagal menyimpan data.'
+                        });
+                    }
+                },
+                error: function (xhr) {
+                    console.error(xhr.responseText);
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Terjadi Kesalahan',
+                        text: xhr.responseJSON?.message || 'Gagal memproses permintaan.'
+                    });
+                },
+                complete: function () {
+                    $("#simpanData").prop("disabled", false).html('<i class="fe fe-save"></i> Simpan');
+                }
+            });
+        });
+
+        $("#updateData").on("click", function(e) {
+            e.preventDefault();
+
+            let id = $("#editData").data('id');
+
+            var formData = new FormData($('#modalEditData form')[0]);
+
+            formData.append('_method', 'PUT');
+
+            $.ajax({
+                url: "{{ url('master/image-hero') }}/" + id,
+                type: "POST",
+                data: formData,
+                processData: false,
+                contentType: false,
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                success: function(response) {
+                    if (response.status === true) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Berhasil',
+                            text: response.message,
+                            timer: 1500,
+                            showConfirmButton: false
+                        }).then(() => {
+                            $("#editData")[0].reset();
+                            $('#modalEditData').modal('hide');
+                            
+                            table.ajax.reload(null, false);
+                            
+                        });
+                    }
+                },
+                error: function(xhr) {
+                    console.error(xhr.responseText);
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Terjadi Kesalahan',
+                        text: xhr.responseJSON?.message || 'Gagal memproses permintaan.'
+                    });
+                }
+            });
         });
     </script>
 @endsection

@@ -59,6 +59,9 @@ Route::middleware(['web', 'auth'])->group(function () {
         Route::resource("katalog", KatalogController::class);
 
         // Image hero
+        Route::put("/image-hero/{id}/update-status", [HeroController::class, "updateStatus"])->name("image-hero.updateStatus");
+        Route::post('/image-hero/upload-image', [HeroController::class, 'uploadImage'])->name('image-hero.upload-image');
+        Route::post('/image-hero/delete-uploaded-image', [HeroController::class, 'deleteUploadedImage'])->name('image-hero.delete-uploaded-image');
         Route::get("/image-hero/datatable", [HeroController::class, "datatable"])->name("hero-image.datatable");
         Route::resource("image-hero", HeroController::class);
 

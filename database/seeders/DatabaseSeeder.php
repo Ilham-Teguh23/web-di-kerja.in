@@ -26,9 +26,9 @@ class DatabaseSeeder extends Seeder
             MetaPricePackageServiceSeeder::class,
             PackageServiceSeeder::class,
             PackageServiceConsultationSeeder::class,
-            AboutSeeder::class,
+            // AboutSeeder::class,
             ListSuperioritySeeder::class,
-            AboutListSuperioritySeeder::class,
+            // AboutListSuperioritySeeder::class,
             ContactSeeder::class,
             TestimonialProductSeeder::class,
         ]);

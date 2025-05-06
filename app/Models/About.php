@@ -16,4 +16,9 @@ class About extends Model
     {
         return $this->hasMany(AboutListSuperiority::class, 'about_id');
     }
+
+    public function imageAbout()
+    {
+        return $this->hasMany(ImageAbout::class, 'about_id');
+    }
 }

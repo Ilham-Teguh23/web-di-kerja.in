@@ -103,69 +103,87 @@ class TestimonialProductController extends Controller
     }
 
     public function update(Request $request, $id)
-    {
-        $request->validate([
-            'editName' => 'required|string',
-            'editDeskripsi' => 'nullable|string',
-            'uploaded_images' => 'nullable|array'
-        ]);
+{
+    $request->validate([
+        'editName' => 'required|string',
+        'editDeskripsi' => 'nullable|string',
+        'uploaded_images' => 'nullable|array',
+        'existing_images' => 'nullable|array', // <-- Tambahan
+    ]);
 
-        try {
-            DB::beginTransaction();
+    try {
+        DB::beginTransaction();
 
-            $package = $this->testimonialProduct
-                ->with(['imageProduct'])
-                ->where("id", $id)
-                ->firstOrFail();
+        $package = $this->testimonialProduct
+            ->with(['imageProduct'])
+            ->where("id", $id)
+            ->firstOrFail();
 
-            $oldImageNames = $package->imageProduct->pluck('gambar')->toArray();
+        // Ambil semua gambar lama
+        $oldImageNames = $package->imageProduct->pluck('gambar')->toArray();
 
-            $imagesToDelete = $oldImageNames;
+        // Gambar yang akan disimpan ulang
+        $existingImages = $request->existing_images ?? []; // dari gambar lama yang masih dipakai
+        $uploadedImages = $request->uploaded_images ?? []; // dari gambar baru yang diupload
 
-            foreach ($imagesToDelete as $fileName) {
-                $path = public_path('storage/testimonial-product/' . $fileName);
+        // Hapus file lama dari folder jika tidak termasuk dalam existing_images
+        foreach ($oldImageNames as $oldImage) {
+            if (!in_array($oldImage, $existingImages)) {
+                $path = public_path('storage/testimonial-product/' . $oldImage);
                 if (file_exists($path)) {
                     unlink($path);
                 }
             }
+        }
 
-            $package->imageProduct()->delete();
+        // Hapus semua relasi gambar
+        $package->imageProduct()->delete();
 
-            $uploadedImages = $request->uploaded_images ?? [];
-            foreach ($uploadedImages as $newImage) {
-                $package->imageProduct()->create([
-                    'gambar' => $newImage
-                ]);
-            }
-
-            $package->nama = $request->editName;
-            $package->deskripsi  = $request->editDeskripsi;
-            $package->save();
-
-            DB::commit();
-
-            return response()->json([
-                'status' => true,
-                'message' => 'Data berhasil diperbarui dan gambar lama dihapus'
+        // Simpan ulang gambar lama yang masih digunakan
+        foreach ($existingImages as $img) {
+            $package->imageProduct()->create([
+                'gambar' => $img
             ]);
-        } catch (\Exception $e) {
-            DB::rollBack();
+        }
 
-            if (!empty($request->uploaded_images)) {
-                foreach ($request->uploaded_images as $newImg) {
-                    $path = public_path('storage/testimonial-product/' . $newImg);
-                    if (file_exists($path)) {
-                        unlink($path);
-                    }
+        // Simpan gambar baru yang diupload
+        foreach ($uploadedImages as $newImg) {
+            $package->imageProduct()->create([
+                'gambar' => $newImg
+            ]);
+        }
+
+        // Update data utama
+        $package->nama = $request->editName;
+        $package->deskripsi = $request->editDeskripsi;
+        $package->save();
+
+        DB::commit();
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Data berhasil diperbarui'
+        ]);
+    } catch (\Exception $e) {
+        DB::rollBack();
+
+        // Jika gagal dan ada gambar baru, hapus gambar baru dari direktori
+        if (!empty($request->uploaded_images)) {
+            foreach ($request->uploaded_images as $img) {
+                $path = public_path('storage/testimonial-product/' . $img);
+                if (file_exists($path)) {
+                    unlink($path);
                 }
             }
-
-            return response()->json([
-                'status' => false,
-                'message' => 'Gagal memperbarui data: ' . $e->getMessage()
-            ], 500);
         }
+
+        return response()->json([
+            'status' => false,
+            'message' => 'Gagal memperbarui data: ' . $e->getMessage()
+        ], 500);
     }
+}
+
 
 
 

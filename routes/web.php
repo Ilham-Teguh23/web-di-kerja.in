@@ -67,6 +67,9 @@ Route::middleware(['web', 'auth'])->group(function () {
 
         // About
         Route::get("/about/datatable", [AboutController::class, "datatable"])->name("about.datatable");
+        Route::post('/about/upload-image', [AboutController::class, 'uploadImage'])->name('about.upload-image');
+        Route::post('/about/delete-uploaded-image', [AboutController::class, 'deleteUploadedImage'])->name('about.delete-uploaded-image');
+        Route::get('/about/list-superiority-options', [AboutController::class, 'getListSuperiorityOptions'])->name('about.list-superiority-options');
         Route::resource("about", AboutController::class);
 
         // Testimonials Customer

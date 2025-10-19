@@ -1,49 +1,76 @@
 <footer id="footer" class="footer position-relative light-background" style="padding-bottom: 0px">
+  <style>
+    /* ===== Footer Styling ===== */
+    #footer {
+      background: #f8fafc;
+      padding: 30px 0 0 0;
+      border-top: 1px solid #e5e7eb;
+    }
 
-    {{-- <div class="container footer-top">
-        <div class="row gy-4">
-            <div class="col-lg-12 col-md-12 footer-about" style="text-align: center">
-                <a href="index.html" class="logo">
-                    <span class="sitename">
-                        di-kerja.in
-                    </span>
-                </a>
-                <div class="pt-3 footer-contact">
-                    <p>
-                        Jl. Darma Putra Raya No.6, Kby. Lama Sel., Kec. Kby. Lama, Kota Jakarta Selatan.
-                    </p>
-                    <p class="mt-3">
-                        <strong>Nomor HP:</strong>
-                        <span>0812-1470-7143</span>
-                    </p>
-                    <p>
-                        <strong>Email:</strong>
-                        <span>ilham.teguh55@gmail.com</span>
-                    </p>
-                </div>
-                <div class="mt-4 social-links d-flex justify-content-center align-center">
-                    <a target="_blank" href="https://x.com/HameTR29">
-                        <i class="bi bi-twitter-x"></i>
-                    </a>
-                    <a href="#">
-                        <i class="bi bi-instagram"></i>
-                    </a>
-                    <a target="_blank" href="https://www.linkedin.com/in/mohammad-ilham-teguhriyadi-311563272/">
-                        <i class="bi bi-linkedin"></i>
-                    </a>
-                </div>
-            </div>
-        </div>
-    </div> --}}
+    #footer .copyright {
+      color: #475569;
+      font-size: 14px;
+      margin-bottom: 10px;
+    }
 
-    <div class="container text-center copyright">
-        <p>
-            ©<span>Copyright 2024</span>
-            <strong class="px-1 sitename">
-                di-kerja.in
-            </strong>
-            <span>All Rights Reserved</span>
-        </p>
+    #footer .sitename {
+      color: #1d4ed8;
+      font-weight: 700;
+    }
+
+    #footer .footer-links {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+
+    #footer .footer-links a {
+      color: #475569;
+      text-decoration: none;
+      font-size: 14px;
+      transition: color 0.2s ease;
+    }
+
+    #footer .footer-links a.active {
+        color: #1d4ed8; /* warna biru aktif */
+        font-weight: 600;
+        text-decoration: underline;
+    }
+
+
+    #footer p {
+      margin: 0;
+    }
+  </style>
+
+  <div class="container text-center">
+    <!-- Link tambahan -->
+    <div class="footer-links">
+        <a 
+            href="{{ route('termsAndCondition') }}" 
+            class="{{ request()->routeIs('termsAndCondition') ? 'active' : '' }}"
+        >
+            Terms & Conditions
+        </a>
+
+        <a 
+            href="{{ route('privacyPolicy') }}" 
+            class="{{ request()->routeIs('privacyPolicy') ? 'active' : '' }}"
+        >
+            Privacy Policy
+        </a>
     </div>
 
+
+    <!-- Copyright -->
+    <div class="copyright">
+      <p>
+        © <span>Copyright 2024</span>
+        <strong class="px-1 sitename">di-kerja.in</strong>
+        <span>All Rights Reserved</span>
+      </p>
+    </div>
+  </div>
 </footer>

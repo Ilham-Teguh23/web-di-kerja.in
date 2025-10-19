@@ -24,12 +24,17 @@ use App\Http\Controllers\Master\FavoriteItemController;
 use App\Http\Controllers\TestimonialCustomerController;
 use App\Http\Controllers\Master\DetailConsultantController;
 use App\Http\Controllers\Master\HeroController;
+use App\Http\Controllers\Master\PrivacyPolicyController;
+use App\Http\Controllers\Master\TermsAndConditionController;
 
 Route::get("/", [LandingPageController::class,  "index"]);
+Route::get("/terms-and-conditions", [TermsAndConditionController::class,  "index"])->name('termsAndCondition');
+Route::get("/privacy-policy", [PrivacyPolicyController::class,  "index"])->name('privacyPolicy');
 Route::post('/sending-message', [LandingPageController::class, 'store'])->name('contact-message-store');
 Route::prefix("produk")->group(function() {
     Route::get("{slug}", [ProductController::class, "detail"]);
 });
+
 
 Route::group(["middleware" => ["guest"]], function() {
     Route::prefix("auth")->group(function() {

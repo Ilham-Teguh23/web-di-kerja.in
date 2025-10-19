@@ -38,7 +38,65 @@
             z-index: -1;
         }
 
+        .info-item {
+            background: #fff;
+            border-radius: 10px;
+            padding: 30px 15px;
+            text-align: center;
+            height: 100%;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06);
+            transition: all 0.3s ease;
+        }
 
+        .info-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+        }
+
+        .info-item i {
+            font-size: 36px;
+            color: #4aa3df;
+            border: 2px dotted #4aa3df;
+            border-radius: 50%;
+            padding: 15px;
+            margin-bottom: 12px;
+        }
+
+        .info-item h3 {
+            font-weight: 600;
+            font-size: 18px;
+            margin-bottom: 8px;
+            color: #2f3e46;
+        }
+
+        .info-item p {
+            font-size: 15px;
+            color: #444;
+            margin-bottom: 0;
+        }
+
+        /* Sosmed Center */
+        .social-icons {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 10px;
+        }
+
+        .social-icons i {
+            font-size: 28px;
+            border: 2px dotted #4aa3df;
+            border-radius: 50%;
+            padding: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .social-icons i:hover {
+            background: #4aa3df;
+            color: white;
+            transform: scale(1.1);
+        }
 
     </style>
 
@@ -193,7 +251,7 @@
                 <div class="row gy-4">
 
                     <div class="col-lg-4" data-aos="zoom-in" data-aos-delay="100">
-                        <div class="pricing-item promo-bg" style="background-image: url('https://picsum.photos/300/900');">
+                        <div class="pricing-item promo-bg">
                             <h3>Konsultasi Alur / Program</h3>
                             <p class="description">
                                 Konsultasi ini bersifat <strong>GRATIS</strong>, tentunya <strong>Syarat dan Ketentuan Berlaku</strong>
@@ -787,7 +845,7 @@
                         <div class="info-item d-flex flex-column justify-content-center align-items-center fixed-size-box" data-aos="fade-up" data-aos-delay="300">
                             <i class="bi bi-telephone"></i>
                             <h3>Narahubung</h3>
-                            <p>0812-1470-7143</p>
+                            <p>08121470</p>
                         </div>
                     </div>
                 
@@ -1157,10 +1215,10 @@
 
             // Format pesan WhatsApp
             let text = `Halo Admin di-kerja.in, ada pesan baru dari website:%0A
-Nama: ${name}%0A
-Email: ${email}%0A
-Subjek: ${subject}%0A
-Pesan: ${message}`;
+            Nama: ${name}%0A
+            Email: ${email}%0A
+            Subjek: ${subject}%0A
+            Pesan: ${message}`;
 
             // Redirect ke WhatsApp
             window.open(`https://wa.me/${phone}?text=${text}`, "_blank");

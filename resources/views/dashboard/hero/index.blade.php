@@ -381,7 +381,6 @@
                 success: function (response) {
                     if (response.status === true) {
                         const data = response.data;
-                        
 
                         $('#editData').data('id', id);
 

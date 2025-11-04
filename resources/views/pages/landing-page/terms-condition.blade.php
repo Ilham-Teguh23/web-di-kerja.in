@@ -34,7 +34,7 @@
             <section class="legal-section" id="intro">
                 <h2>1. Pendahuluan</h2>
                 <p>
-                <strong>di-kerja.in</strong> adalah platform digital yang menyediakan berbagai layanan berbasis proyek seperti desain, penulisan, administrasi, 
+                <strong>di-kerja.in</strong> adalah platform digital yang menyediakan berbagai layanan jasa seperti desain, penulisan, administrasi, 
                 pengembangan web, dan jasa profesional lainnya. Kami berkomitmen membantu pengguna menyelesaikan pekerjaan dengan cepat, efisien, dan sesuai kebutuhan.
                 </p>
                 <p>
@@ -71,14 +71,14 @@
                 <h2>4. Pembayaran dan Pengembalian Dana</h2>
                 <p>
                 Semua transaksi dilakukan melalui metode pembayaran resmi yang tersedia di platform kami. 
-                Untuk memulai proyek, pengguna wajib melakukan <strong>pembayaran uang muka (DP) sebesar 50%</strong> dari total biaya yang telah disepakati.
+                Untuk memulai pengerjaan tugas, pengguna wajib melakukan <strong>pembayaran uang muka (DP) sebesar 50%</strong> dari total biaya yang telah disepakati.
                 </p>
                 <ul>
                 <li>Sisa pembayaran 50% dibayarkan setelah hasil pekerjaan selesai dan disetujui oleh pengguna.</li>
                 <li>Apabila pengguna membatalkan pesanan <strong>sebelum pengerjaan dimulai</strong>, maka akan dilakukan <strong>pengembalian dana sebesar 50% dari total DP</strong>.</li>
                 <li>Apabila pembatalan dilakukan <strong>setelah pengerjaan dimulai</strong>, maka DP dianggap <strong>hangus</strong> sebagai kompensasi atas waktu dan sumber daya yang telah digunakan.</li>
-                <li>Jika terjadi kesalahan dari pihak kami (misalnya proyek tidak diselesaikan atau hasil tidak sesuai perjanjian), pengguna berhak atas <strong>pengembalian penuh dari DP</strong>.</li>
-                <li>Harga layanan dapat berubah sewaktu-waktu, namun tidak akan memengaruhi proyek yang sudah berjalan.</li>
+                <li>Jika terjadi kesalahan dari pihak kami (misalnya pengerjaan tugas tidak diselesaikan atau hasil tidak sesuai perjanjian), pengguna berhak atas <strong>pengembalian penuh dari DP</strong>.</li>
+                <li>Harga layanan dapat berubah sewaktu-waktu, namun tidak akan memengaruhi pengerjaan tugas yang sudah berjalan.</li>
                 </ul>
             </section>
 
@@ -86,7 +86,7 @@
                 <h2>5. Perlindungan Data dan Privasi</h2>
                 <p>
                     <strong>di-kerja.in</strong> menghormati privasi setiap pengguna. Semua data atau informasi yang kamu berikan — 
-                    seperti nama, kontak, dan detail proyek — hanya digunakan untuk keperluan komunikasi dan pengerjaan pesanan.
+                    seperti nama, kontak, dan detail tugas — hanya digunakan untuk keperluan komunikasi dan pengerjaan pesanan.
                 </p>
 
                 <p>
@@ -94,7 +94,7 @@
                 </p>
 
                 <p>
-                    Data kamu disimpan dengan aman dan hanya diakses oleh tim <strong>di-kerja.in</strong> yang terlibat langsung dalam proyek.
+                    Data kamu disimpan dengan aman dan hanya diakses oleh tim <strong>di-kerja.in</strong> yang terlibat langsung dalam pengerjaan tugas.
                 </p>
 
                 <p>
@@ -111,7 +111,7 @@
             <section class="legal-section" id="liability">
                 <h2>6. Tanggung Jawab</h2>
                 <p>
-                Kami akan kerjakan setiap proyek sebaik mungkin, tapi kami nggak bisa tanggung jawab atas:
+                Kami akan kerjakan setiap tugas sebaik mungkin, tapi kami nggak bisa tanggung jawab atas:
                 </p>
                 <ul>
                 <li>Penyalahgunaan hasil kerja setelah diserahkan.</li>

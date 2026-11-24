@@ -139,6 +139,17 @@
                 <!-- End::slide -->
 
                 <li class="slide__category">
+                    <span class="category-name">Integrasi</span>
+                </li>
+
+                <li class="slide {{ request()->routeIs('whatsapp.*') ? 'active' : '' }}">
+                    <a href="{{ route('whatsapp.index') }}" class="side-menu__item {{ request()->routeIs('whatsapp.*') ? 'active' : '' }}">
+                        <i class="fe fe-message-circle side-menu__icon"></i>
+                        <span class="side-menu__label">WhatsApp</span>
+                    </a>
+                </li>
+
+                <li class="slide__category">
                     <span class="category-name">Account</span>
                 </li>
     

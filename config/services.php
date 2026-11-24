@@ -35,4 +35,20 @@ return [
         ],
     ],
 
+    // WhatsApp Cloud API (admin > WhatsApp) and the Meta app "Dikerjain".
+    'whatsapp' => [
+        'graph_version' => env('WA_GRAPH_VERSION', 'v27.0'),
+        // System User token with business_management,
+        // whatsapp_business_management and whatsapp_business_messaging.
+        'access_token' => env('WA_ACCESS_TOKEN', ''),
+        'business_id' => env('WA_BUSINESS_ID', ''),
+        'waba_id' => env('WA_WABA_ID', ''),
+        'phone_number_id' => env('WA_PHONE_NUMBER_ID', ''),
+        // Embedded Signup (Coexistence) and the webhook signature.
+        'app_id' => env('META_APP_ID', ''),
+        'app_secret' => env('META_APP_SECRET', ''),
+        'es_config_id' => env('WA_ES_CONFIG_ID', ''),
+        'webhook_verify_token' => env('WA_WEBHOOK_VERIFY_TOKEN', ''),
+    ],
+
 ];

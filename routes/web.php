@@ -28,6 +28,8 @@ use App\Http\Controllers\Master\PrivacyPolicyController;
 use App\Http\Controllers\Master\SettingController;
 use App\Http\Controllers\Master\TermsAndConditionController;
 use App\Http\Controllers\SitemapController;
+use App\Http\Controllers\WhatsApp\WhatsAppController;
+use App\Http\Controllers\WhatsApp\WhatsAppWebhookController;
 
 Route::get("/", [LandingPageController::class,  "index"])->name('home');
 Route::get("/terms-and-conditions", [TermsAndConditionController::class,  "index"])->name('termsAndCondition');
@@ -50,6 +52,12 @@ Route::group(["middleware" => ["guest"]], function() {
 });
 
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+
+// WhatsApp webhook for Meta: public, no session/CSRF, POST checked by signature.
+Route::controller(WhatsAppWebhookController::class)->withoutMiddleware('web')->group(function () {
+    Route::get('/webhooks/whatsapp', 'verify')->name('whatsapp.webhook.verify');
+    Route::post('/webhooks/whatsapp', 'receive')->name('whatsapp.webhook.receive');
+});
 
 Route::middleware(['web', 'auth'])->group(function () {
 
@@ -139,5 +147,19 @@ Route::middleware(['web', 'auth'])->group(function () {
         // Pengaturan Website & SEO
         Route::get("/setting", [SettingController::class, "index"])->name("setting.index");
         Route::put("/setting", [SettingController::class, "update"])->name("setting.update");
+
+        // WhatsApp Cloud API
+        Route::prefix("whatsapp")->name("whatsapp.")->controller(WhatsAppController::class)->group(function () {
+            Route::get("/", "index")->name("index");
+            Route::get("/business-assets", "businessAssets")->name("business-assets");
+            Route::get("/phone-numbers", "phoneNumbers")->name("phone-numbers");
+            Route::get("/templates", "templates")->name("templates");
+            Route::post("/templates", "createTemplate")->name("templates.store");
+            Route::post("/messages", "sendMessage")->name("messages.store");
+            Route::get("/embedded-signup", "status")->name("signup.status");
+            Route::post("/embedded-signup", "exchange")->name("signup.exchange");
+            Route::post("/embedded-signup/sync", "sync")->name("signup.sync");
+            Route::get("/webhook-events", "webhookEvents")->name("webhook-events");
+        });
     });
 });

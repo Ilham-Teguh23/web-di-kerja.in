@@ -44,8 +44,8 @@ class ContactController extends Controller
             // Simpan ke tabel contact
             Contact::create([
                 'address' => $request->alamat,
-                'phone' => $request->email,
-                'email' => $request->telp,
+                'phone' => $request->telp,
+                'email' => $request->email,
                 'link_fb' => $request->fb,
                 'link_ig' => $request->ig,
                 'link_twitter' => $request->twit,

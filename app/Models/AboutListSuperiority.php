@@ -14,6 +14,6 @@ class AboutListSuperiority extends Model
 
     public function listSuperiority()
     {
-        return $this->belongsTo(listSuperiority::class, 'list_superiority_id');
+        return $this->belongsTo(ListSuperiority::class, 'list_superiority_id');
     }
 }

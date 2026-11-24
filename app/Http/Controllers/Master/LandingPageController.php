@@ -2,12 +2,21 @@
 
 namespace App\Http\Controllers\Master;
 
+use App\Models\FAQ;
+use App\Support\Seo;
+use App\Support\Html;
+use App\Models\About;
+use App\Models\Benefit;
+use App\Models\Contact;
+use App\Models\Setting;
+use App\Models\HeroImage;
+use App\Models\PackageItem;
 use Illuminate\Http\Request;
 use App\Models\ContactMessages;
+use App\Models\TestimonialProduct;
 use App\Http\Controllers\Controller;
-use App\Models\Benefit;
-use App\Models\FAQ;
-use Artesaos\SEOTools\Facades\SEOTools;
+use App\Models\TestimonialCustomer;
+use Illuminate\Support\Collection;
 
 class LandingPageController extends Controller
 {
@@ -21,38 +30,80 @@ class LandingPageController extends Controller
 
     public function index()
     {
-        // Set SEO Meta
-        SEOTools::setTitle('Jasa Pembuatan Aplikasi dan Website Profesional dengan Harga Terjangkau, Berkualitas dan Terpercaya');
-        SEOTools::setDescription('Kami menawarkan jasa pembuatan aplikasi dan website untuk kebutuhan bisnis Anda.');
-        SEOTools::setCanonical(url()->current());
+        $setting = Setting::allValues();
+        $heroImage = $this->activeHeroImage();
 
-        // OpenGraph
-        SEOTools::opengraph()->setUrl(url()->current());
-        SEOTools::opengraph()->addProperty('type', 'website');
-        // SEOTools::opengraph()->addImage(asset('images/og-image.jpg'));
+        // Gambar share: OG image dari pengaturan, kalau belum ada pakai gambar hero aktif
+        Seo::apply($setting['seo_title'], $setting['seo_description'], $setting['seo_og_image'] ? null : $heroImage);
 
-        // Twitter Card
-        SEOTools::twitter()->setSite('@HameTR29');
-        SEOTools::twitter()->setTitle('Jasa Pembuatan Aplikasi dan Website Profesional dengan Harga Terjangkau, Berkualitas dan Terpercaya');
-        SEOTools::twitter()->setDescription('Kami menawarkan jasa pembuatan aplikasi dan website untuk kebutuhan bisnis Anda.');
-        // SEOTools::twitter()->setImage(asset('images/og-image.jpg'));
-
-        // JSON-LD
-        SEOTools::jsonLd()->setType('WebPage');
-        SEOTools::jsonLd()->setTitle('Jasa Pembuatan Aplikasi dan Website Profesional dengan Harga Terjangkau, Berkualitas dan Terpercaya');
-        SEOTools::jsonLd()->setDescription('Kami menawarkan jasa pembuatan aplikasi dan website untuk kebutuhan bisnis Anda.');
-        SEOTools::jsonLd()->setUrl(url()->current());
-
-        config([
-            'seo.meta' => SEOTools::generate()
-        ]);
+        $faq = $this->faq->where("status", "1")->orderBy("created_at", "DESC")->get();
+        $packages = PackageItem::with(['price', 'FavoriteItem', 'packageConsultation.detailConsultant'])->orderBy('id')->get();
+        $contact = Contact::latest('id')->first();
 
         $data = [
-            "faq" => $this->faq->where("status", "1")->orderBy("created_at", "DESC")->get(),
-            "benefit" => $this->benefit->where("status", "1")->orderBy("created_at", "ASC")->get()
+            "faq" => $faq,
+            "benefit" => $this->benefit->where("status", "1")->orderBy("created_at", "ASC")->get(),
+            "heroImage" => $heroImage ?: url('/landing-page/assets/img/hero-services-img.png'),
+            "about" => About::with(['imageAbout', 'AboutListSuperiority.listSuperiority'])->latest('id')->first(),
+            "packages" => $packages,
+            "products" => TestimonialProduct::with('imageProduct')->where('status', '1')->latest('id')->get(),
+            "testimonials" => TestimonialCustomer::where('status', '1')->latest('id')->get(),
+            "contact" => $contact,
+            "structuredData" => Seo::schema($this->structuredData($faq, $packages, $contact)),
         ];
 
         return view("pages.landing-page.index", $data);
+    }
+
+    /**
+     * Gambar hero terbaru yang berstatus aktif di menu Hero Image.
+     */
+    protected function activeHeroImage(): ?string
+    {
+        $image = HeroImage::where('status', '1')->latest('id')->value('image_path');
+
+        return $image ? asset('storage/hero-image/' . $image) : null;
+    }
+
+    protected function structuredData(Collection $faq, Collection $packages, ?Contact $contact): array
+    {
+        $organization = Seo::organization($contact);
+
+        if ($packages->isNotEmpty()) {
+            $organization['hasOfferCatalog'] = [
+                '@type' => 'OfferCatalog',
+                'name' => 'Paket Layanan',
+                'itemListElement' => $packages->map(fn ($package) => array_filter([
+                    '@type' => 'Offer',
+                    'itemOffered' => [
+                        '@type' => 'Service',
+                        'name' => $package->name,
+                        'description' => Html::text($package->description) ?: null,
+                    ],
+                    'price' => $package->price?->price,
+                    'priceCurrency' => $package->price ? 'IDR' : null,
+                ], fn ($value) => ! is_null($value)))->values()->all(),
+            ];
+        }
+
+        $graph = [$organization, Seo::website()];
+
+        if ($faq->isNotEmpty()) {
+            $graph[] = [
+                '@type' => 'FAQPage',
+                '@id' => url('/') . '#faq',
+                'mainEntity' => $faq->map(fn ($item) => [
+                    '@type' => 'Question',
+                    'name' => $item->pertanyaan,
+                    'acceptedAnswer' => [
+                        '@type' => 'Answer',
+                        'text' => $item->jawaban,
+                    ],
+                ])->values()->all(),
+            ];
+        }
+
+        return $graph;
     }
 
     public function getLocation(Request $request)

@@ -12,9 +12,11 @@ class DashboardController extends Controller
         return view('dashboard.dashboard'); // View untuk form login
     }
 
-    public function authLogout()
+    public function authLogout(Request $request)
     {
         Auth::logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
 
         return redirect()->route("login")->with("success", "Logout Berhasil");
     }

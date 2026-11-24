@@ -17,10 +17,11 @@ class ContactSeeder extends Seeder
             'address' => 'Jl. Darma Putra Raya No.6, Kby. Lama Sel., Kec. Kby. Lama, Kota Jakarta Selatan.',
             'phone' => '0812-1470-7143',
             'email' => 'mimin.dikerjain@gmail.com',
-            'link_fb' => 'https://facebook.com/yourprofile',
-            'link_ig' => 'https://instagram.com/yourprofile',
-            'link_twitter' => 'https://twitter.com/yourprofile',
-            'link_tiktok' => 'https://tiktok.com/@yourprofile',
+            // Isi link sosial media dari menu Master > Kontak, yang kosong tidak ditampilkan
+            'link_fb' => null,
+            'link_ig' => null,
+            'link_twitter' => null,
+            'link_tiktok' => null,
         ]);
     }
 }

@@ -25,15 +25,21 @@ use App\Http\Controllers\TestimonialCustomerController;
 use App\Http\Controllers\Master\DetailConsultantController;
 use App\Http\Controllers\Master\HeroController;
 use App\Http\Controllers\Master\PrivacyPolicyController;
+use App\Http\Controllers\Master\SettingController;
 use App\Http\Controllers\Master\TermsAndConditionController;
+use App\Http\Controllers\SitemapController;
 
-Route::get("/", [LandingPageController::class,  "index"]);
+Route::get("/", [LandingPageController::class,  "index"])->name('home');
 Route::get("/terms-and-conditions", [TermsAndConditionController::class,  "index"])->name('termsAndCondition');
 Route::get("/privacy-policy", [PrivacyPolicyController::class,  "index"])->name('privacyPolicy');
 Route::post('/sending-message', [LandingPageController::class, 'store'])->name('contact-message-store');
 Route::prefix("produk")->group(function() {
-    Route::get("{slug}", [ProductController::class, "detail"]);
+    Route::get("{slug}", [ProductController::class, "detail"])->name('produk.detail');
 });
+
+// SEO
+Route::get('/sitemap.xml', [SitemapController::class, 'index'])->name('sitemap');
+Route::get('/robots.txt', [SitemapController::class, 'robots'])->name('robots');
 
 
 Route::group(["middleware" => ["guest"]], function() {
@@ -129,5 +135,9 @@ Route::middleware(['web', 'auth'])->group(function () {
         // Meta Data Superiority
         Route::get("/superiority/datatable", [AboutSuperiorityController::class, "datatable"])->name("superiority.datatable");
         Route::resource("superiority", AboutSuperiorityController::class);
+
+        // Pengaturan Website & SEO
+        Route::get("/setting", [SettingController::class, "index"])->name("setting.index");
+        Route::put("/setting", [SettingController::class, "update"])->name("setting.update");
     });
 });

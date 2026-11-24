@@ -48,7 +48,7 @@ class PackageItemController extends Controller
             'name' => 'required|string',
             'deskripsi' => 'nullable|string',
             'price' => 'nullable|exists:meta_price_package_service,id',
-            'uploaded_image' => 'nullable|string',
+            'uploaded_image' => 'nullable|string|regex:/^[\w.\-]+$/',
             'consultant' => 'nullable|array'
         ]);
 
@@ -150,7 +150,7 @@ class PackageItemController extends Controller
             'editName' => 'required|string',
             'editDescription' => 'nullable|string',
             'editPrice' => 'nullable|exists:meta_price_package_service,id',
-            'uploaded_image' => 'nullable|string',
+            'uploaded_image' => 'nullable|string|regex:/^[\w.\-]+$/',
             'editConsultant' => 'nullable|array'
         ]);
         
@@ -321,7 +321,11 @@ class PackageItemController extends Controller
     if ($request->hasFile('file')) {
         $file = $request->file('file');
 
-        $extension = $file->getClientOriginalExtension();
+        if ($invalid = $this->rejectInvalidImage($request)) {
+            return $invalid;
+        }
+
+        $extension = $file->extension();
         $encryptedName = md5($file->getClientOriginalName() . time()) . '.' . $extension;
 
         $dir = 'storage/image_item_package/';
@@ -335,7 +339,7 @@ class PackageItemController extends Controller
         try {
             // Jika ada file lama, hapus file lama terlebih dahulu
             if ($request->has('old_filename')) {
-                $oldFileName = $request->input('old_filename');
+                $oldFileName = basename((string) $request->input('old_filename'));
                 $oldFilePath = public_path($dir . $oldFileName);
 
                 if (File::exists($oldFilePath)) {
@@ -370,7 +374,7 @@ class PackageItemController extends Controller
 
 public function deleteUploadedImage(Request $request)
 {
-    $filename = $request->input('filename');
+    $filename = basename((string) $request->input('filename'));
 
     if (!$filename) {
         return response()->json([
@@ -399,7 +403,7 @@ public function deleteUploadedImage(Request $request)
 
     return response()->json([
         'status' => false,
-        'message' => 'File tidak ditemukan: ' . $path
+        'message' => 'File tidak ditemukan: ' . $filename
     ], 404);
 }
 

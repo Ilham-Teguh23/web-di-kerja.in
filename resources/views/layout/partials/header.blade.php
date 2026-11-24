@@ -10,7 +10,7 @@
             <!-- Start::header-element -->
             <div class="header-element">
                 <div class="horizontal-logo">
-                    <a href="{{ asset('index.html') }}" class="header-logo">
+                    <a href="{{ route('dashboard') }}" class="header-logo">
                         <img src="{{ url('/assets-images') }}/logo_aplikasi.png" alt="logo" class="desktop-logo">
                         <img src="{{ url('/assets-images') }}/logo_aplikasi.png" alt="logo" class="toggle-logo">
                         <img src="{{ url('/assets-images') }}/logo_aplikasi.png" alt="logo" class="desktop-dark">
@@ -244,7 +244,7 @@
                     <li class="dropdown-item"><a class="d-flex w-100" href="#"><i class="fe fe-mail fs-18 me-2 text-primary"></i>Inbox <span class="badge bg-danger ms-auto">25</span></a></li>
                     <li class="dropdown-item"><a class="d-flex w-100" href="#"><i class="fe fe-settings fs-18 me-2 text-primary"></i>Settings</a></li>
                     <li class="dropdown-item">
-                        <a class="d-flex w-100" href="{{ url('/auth/logout') }}">
+                        <a class="d-flex w-100" href="javascript:void(0)" onclick="confirmLogout()">
                             <i class="fe fe-info fs-18 me-2 text-primary"></i>Log Out
                         </a>
                     </li>

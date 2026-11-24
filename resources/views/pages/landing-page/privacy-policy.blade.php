@@ -5,11 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    {!! config('seo.meta') !!}
-
-    <title>
-        .: di-kerja.in :.
-    </title>
+    @include('pages.landing-page.layouts.seo.seo')
 
     @include('pages.landing-page.layouts.favico.favico')
 
@@ -28,6 +24,11 @@
         <section class="legal-content container">
             <div class="row">
                 <div class="col-lg-9 mx-auto">
+
+                <header class="legal-page-title">
+                    <h1>Kebijakan Privasi</h1>
+                    <p>Bagaimana {{ $setting['site_name'] }} menggunakan, menyimpan, dan menghapus data kamu.</p>
+                </header>
 
                 <section class="legal-section" id="use">
                     <h2>1. Penggunaan Data</h2>
@@ -51,10 +52,7 @@
                     Kamu bebas minta agar data kamu dihapus dari catatan saya.  
                     Cukup kirim pesan lewat:
                     </p>
-                    <p>
-                    Email: <a href="mailto:mimin.dikerjain@gmail.com">mimin.dikerjain@gmail.com</a><br>
-                    WhatsApp: <a href="https://wa.me/628121470" target="_blank">0812-1470</a>
-                    </p>
+                    @include('pages.landing-page.layouts.components.contact-info')
                     <p>
                     Biasanya saya hapus dalam waktu maksimal 7 hari, kecuali data pembayaran yang memang harus disimpan sebagai bukti transaksi.
                     </p>
@@ -73,10 +71,7 @@
                     <p>
                     Kalau ada pertanyaan soal privasi, kamu bisa langsung hubungi saya di:
                     </p>
-                    <p>
-                    Email: <a href="mailto:mimin.dikerjain@gmail.com">mimin.dikerjain@gmail.com</a><br>
-                    WhatsApp: <a href="https://wa.me/628121470" target="_blank">0812-1470</a>
-                    </p>
+                    @include('pages.landing-page.layouts.components.contact-info')
                 </section>
 
                 </div>

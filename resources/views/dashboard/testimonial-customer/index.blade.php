@@ -10,7 +10,7 @@
     .dropzone .dz-preview .dz-image img {
         max-width: 120px;
         max-height: 120px;
-        object-fit: cover; 
+        object-fit: cover;
     }
 </style>
 
@@ -52,6 +52,8 @@
                             <tr>
                                 <th>No.</th>
                                 <th>Gambar</th>
+                                <th>Nama</th>
+                                <th>Testimoni</th>
                                 <th>Status</th>
                                 <th>Aksi</th>
                             </tr>
@@ -78,7 +80,21 @@
                 <form id="tambahData">
                     <div class="modal-body">
                         <div class="form-group mb-3">
+                            <label for="nama" class="form-label">Nama Pelanggan</label>
+                            <input type="text" class="form-control" id="nama" name="nama" placeholder="Contoh: Ri** (boleh disamarkan)">
+                        </div>
+                        <div class="form-group mb-3">
+                            <label for="keterangan" class="form-label">Keterangan</label>
+                            <input type="text" class="form-control" id="keterangan" name="keterangan" placeholder="Contoh: Mahasiswa">
+                        </div>
+                        <div class="form-group mb-3">
+                            <label for="deskripsi" class="form-label">Isi Testimoni</label>
+                            <textarea class="form-control" id="deskripsi" name="deskripsi" rows="4"
+                                placeholder="Kosongkan jika testimoni berupa screenshot / gambar saja"></textarea>
+                        </div>
+                        <div class="form-group mb-3">
                             <label class="form-label">Upload Gambar</label>
+                            <small class="text-muted d-block mb-1">Foto pelanggan (jika isi testimoni diisi) atau screenshot testimoni.</small>
                             <div class="dropzone" id="dropzoneArea"></div>
                         </div>
                     </div>
@@ -108,6 +124,19 @@
                 </div>
                 <form id="editData">
                     <div class="modal-body">
+                        <div class="form-group">
+                            <label for="editNama" class="form-label">Nama Pelanggan</label>
+                            <input type="text" class="form-control" id="editNama" name="nama">
+                        </div>
+                        <div class="mt-3 form-group">
+                            <label for="editKeterangan" class="form-label">Keterangan</label>
+                            <input type="text" class="form-control" id="editKeterangan" name="keterangan">
+                        </div>
+                        <div class="mt-3 form-group">
+                            <label for="editDeskripsi" class="form-label">Isi Testimoni</label>
+                            <textarea class="form-control" id="editDeskripsi" name="deskripsi" rows="4"
+                                placeholder="Kosongkan jika testimoni berupa screenshot / gambar saja"></textarea>
+                        </div>
                         <div class="mt-3 form-group">
                             <label class="form-label">Upload Gambar</label>
                             <div class="dropzone" id="editDropzoneArea"></div>
@@ -142,16 +171,30 @@
 
     <script>
         var myDropzone;
+        var editDropzone = null;
         var table;
 
         Dropzone.autoDiscover = false;
         var uploadedFileName = null;
-        
+
+        // Hanya satu nama file hasil upload yang dikirim saat simpan
+        function setUploadedImage(form, filename) {
+            $(form).find('input[name="uploaded_image"]').remove();
+
+            if (filename) {
+                $('<input>').attr({
+                    type: 'hidden',
+                    name: 'uploaded_image',
+                    value: filename
+                }).appendTo(form);
+            }
+        }
+
 
         $('#modalTambahData').on('shown.bs.modal', function () {
 
             if (Dropzone.instances.length > 0) {
-                Dropzone.instances.forEach(function(dropzone) {
+                Dropzone.instances.slice().forEach(function(dropzone) {
                     dropzone.destroy();
                 });
             }
@@ -159,9 +202,10 @@
             if ($("#dropzoneArea").length) {
                 Dropzone.autoDiscover = false;
 
-                var uploadedFileName = '';
+                uploadedFileName = '';
+                setUploadedImage('#tambahData', null);
 
-                var myDropzone = new Dropzone("#dropzoneArea", {
+                myDropzone = new Dropzone("#dropzoneArea", {
                     url: "{{ route('testimonials-customer.upload-image') }}",
                     maxFiles: 1,
                     acceptedFiles: "image/*",
@@ -176,16 +220,12 @@
                                 type: 'POST',
                                 data: {
                                     _token: $('meta[name="csrf-token"]').attr('content'),
-                                    filename: uploadedFileName 
+                                    filename: uploadedFileName
                                 },
                                 success: function (res) {
 
                                     uploadedFileName = response.filename;
-                                    $('<input>').attr({
-                                        type: 'hidden',
-                                        name: 'uploaded_image',
-                                        value: uploadedFileName
-                                    }).appendTo('#tambahData');
+                                    setUploadedImage('#tambahData', uploadedFileName);
 
                                     Swal.fire({
                                         icon: 'success',
@@ -206,11 +246,7 @@
                             });
                         } else {
                             uploadedFileName = response.filename;
-                            $('<input>').attr({
-                                type: 'hidden',
-                                name: 'uploaded_image',
-                                value: uploadedFileName
-                            }).appendTo('#tambahData');
+                            setUploadedImage('#tambahData', uploadedFileName);
 
                             Swal.fire({
                                 icon: 'success',
@@ -265,6 +301,25 @@
                     {
                         targets: 2,
                         render: function(data, type, full, meta) {
+                            const nama = data ? data : '-';
+                            const keterangan = full.keterangan ? `<br><small class="text-muted">${full.keterangan}</small>` : '';
+
+                            return nama + keterangan;
+                        }
+                    },
+                    {
+                        targets: 3,
+                        render: function(data, type, full, meta) {
+                            if (!data) {
+                                return '<span class="text-muted">(gambar saja)</span>';
+                            }
+
+                            return `<span class="d-inline-block text-truncate" style="max-width: 280px;">${data}</span>`;
+                        }
+                    },
+                    {
+                        targets: 4,
+                        render: function(data, type, full, meta) {
                             const status = full.status == "0" ? "Tidak Aktif" : "Aktif";
                             const btnClass = full.status == "0" ? "btn-danger" : "btn-success";
                             const nextStatus = full.status == "0" ? 1 : 0;
@@ -273,7 +328,7 @@
                         }
                     },
                     {
-                        targets: 3,
+                        targets: 5,
                         render: function(data, type, full, meta) {
                             return `
                         <a href="#" class="btn btn-warning btn-sm" onclick="editData(${full.id})">
@@ -291,6 +346,12 @@
                     },
                     {
                         data: 'gambar'
+                    },
+                    {
+                        data: 'nama'
+                    },
+                    {
+                        data: 'deskripsi'
                     },
                     {
                         data: 'status'
@@ -321,7 +382,7 @@
 
         function updateStatus(id, status) {
             // console.log(id);
-            
+
             Swal.fire({
                 title: 'Yakin ingin mengubah status?',
                 text: "Tindakan ini akan memperbarui data!",
@@ -381,11 +442,22 @@
                 success: function (response) {
                     if (response.status === true) {
                         const data = response.data;
-                        
+
 
                         $('#editData').data('id', id);
 
-                        if (!window.dropzoneInitialized) {
+                        $('#editNama').val(data.nama);
+                        $('#editKeterangan').val(data.keterangan);
+                        $('#editDeskripsi').val(data.deskripsi);
+
+                        // Dropzone dibuat ulang setiap edit agar gambar yang tampil sesuai data yang dipilih
+                        if (editDropzone && Dropzone.instances.includes(editDropzone)) {
+                            editDropzone.destroy();
+                        }
+
+                        setUploadedImage('#editData', null);
+
+                        if ($("#editDropzoneArea").length) {
                             editDropzone = new Dropzone("#editDropzoneArea", {
                                 url: "{{ route('testimonials-customer.upload-image') }}",
                                 maxFiles: 1,
@@ -397,17 +469,19 @@
                                 init: function() {
                                     var dz = this;
 
-                                    var mockFile = {
-                                        name: data.gambar,
-                                        size: 12345,
-                                        url: '/storage/testimonial-costumer/' + data.gambar 
-                                    };
+                                    if (data.gambar) {
+                                        var mockFile = {
+                                            name: data.gambar,
+                                            size: 12345,
+                                            url: '/storage/testimonial-costumer/' + data.gambar
+                                        };
 
-                                    dz.emit("addedfile", mockFile);  
-                                    dz.emit("thumbnail", mockFile, mockFile.url); 
-                                    dz.emit("complete", mockFile); 
+                                        dz.emit("addedfile", mockFile);
+                                        dz.emit("thumbnail", mockFile, mockFile.url);
+                                        dz.emit("complete", mockFile);
 
-                                    dz.files.push(mockFile);
+                                        dz.files.push(mockFile);
+                                    }
 
                                     dz.on("addedfile", function(file) {
                                         if (dz.files.length > 1) {
@@ -459,8 +533,6 @@
                                     });
                                 }
                             });
-
-                            window.dropzoneInitialized = true;
                         }
 
 
@@ -484,7 +556,7 @@
 
             function hapusData(id) {
                 console.log(id);
-                
+
                 Swal.fire({
                     title: 'Apakah Anda yakin?',
                     text: "Data yang dihapus tidak dapat dikembalikan!",
@@ -562,6 +634,8 @@
                             showConfirmButton: false
                         }).then(() => {
                             $("#tambahData")[0].reset();
+                            setUploadedImage('#tambahData', null);
+                            uploadedFileName = null;
                             $('#modalTambahData').modal('hide');
 
                             if (myDropzone) myDropzone.removeAllFiles(true);
@@ -620,9 +694,9 @@
                         }).then(() => {
                             $("#editData")[0].reset();
                             $('#modalEditData').modal('hide');
-                            
+
                             table.ajax.reload(null, false);
-                            
+
                         });
                     }
                 },

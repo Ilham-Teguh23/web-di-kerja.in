@@ -8,6 +8,7 @@
     <meta name='viewport' content='width=device-width, initial-scale=1.0'>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title> Admin - Di-kerja.in </title>
+    <meta name="robots" content="noindex, nofollow">
     <meta name="Description" content="Bootstrap Responsive Admin Web Dashboard HTML5 Template">
     <meta name="Author" content="Spruko Technologies Private Limited">
     <meta name="keywords" content="admin dashboard,dashboard design htmlbootstrap admin template,html admin panel,admin dashboard html,admin panel html template,bootstrap dashboard,html admin template,html dashboard,html admin dashboard template,bootstrap dashboard template,dashboard html template,bootstrap admin panel,dashboard admin bootstrap,bootstrap admin dashboard">

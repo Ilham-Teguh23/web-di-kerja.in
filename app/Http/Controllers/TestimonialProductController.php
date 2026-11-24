@@ -32,7 +32,8 @@ class TestimonialProductController extends Controller
         $request->validate([
             'name' => 'required|string',
             'deskripsi' => 'required|string',
-            'uploaded_images' => 'nullable|array'
+            'uploaded_images' => 'nullable|array',
+            'uploaded_images.*' => 'string|regex:/^[\w.\-]+$/'
         ]);
 
         DB::beginTransaction();
@@ -108,7 +109,9 @@ class TestimonialProductController extends Controller
         'editName' => 'required|string',
         'editDeskripsi' => 'nullable|string',
         'uploaded_images' => 'nullable|array',
+        'uploaded_images.*' => 'string|regex:/^[\w.\-]+$/',
         'existing_images' => 'nullable|array', // <-- Tambahan
+        'existing_images.*' => 'string|regex:/^[\w.\-]+$/',
     ]);
 
     try {
@@ -259,7 +262,11 @@ class TestimonialProductController extends Controller
         if ($request->hasFile('file')) {
             $file = $request->file('file');
 
-            $extension = $file->getClientOriginalExtension();
+            if ($invalid = $this->rejectInvalidImage($request)) {
+                return $invalid;
+            }
+
+            $extension = $file->extension();
             $encryptedName = md5($file->getClientOriginalName() . time()) . '.' . $extension;
 
             $dir = 'storage/testimonial-product/';
@@ -272,7 +279,7 @@ class TestimonialProductController extends Controller
 
             try {
                 if ($request->has('old_filename')) {
-                    $oldFileName = $request->input('old_filename');
+                    $oldFileName = basename((string) $request->input('old_filename'));
                     $oldFilePath = public_path($dir . $oldFileName);
 
                     if (File::exists($oldFilePath)) {
@@ -306,7 +313,7 @@ class TestimonialProductController extends Controller
 
     public function deleteUploadedImage(Request $request)
     {
-        $filename = $request->input('filename');
+        $filename = basename((string) $request->input('filename'));
 
         if (!$filename) {
             return response()->json([
@@ -335,7 +342,7 @@ class TestimonialProductController extends Controller
 
         return response()->json([
             'status' => false,
-            'message' => 'File tidak ditemukan: ' . $path
+            'message' => 'File tidak ditemukan: ' . $filename
         ], 404);
     }
 

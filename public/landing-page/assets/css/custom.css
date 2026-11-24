@@ -1,0 +1,968 @@
+/**
+ * Penyesuaian tampilan di atas template QuickStart (main.css).
+ * Warna brand tetap, tipografi lebih rapi, kartu bergaris tipis dan bayangan seperlunya.
+ */
+
+/*--------------------------------------------------------------
+# Variabel
+--------------------------------------------------------------*/
+:root {
+  --default-font: "Plus Jakarta Sans", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --heading-font: "Plus Jakarta Sans", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --nav-font: "Plus Jakarta Sans", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+
+  --default-color: #4a5565;
+  --heading-color: #1d2a39;
+  /* Warna brand, sedikit digelapkan agar teks putih di tombol tetap terbaca (kontras 4.8:1) */
+  --accent-color: #2c7a95;
+  --nav-color: #3a4656;
+  --nav-hover-color: #2c7a95;
+  --nav-dropdown-hover-color: #2c7a95;
+
+  --muted-color: #667085;
+  --border-color: #e3e8ee;
+  --soft-accent: #edf5f8;
+  --radius: 14px;
+}
+
+.light-background {
+  --background-color: #f6f9fb;
+}
+
+body {
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  letter-spacing: -0.01em;
+}
+
+/*--------------------------------------------------------------
+# Header
+--------------------------------------------------------------*/
+.header {
+  padding: 14px 0;
+}
+
+.header .logo img {
+  width: 44px;
+  height: 44px;
+  object-fit: contain;
+}
+
+.header .logo .sitename {
+  font-size: 22px;
+  font-weight: 800;
+  margin: 0;
+  color: var(--heading-color);
+}
+
+.scrolled .header {
+  box-shadow: none;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.header .btn-getstarted,
+.header .btn-getstarted:focus {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 600;
+  padding: 9px 18px;
+  border-radius: 10px;
+}
+
+@media (min-width: 1200px) {
+  .navmenu a,
+  .navmenu a:focus {
+    font-size: 15px;
+    font-weight: 500;
+    padding: 18px 14px;
+  }
+}
+
+@media (max-width: 1200px) {
+  .header .btn-getstarted {
+    padding: 7px 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  .header .logo img {
+    width: 36px;
+    height: 36px;
+  }
+
+  .header .logo .sitename {
+    font-size: 19px;
+  }
+
+  /* Di layar kecil cukup ikon WhatsApp */
+  .header .btn-getstarted .btn-label {
+    display: none;
+  }
+}
+
+/*--------------------------------------------------------------
+# Tombol
+--------------------------------------------------------------*/
+.btn-site,
+.btn-site-outline {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 24px;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 15px;
+  transition: background-color 0.2s, border-color 0.2s, color 0.2s;
+}
+
+.btn-site {
+  background: var(--accent-color);
+  color: var(--contrast-color);
+  border: 1px solid var(--accent-color);
+}
+
+.btn-site:hover {
+  background: color-mix(in srgb, var(--accent-color), #000 12%);
+  border-color: color-mix(in srgb, var(--accent-color), #000 12%);
+  color: var(--contrast-color);
+}
+
+.btn-site-outline {
+  background: #fff;
+  color: var(--heading-color);
+  border: 1px solid var(--border-color);
+}
+
+.btn-site-outline:hover {
+  border-color: var(--accent-color);
+  color: var(--accent-color);
+}
+
+/*--------------------------------------------------------------
+# Hero
+--------------------------------------------------------------*/
+.hero {
+  min-height: auto;
+  padding: 150px 0 80px 0;
+  background: linear-gradient(180deg, #f2f7f9 0%, #ffffff 100%);
+}
+
+.hero h1 {
+  font-size: 48px;
+  line-height: 1.15;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+/* Nama brand (mis. "di-kerja.in") jangan terpotong di tanda hubung */
+.hero h1 span {
+  white-space: nowrap;
+}
+
+.hero .hero-subtitle {
+  font-size: 18px;
+  max-width: 520px;
+  margin: 18px 0 32px 0;
+  color: var(--muted-color);
+}
+
+.hero .hero-img {
+  max-width: 100%;
+}
+
+@media (max-width: 991px) {
+  .hero .hero-subtitle {
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+
+@media (max-width: 640px) {
+  .hero {
+    padding: 115px 0 50px 0;
+  }
+
+  .hero h1 {
+    font-size: 32px;
+    line-height: 1.2;
+  }
+
+  .hero .hero-subtitle {
+    font-size: 16px;
+  }
+}
+
+/*--------------------------------------------------------------
+# Judul section
+--------------------------------------------------------------*/
+.section-title {
+  padding-bottom: 48px;
+}
+
+.section-title h2 {
+  font-size: 34px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  margin-bottom: 12px;
+  padding-bottom: 0;
+}
+
+.section-title h2:after {
+  display: none;
+}
+
+.section-title p {
+  max-width: 640px;
+  margin: 0 auto;
+  color: var(--muted-color);
+  font-size: 17px;
+}
+
+@media (max-width: 640px) {
+  .section-title h2 {
+    font-size: 27px;
+  }
+
+  .section-title p {
+    font-size: 15.5px;
+  }
+}
+
+/*--------------------------------------------------------------
+# Tentang Kami
+--------------------------------------------------------------*/
+.about .content .who-we-are {
+  color: var(--accent-color);
+  font-weight: 700;
+  font-size: 13px;
+  letter-spacing: 0.08em;
+  margin-bottom: 12px;
+}
+
+.about .content h3 {
+  font-size: 34px;
+  font-weight: 800;
+  line-height: 1.25;
+  letter-spacing: -0.02em;
+  margin-bottom: 16px;
+}
+
+.about .content .about-description {
+  color: var(--muted-color);
+  font-size: 17px;
+  margin-bottom: 20px;
+}
+
+.about .content ul li {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding-bottom: 12px;
+}
+
+.about .content ul i {
+  color: var(--accent-color);
+}
+
+.about .about-images img {
+  border-radius: var(--radius);
+}
+
+@media (max-width: 640px) {
+  .about .content h3 {
+    font-size: 26px;
+  }
+}
+
+/*--------------------------------------------------------------
+# Keunggulan
+--------------------------------------------------------------*/
+.services .service-item {
+  border-color: var(--border-color);
+  border-radius: var(--radius);
+  padding: 28px;
+  transition: border-color 0.2s, box-shadow 0.2s, transform 0.2s;
+}
+
+.services .service-item:hover {
+  border-color: color-mix(in srgb, var(--accent-color), transparent 60%);
+  box-shadow: 0 8px 24px rgba(16, 24, 40, 0.06);
+  transform: translateY(-2px);
+}
+
+.services .service-item .icon {
+  width: 52px;
+  height: 52px;
+  font-size: 24px;
+  border-radius: 12px;
+  margin-right: 20px;
+  color: var(--accent-color);
+  background: var(--soft-accent);
+}
+
+.services .service-item h3 {
+  font-size: 18px;
+  color: var(--heading-color);
+  margin-bottom: 6px;
+}
+
+.services .service-item p {
+  color: var(--muted-color);
+  font-size: 15px;
+}
+
+/*--------------------------------------------------------------
+# Harga
+--------------------------------------------------------------*/
+.pricing .pricing-item {
+  background: #fff;
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  padding: 32px 28px;
+  transition: box-shadow 0.2s, border-color 0.2s;
+}
+
+.pricing .pricing-item:hover {
+  box-shadow: 0 10px 30px rgba(16, 24, 40, 0.07);
+}
+
+.pricing .featured {
+  border: 1.5px solid var(--accent-color);
+  box-shadow: 0 10px 30px rgba(44, 122, 149, 0.1);
+}
+
+.pricing .featured h3 {
+  padding-right: 7.5rem;
+}
+
+.pricing .featured .popular {
+  top: 30px;
+  right: 24px;
+  padding: 3px 12px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+  background: var(--soft-accent);
+  color: var(--accent-color);
+}
+
+.pricing h3 {
+  font-size: 19px;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+.pricing .description {
+  font-size: 14.5px;
+  color: var(--muted-color);
+}
+
+.pricing .price {
+  margin-top: 20px;
+}
+
+.pricing .price-label {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--muted-color);
+  margin-bottom: 2px;
+}
+
+.pricing h4 {
+  font-size: 38px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--heading-color);
+  line-height: 1.2;
+}
+
+.pricing h4 sup {
+  font-size: 18px;
+  font-weight: 700;
+  top: -0.9em;
+  margin-right: 2px;
+}
+
+.pricing .cta-btn {
+  border-radius: 10px;
+  border-color: var(--border-color);
+  color: var(--heading-color);
+  font-weight: 600;
+  font-size: 15px;
+  padding: 11px 20px;
+  margin-top: 22px;
+}
+
+.pricing .featured .cta-btn:hover {
+  background: color-mix(in srgb, var(--accent-color), #000 12%);
+  border-color: color-mix(in srgb, var(--accent-color), #000 12%);
+}
+
+.pricing ul {
+  margin: 22px 0 0 0;
+  padding-top: 18px;
+  border-top: 1px solid var(--border-color);
+  line-height: 1.5;
+}
+
+.pricing ul li {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 6px 0;
+  font-size: 14.5px;
+  cursor: default;
+}
+
+.pricing ul i {
+  color: var(--accent-color);
+  font-size: 18px;
+  line-height: 1.2;
+  padding-right: 0;
+}
+
+/* Paket dengan gambar latar dari dashboard */
+.promo-bg {
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  position: relative;
+  z-index: 1;
+  border: none !important;
+}
+
+.promo-bg::before {
+  content: "";
+  background-color: rgba(15, 27, 38, 0.72);
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  z-index: -1;
+}
+
+.promo-bg h3,
+.promo-bg h4,
+.promo-bg .description,
+.promo-bg .price-label,
+.promo-bg ul {
+  color: #fff;
+}
+
+.promo-bg ul {
+  border-top-color: rgba(255, 255, 255, 0.2);
+}
+
+.promo-bg .cta-btn {
+  background: #fff;
+  border-color: #fff;
+}
+
+/*--------------------------------------------------------------
+# Produk
+--------------------------------------------------------------*/
+.product-card {
+  background: #fff;
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  overflow: hidden;
+  transition: box-shadow 0.2s, transform 0.2s;
+}
+
+.product-card:hover {
+  box-shadow: 0 10px 30px rgba(16, 24, 40, 0.08);
+  transform: translateY(-2px);
+}
+
+.product-card-media {
+  display: block;
+  aspect-ratio: 16 / 10;
+  background: var(--soft-accent);
+  border-bottom: 1px solid var(--border-color);
+  overflow: hidden;
+}
+
+.product-card-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top center;
+  transition: transform 0.4s;
+}
+
+.product-card:hover .product-card-media img {
+  transform: scale(1.03);
+}
+
+.product-card-media .carousel,
+.product-card-media .carousel-inner,
+.product-card-media .carousel-item {
+  height: 100%;
+}
+
+.product-card-body {
+  padding: 22px 24px 24px 24px;
+}
+
+.product-card h3 {
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.product-card h3 a {
+  color: var(--heading-color);
+}
+
+.product-card h3 a:hover {
+  color: var(--accent-color);
+}
+
+.product-card p {
+  font-size: 14.5px;
+  color: var(--muted-color);
+  margin-bottom: 16px;
+}
+
+.product-card-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 600;
+  font-size: 14.5px;
+}
+
+.product-card-link i {
+  transition: transform 0.2s;
+}
+
+.product-card-link:hover i {
+  transform: translateX(3px);
+}
+
+/*--------------------------------------------------------------
+# FAQ
+--------------------------------------------------------------*/
+.faq .faq-container .faq-item {
+  background: #fff;
+  border-color: var(--border-color);
+  border-radius: 12px;
+  padding: 18px 22px;
+}
+
+.faq .faq-container .faq-item h3 {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.faq .faq-container .faq-item .faq-content p {
+  color: var(--muted-color);
+}
+
+/*--------------------------------------------------------------
+# Testimoni
+--------------------------------------------------------------*/
+.testimonials .testimonial-item {
+  box-shadow: none;
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  padding: 28px;
+  margin: 30px 15px;
+}
+
+.testimonials .testimonial-item .stars i {
+  color: #f2b01e;
+  font-size: 15px;
+}
+
+.testimonials .testimonial-item p {
+  font-style: normal;
+  font-size: 15.5px;
+  color: var(--default-color);
+}
+
+.testimonials .testimonial-item .testimonial-img {
+  width: 56px;
+  height: 56px;
+  object-fit: cover;
+  border: none;
+}
+
+.testimonials .testimonial-item h3 {
+  font-size: 16px;
+  color: var(--heading-color);
+}
+
+.testimonial-initial {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--soft-accent);
+  color: var(--accent-color);
+  font-weight: 700;
+  font-size: 20px;
+}
+
+.testimonial-screenshot img {
+  width: 100%;
+  max-height: 420px;
+  object-fit: contain;
+  border-radius: 10px;
+}
+
+/*--------------------------------------------------------------
+# Kontak
+--------------------------------------------------------------*/
+.contact .info-item {
+  background: #fff;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius);
+  box-shadow: none;
+  padding: 26px 20px;
+  text-align: center;
+  height: 100%;
+}
+
+.contact .info-item .info-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  margin-bottom: 14px;
+  border-radius: 12px;
+  background: var(--soft-accent);
+  color: var(--accent-color);
+  font-size: 22px;
+}
+
+/* Reset gaya ikon bawaan template (lingkaran bergaris titik) */
+.contact .info-item i {
+  width: auto;
+  height: auto;
+  display: inline;
+  border: 0;
+  border-radius: 0;
+  font-size: inherit;
+  color: inherit;
+}
+
+.contact .info-item h3 {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--heading-color);
+  margin-bottom: 6px;
+}
+
+.contact .info-item p {
+  font-size: 14.5px;
+  color: var(--muted-color);
+  margin-bottom: 0;
+}
+
+.contact .info-item a {
+  color: inherit;
+}
+
+.contact .info-item a:hover {
+  color: var(--accent-color);
+}
+
+.social-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.social-links a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  border: 1px solid var(--border-color);
+  color: var(--heading-color);
+  font-size: 17px;
+  background: #fff;
+}
+
+.social-links a:hover {
+  border-color: var(--accent-color);
+  color: var(--accent-color);
+}
+
+.contact .php-email-form {
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius);
+  box-shadow: none;
+  padding: 32px;
+  margin-top: 8px;
+}
+
+.contact .php-email-form input[type=text],
+.contact .php-email-form input[type=email],
+.contact .php-email-form textarea {
+  border-radius: 10px;
+  border-color: var(--border-color);
+  padding: 12px 14px;
+  font-size: 15px;
+}
+
+.contact .php-email-form input[type=text]:focus,
+.contact .php-email-form input[type=email]:focus,
+.contact .php-email-form textarea:focus {
+  border-color: var(--accent-color);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent-color), transparent 85%);
+}
+
+.contact .php-email-form button[type=submit] {
+  border-radius: 10px;
+  padding: 12px 28px;
+  font-weight: 600;
+}
+
+.contact .php-email-form button[type=submit]:hover {
+  background: color-mix(in srgb, var(--accent-color), #000 12%);
+}
+
+@media (max-width: 640px) {
+  .contact .php-email-form {
+    padding: 22px;
+  }
+}
+
+/*--------------------------------------------------------------
+# Footer
+--------------------------------------------------------------*/
+.footer {
+  --background-color: #f6f9fb;
+  border-top: 1px solid var(--border-color);
+  font-size: 14.5px;
+  padding-bottom: 0;
+}
+
+.footer .footer-top {
+  padding-top: 56px;
+  padding-bottom: 28px;
+}
+
+.footer .footer-contact p {
+  overflow-wrap: anywhere;
+}
+
+.footer .footer-about .logo {
+  margin-bottom: 14px;
+  gap: 10px;
+}
+
+.footer .footer-about .logo img {
+  width: 40px;
+  height: 40px;
+  max-height: none;
+  margin-right: 0;
+  object-fit: contain;
+}
+
+.footer .footer-about .logo span {
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--heading-color);
+  letter-spacing: -0.01em;
+}
+
+.footer .footer-about p {
+  color: var(--muted-color);
+  max-width: 380px;
+  margin-bottom: 18px;
+}
+
+.footer h4 {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--heading-color);
+  margin-bottom: 14px;
+  padding-bottom: 0;
+}
+
+.footer .footer-links ul li {
+  padding: 6px 0;
+}
+
+.footer .footer-links ul a,
+.footer .footer-contact a {
+  color: var(--default-color);
+}
+
+.footer .footer-links ul a:hover,
+.footer .footer-contact a:hover {
+  color: var(--accent-color);
+}
+
+.footer .footer-contact p {
+  color: var(--default-color);
+  margin-bottom: 8px;
+}
+
+.footer .footer-bottom {
+  border-top: 1px solid var(--border-color);
+  padding: 18px 0;
+  color: var(--muted-color);
+  font-size: 14px;
+}
+
+.footer .footer-bottom p {
+  margin: 0;
+}
+
+.footer .footer-bottom .footer-legal {
+  display: flex;
+  gap: 18px;
+  flex-wrap: wrap;
+}
+
+.footer .footer-bottom .footer-legal a {
+  color: var(--muted-color);
+}
+
+.footer .footer-bottom .footer-legal a:hover,
+.footer .footer-bottom .footer-legal a.active {
+  color: var(--accent-color);
+}
+
+/*--------------------------------------------------------------
+# Lain-lain
+--------------------------------------------------------------*/
+.scroll-top {
+  border-radius: 10px;
+}
+
+/*--------------------------------------------------------------
+# Halaman detail produk
+--------------------------------------------------------------*/
+.product-detail {
+  padding-top: 130px;
+}
+
+.product-detail .breadcrumb {
+  font-size: 14px;
+}
+
+.product-detail h1 {
+  font-size: 34px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  margin-bottom: 20px;
+}
+
+.product-detail .product-gallery img {
+  width: 100%;
+  height: 220px;
+  object-fit: cover;
+  object-position: top center;
+  border-radius: 12px;
+  border: 1px solid var(--border-color);
+}
+
+.product-detail .product-gallery .main-image img {
+  height: 420px;
+}
+
+.product-detail .product-description {
+  font-size: 16px;
+  line-height: 1.8;
+}
+
+.product-detail .cta-box {
+  background: #fff;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius);
+  padding: 28px;
+  position: sticky;
+  top: 100px;
+}
+
+.product-detail .cta-box p {
+  color: var(--muted-color);
+}
+
+.other-products img {
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  height: auto;
+  object-fit: cover;
+  object-position: top center;
+  border-radius: 12px;
+  border: 1px solid var(--border-color);
+}
+
+.other-products a:hover h3 {
+  color: var(--accent-color);
+}
+
+@media (max-width: 768px) {
+  .product-detail {
+    padding-top: 100px;
+  }
+
+  .product-detail h1 {
+    font-size: 26px;
+  }
+
+  .product-detail .product-gallery .main-image img {
+    height: 240px;
+  }
+}
+
+/*--------------------------------------------------------------
+# Halaman Syarat & Ketentuan / Kebijakan Privasi
+--------------------------------------------------------------*/
+.legal-content {
+  padding-top: 130px;
+  padding-bottom: 60px;
+}
+
+.legal-content .legal-page-title {
+  margin-bottom: 36px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.legal-content .legal-page-title h1 {
+  font-size: 34px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  margin-bottom: 8px;
+}
+
+.legal-content .legal-page-title p {
+  color: var(--muted-color);
+  margin: 0;
+}
+
+/* Bagian di dalam halaman legal memakai tag <section>, jadi padding 60px bawaan template dinolkan */
+.legal-content .legal-section {
+  padding: 0;
+  margin-bottom: 28px;
+}
+
+.legal-content .legal-section h2 {
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+@media (max-width: 768px) {
+  .legal-content {
+    padding-top: 100px;
+  }
+
+  .legal-content .legal-page-title h1 {
+    font-size: 26px;
+  }
+}

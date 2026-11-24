@@ -49,17 +49,17 @@ return [
             'description' => 'Kami menyediakan jasa pembuatan aplikasi mobile dan website profesional untuk kebutuhan bisnis Anda. Tim ahli siap membantu Anda.', // set false to total remove
             'url'         => false, // Set null for using Url::current(), set false to total remove
             'type'        => 'website',
-            'site_name'   => 'Jasa Dev',
+            'site_name'   => 'di-kerja.in',
             'images'      => [],
         ],
     ],
     'twitter' => [
         /*
          * The default values to be used by the twitter cards generator.
+         * Akun X/Twitter diatur dari menu Pengaturan & SEO di dashboard.
          */
         'defaults' => [
             'card'        => 'summary_large_image',
-            'site'        => '@HameTR29',
         ],
     ],
     'json-ld' => [
@@ -68,12 +68,11 @@ return [
          */
         'defaults' => [
             '@context'     => 'https://schema.org',
-            'title'       => 'Over 9000 Thousand!', // set false to total remove
+            'title'       => 'di-kerja.in', // set false to total remove
             'description' => 'Kami menyediakan jasa pembuatan aplikasi mobile dan website profesional untuk kebutuhan bisnis Anda. Tim ahli siap membantu Anda.',
             'url'         => null, // Set to null or 'full' to use Url::full(), set to 'current' to use Url::current(), set false to total remove
             '@type'        => 'WebPage',
             'images'      => [],
-            'name'        => 'Jasa Pembuatan Aplikasi dan Website Profesional dengan Harga Terjangkau, Berkualitas dan Terpercaya'
         ],
     ],
 ];

@@ -27,7 +27,7 @@ class HeroController extends Controller
     {
         // dd($request->all());
         $request->validate([
-            'uploaded_image' => 'nullable|string',
+            'uploaded_image' => 'nullable|string|regex:/^[\w.\-]+$/',
         ]);
 
         try {
@@ -87,7 +87,7 @@ class HeroController extends Controller
     {
         // dd($request->all())  ;
         $request->validate([
-            'uploaded_image' => 'nullable|string',
+            'uploaded_image' => 'nullable|string|regex:/^[\w.\-]+$/',
         ]);
         
         try {
@@ -199,7 +199,11 @@ class HeroController extends Controller
         if ($request->hasFile('file')) {
             $file = $request->file('file');
 
-            $extension = $file->getClientOriginalExtension();
+            if ($invalid = $this->rejectInvalidImage($request)) {
+                return $invalid;
+            }
+
+            $extension = $file->extension();
             $encryptedName = md5($file->getClientOriginalName() . time()) . '.' . $extension;
 
             $dir = 'storage/hero-image/';
@@ -212,7 +216,7 @@ class HeroController extends Controller
 
             try {
                 if ($request->has('old_filename')) {
-                    $oldFileName = $request->input('old_filename');
+                    $oldFileName = basename((string) $request->input('old_filename'));
                     $oldFilePath = public_path($dir . $oldFileName);
 
                     if (File::exists($oldFilePath)) {
@@ -246,7 +250,7 @@ class HeroController extends Controller
 
     public function deleteUploadedImage(Request $request)
     {
-        $filename = $request->input('filename');
+        $filename = basename((string) $request->input('filename'));
 
         if (!$filename) {
             return response()->json([
@@ -275,7 +279,7 @@ class HeroController extends Controller
 
         return response()->json([
             'status' => false,
-            'message' => 'File tidak ditemukan: ' . $path
+            'message' => 'File tidak ditemukan: ' . $filename
         ], 404);
     }
 

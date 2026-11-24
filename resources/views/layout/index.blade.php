@@ -158,8 +158,13 @@
                 confirmButtonText: 'Ya, Logout!'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    // Redirect ke route logout jika pengguna menekan tombol "Ya, Logout!"
-                    window.location.href = '{{ route("logout") }}';
+                    // Route logout hanya menerima POST + token CSRF
+                    const form = document.createElement('form');
+                    form.method = 'POST';
+                    form.action = '{{ route("logout") }}';
+                    form.innerHTML = '<input type="hidden" name="_token" value="{{ csrf_token() }}">';
+                    document.body.appendChild(form);
+                    form.submit();
                 }
             });
         }

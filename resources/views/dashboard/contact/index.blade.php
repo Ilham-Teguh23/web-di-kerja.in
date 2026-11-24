@@ -44,6 +44,7 @@
                                 <th>No.</th>
                                 <th>Alamat</th>
                                 <th>Telpon</th>
+                                <th>Email</th>
                                 <th>link fb</th>
                                 <th>link ig</th>
                                 <th>link twitter</th>
@@ -264,9 +265,9 @@
 
                         $('#editAlamat').val(data.address);
 
-                        $('#editEmail').val(data.phone);
+                        $('#editEmail').val(data.email);
 
-                        $('#editTelp').val(data.email);
+                        $('#editTelp').val(data.phone);
 
                         $('#editFb').val(data.link_fb);
 

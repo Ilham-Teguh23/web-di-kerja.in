@@ -5,100 +5,15 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    {!! config('seo.meta') !!}
+    @include('pages.landing-page.layouts.seo.seo')
 
-    <title>
-        .: di-kerja.in :.
-    </title>
+    <link rel="preload" as="image" href="{{ $heroImage }}">
 
     @include('pages.landing-page.layouts.favico.favico')
 
     @include('pages.landing-page.layouts.fonts.font')
 
     @include('pages.landing-page.layouts.css.style')
-
-    <style>
-        .promo-bg {
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-            color: white;
-            padding: 20px;
-            border-radius: 12px;
-            position: relative;
-            z-index: 1;
-        }
-
-        .promo-bg::before {
-            content: "";
-            background-color: rgba(0, 0, 0, 0.6); /* overlay agar teks tetap terlihat */
-            position: absolute;
-            inset: 0;
-            border-radius: 12px;
-            z-index: -1;
-        }
-
-        .info-item {
-            background: #fff;
-            border-radius: 10px;
-            padding: 30px 15px;
-            text-align: center;
-            height: 100%;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06);
-            transition: all 0.3s ease;
-        }
-
-        .info-item:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
-        }
-
-        .info-item i {
-            font-size: 36px;
-            color: #4aa3df;
-            border: 2px dotted #4aa3df;
-            border-radius: 50%;
-            padding: 15px;
-            margin-bottom: 12px;
-        }
-
-        .info-item h3 {
-            font-weight: 600;
-            font-size: 18px;
-            margin-bottom: 8px;
-            color: #2f3e46;
-        }
-
-        .info-item p {
-            font-size: 15px;
-            color: #444;
-            margin-bottom: 0;
-        }
-
-        /* Sosmed Center */
-        .social-icons {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 12px;
-            margin-bottom: 10px;
-        }
-
-        .social-icons i {
-            font-size: 28px;
-            border: 2px dotted #4aa3df;
-            border-radius: 50%;
-            padding: 10px;
-            transition: all 0.3s ease;
-        }
-
-        .social-icons i:hover {
-            background: #4aa3df;
-            color: white;
-            transform: scale(1.1);
-        }
-
-    </style>
 
 </head>
 
@@ -110,22 +25,41 @@
 
         <!-- Hero Section -->
         <section id="hero" class="hero section">
-            <div class="hero-bg">
-                <img src="{{ url('/landing-page') }}/assets/img/hero-bg-light.webp" alt="">
-            </div>
-            <div class="container text-center">
-                <div class="d-flex flex-column justify-content-center align-items-center">
-                    <h1 data-aos="fade-up">Selamat Datang <span>di-kerja.in</span></h1>
-                    <p data-aos="fade-up" data-aos-delay="100">
-                        Jasa Pembuatan Website dan Aplikasi Termurah dan Terpercaya.
-                    </p>
-                    <img src="{{ url('/landing-page') }}/assets/img/hero-services-img.png" class="img-fluid hero-img"
-                        alt="" data-aos="zoom-out" data-aos-delay="300">
+            <div class="container">
+                <div class="row align-items-center gy-5">
+                    <div class="col-lg-6 text-center text-lg-start">
+                        <h1 data-aos="fade-up">
+                            {{ $setting['hero_title'] }}
+                            @if (filled($setting['hero_highlight']))
+                                <span>{{ $setting['hero_highlight'] }}</span>
+                            @endif
+                        </h1>
+                        @if (filled($setting['hero_subtitle']))
+                            <p class="hero-subtitle" data-aos="fade-up" data-aos-delay="100">
+                                {{ $setting['hero_subtitle'] }}
+                            </p>
+                        @endif
+                        <div class="d-flex flex-wrap gap-3 justify-content-center justify-content-lg-start" data-aos="fade-up" data-aos-delay="150">
+                            <a href="{{ \App\Support\WhatsApp::link(trim($setting['whatsapp_message'] . ' layanan ' . $setting['site_name'])) }}"
+                                class="btn-site" target="_blank" rel="noopener">
+                                <i class="bi bi-whatsapp"></i> Konsultasi via WhatsApp
+                            </a>
+                            @if ($packages->isNotEmpty())
+                                <a href="#pricing" class="btn-site-outline">Lihat Paket Harga</a>
+                            @endif
+                        </div>
+                    </div>
+                    <div class="col-lg-6 text-center">
+                        <img src="{{ $heroImage }}" class="img-fluid hero-img" fetchpriority="high"
+                            alt="{{ $setting['site_name'] }} - {{ $setting['hero_subtitle'] ?: $setting['seo_title'] }}"
+                            data-aos="zoom-out" data-aos-delay="200">
+                    </div>
                 </div>
             </div>
 
         </section><!-- /Hero Section -->
 
+        @if ($about)
         <!-- About Section -->
         <section id="about" class="about section">
 
@@ -133,83 +67,93 @@
 
                 <div class="row gy-4">
 
-                    <div class="col-lg-6 content" data-aos="fade-up" data-aos-delay="100">
-                        <p class="who-we-are">Kenapa Harus Kami?</p>
-                        <h3>
-                            Kami lebih mengedepankan kualitas dibandingkan kuantitas
-                        </h3>
-                        <p class="fst-italic">
-                            di-kerja.in merupakan sebuah penyedia Jasa Pembuatan Aplikasi atau Website yang memiliki
-                            harga terjangkau, pengerjaan cepat dan berkualitas.
-                        </p>
-                        <ul>
-                            <li>
-                                <i class="bi bi-check-circle"></i>
-                                <span>
-                                    Dikerjakan oleh orang berprofresional dalam bidang nya.
-                                </span>
-                            </li>
-                            <li>
-                                <i class="bi bi-check-circle"></i>
-                                <span>
-                                    Jaminan refund biaya apabila tidak sesuai dengan kesepakatan.
-                                </span>
-                            </li>
-                            <li>
-                                <i class="bi bi-check-circle"></i>
-                                <span>
-                                    Terbuka untuk konsultasi terlebih dahulu.
-                                </span>
-                            </li>
-                        </ul>
+                    @php
+                        $aboutImages = $about->imageAbout->pluck('gambar')->filter()->values();
+                        $superiorities = $about->AboutListSuperiority->pluck('listSuperiority')->filter();
+                    @endphp
+
+                    <div class="{{ $aboutImages->isEmpty() ? 'col-lg-12' : 'col-lg-6' }} content" data-aos="fade-up" data-aos-delay="100">
+                        <p class="who-we-are">{{ $about->keunggulan }}</p>
+                        @if (filled($about->title_keunggulan))
+                            <h3>{{ $about->title_keunggulan }}</h3>
+                        @endif
+                        @if (filled(\App\Support\Html::text($about->description)))
+                            <div class="about-description">
+                                {!! \App\Support\Html::clean($about->description) !!}
+                            </div>
+                        @endif
+                        @if ($superiorities->isNotEmpty())
+                            <ul>
+                                @foreach ($superiorities as $superiority)
+                                    <li>
+                                        <i class="bi bi-check-circle"></i>
+                                        <span>{{ $superiority->name }}</span>
+                                    </li>
+                                @endforeach
+                            </ul>
+                        @endif
                     </div>
 
+                    @if ($aboutImages->isNotEmpty())
                     <div class="col-lg-6 about-images" data-aos="fade-up" data-aos-delay="200">
                         <div class="row gy-4">
-                            <div class="col-lg-6">
-                                <img src="{{ url('/landing-page') }}/assets/img/about-company-1.jpg" class="img-fluid"
-                                    alt="">
-                            </div>
-                            <div class="col-lg-6">
-                                <div class="row gy-4">
-                                    <div class="col-lg-12">
-                                        <img src="{{ url('/landing-page') }}/assets/img/about-company-2.jpg"
-                                            class="img-fluid" alt="">
-                                    </div>
-                                    <div class="col-lg-12">
-                                        <img src="{{ url('/landing-page') }}/assets/img/about-company-3.jpg"
-                                            class="img-fluid" alt="">
+                            @if ($aboutImages->count() === 1)
+                                <div class="col-lg-12">
+                                    <img src="{{ asset('storage/about/' . $aboutImages->first()) }}" class="img-fluid"
+                                        alt="Tentang {{ $setting['site_name'] }}" loading="lazy">
+                                </div>
+                            @else
+                                <div class="col-lg-6">
+                                    <img src="{{ asset('storage/about/' . $aboutImages->first()) }}" class="img-fluid"
+                                        alt="Tentang {{ $setting['site_name'] }} 1" loading="lazy">
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="row gy-4">
+                                        @foreach ($aboutImages->slice(1) as $image)
+                                            <div class="col-lg-12">
+                                                <img src="{{ asset('storage/about/' . $image) }}" class="img-fluid"
+                                                    alt="Tentang {{ $setting['site_name'] }} {{ $loop->iteration + 1 }}" loading="lazy">
+                                            </div>
+                                        @endforeach
                                     </div>
                                 </div>
-                            </div>
+                            @endif
                         </div>
 
                     </div>
+                    @endif
 
                 </div>
 
             </div>
         </section><!-- /About Section -->
+        @endif
 
+        @if ($benefit->isNotEmpty())
         <!-- Services Section -->
         <section id="services" class="services section light-background">
 
             <!-- Section Title -->
             <div class="container section-title" data-aos="fade-up">
-                <h2>Keunggulan Kami</h2>
-                <p>
-                    Kami juga mempunyai beberapa keunggulan yang cukup bisa bersaing dengan yang lain.
-                </p>
+                <h2>{{ $setting['services_title'] }}</h2>
+                @if (filled($setting['services_subtitle']))
+                    <p>{{ $setting['services_subtitle'] }}</p>
+                @endif
             </div><!-- End Section Title -->
 
             <div class="container">
 
                 <div class="row g-5">
 
-                    @forelse ($benefit as $item)
+                    @foreach ($benefit as $item)
+                    @php
+                        // Ikon diisi dari dashboard, terima "bi bi-activity" maupun "bi-activity"
+                        $icon = trim((string) $item->icon) ?: 'bi bi-activity';
+                        $icon = str_starts_with($icon, 'bi-') ? 'bi ' . $icon : $icon;
+                    @endphp
                     <div class="col-lg-6" data-aos="fade-up" data-aos-delay="100">
-                        <div class="service-item item-cyan position-relative">
-                            <i class="bi bi-activity icon"></i>
+                        <div class="service-item position-relative">
+                            <i class="{{ $icon }} icon"></i>
                             <div>
                                 <h3>{{ $item["judul"] }}</h3>
                                 <p>
@@ -218,405 +162,166 @@
                             </div>
                         </div>
                     </div>
-                    @empty
-                    <div class="col-lg-12">
-                        <div class="alert alert-danger">
-                            <strong>Perhatian!</strong>.
-                            <span>
-                                Data Benefit Tidak Tersedia.
-                            </span>
-                        </div>
-                    </div>
-                    @endforelse
+                    @endforeach
 
                 </div>
 
             </div>
 
         </section><!-- /Services Section -->
+        @endif
 
+        @if ($packages->isNotEmpty())
         <!-- Pricing Section -->
         <section id="pricing" class="pricing section">
 
             <!-- Section Title -->
             <div class="container section-title" data-aos="fade-up">
-                <h2>Harga</h2>
-                <p>
-                    Kami menawarkan beberapa harga yang cukup ramah di kantong khusus nya Mahasiswa dan Pelajar.
-                </p>
+                <h2>{{ $setting['pricing_title'] }}</h2>
+                @if (filled($setting['pricing_subtitle']))
+                    <p>{{ $setting['pricing_subtitle'] }}</p>
+                @endif
             </div><!-- End Section Title -->
 
             <div class="container">
 
                 <div class="row gy-4">
 
-                    <div class="col-lg-4" data-aos="zoom-in" data-aos-delay="100">
-                        <div class="pricing-item promo-bg">
-                            <h3>Konsultasi Alur / Program</h3>
-                            <p class="description">
-                                Konsultasi ini bersifat <strong>GRATIS</strong>, tentunya <strong>Syarat dan Ketentuan Berlaku</strong>
-                            </p>
-                            <h4><sup>Rp.</sup>0</h4>
-                            <a target="_blank"
-                               href="https://api.whatsapp.com/send?phone=081214707143&text=Hallo Admin, Saya ingin bertanya mengenai Konsultasi Alur / Program"
-                               class="cta-btn">Hubungi Admin</a>
-                            <ul>
-                                <li><i class="bi bi-check"></i> Konsultasi Program</li>
-                                <li><i class="bi bi-check"></i> Konsultasi Alur</li>
-                                <li><i class="bi bi-check"></i> Konsultasi Flow Database</li>
-                                <li><i class="bi bi-check"></i> Konsultasi Error</li>
-                                <li><i class="bi bi-check"></i> Fast Respon</li>
-                            </ul>
-                        </div>
-                    </div>
-                    
-
-                    <div class="col-lg-4" data-aos="zoom-in" data-aos-delay="200">
-                        <div class="pricing-item featured">
-                            <p class="popular">Paling Diminati</p>
-                            <h3>Company Profile</h3>
-                            <p class="description">
-                                Pembuatan sejenis Company Profile / CRUD
-                            </p>
-                            <h4>
-                                <sup>Rp.</sup>199.000<span> / Mulai dari</span>
-                            </h4>
-                            <a target="_blank"
-                                href="https://api.whatsapp.com/send?phone=081214707143&text=Hallo Admin, Saya ingin bertanya mengenai Pembuatan Company Profile / Pembuatan CRUD Sederhana"
+                    @foreach ($packages as $package)
+                    @php
+                        $price = $package->price?->price;
+                        $packageImage = $package->image_path ? asset('storage/image_item_package/' . $package->image_path) : null;
+                        $features = $package->packageConsultation->pluck('detailConsultant')->filter();
+                    @endphp
+                    <div class="col-lg-4" data-aos="zoom-in" data-aos-delay="{{ ($loop->index % 3 + 1) * 100 }}">
+                        <div class="pricing-item {{ $package->FavoriteItem ? 'featured' : '' }} {{ $packageImage ? 'promo-bg' : '' }}"
+                            @if ($packageImage) style="background-image: url('{{ $packageImage }}')" @endif>
+                            @if ($package->FavoriteItem)
+                                <p class="popular">{{ $package->FavoriteItem->name }}</p>
+                            @endif
+                            <h3>{{ $package->name }}</h3>
+                            @if (filled(\App\Support\Html::text($package->description)))
+                                <div class="description">
+                                    {!! \App\Support\Html::clean($package->description) !!}
+                                </div>
+                            @endif
+                            @if (! is_null($price))
+                                <div class="price">
+                                    @if ($price > 0)
+                                        <span class="price-label">Mulai dari</span>
+                                        <h4><sup>Rp</sup>{{ number_format($price, 0, ',', '.') }}</h4>
+                                    @else
+                                        <span class="price-label">Biaya</span>
+                                        <h4>Gratis</h4>
+                                    @endif
+                                </div>
+                            @endif
+                            <a target="_blank" rel="noopener"
+                                href="{{ \App\Support\WhatsApp::link(trim($setting['whatsapp_message'] . ' ' . $package->name)) }}"
                                 class="cta-btn">Hubungi Admin</a>
-                            <ul>
-                                <li><i class="bi bi-check"></i> <span>Free Konsultasi Flow Database</span></li>
-                                <li><i class="bi bi-check"></i> <span>Free Konsultasi Alur Proses</span></li>
-                                <li><i class="bi bi-check"></i> <span>Free Template</span></li>
-                                <li><i class="bi bi-check"></i> <span>Free Pemasangan Program</span></li>
-                                <li>
-                                    <i class="bi bi-check"></i>
-                                    <span>Gratis Revisi Max: 3x (Tergantung Kompleksitas)</span>
-                                </li>
-                                <li>
-                                    <i class="bi bi-check"></i>
-                                    <span>Fast Respon</span>
-                                </li>
-                            </ul>
+                            @if ($features->isNotEmpty())
+                                <ul>
+                                    @foreach ($features as $feature)
+                                        <li><i class="bi bi-check"></i> <span>{{ $feature->name }}</span></li>
+                                    @endforeach
+                                </ul>
+                            @endif
                         </div>
                     </div><!-- End Pricing Item -->
-
-                    <div class="col-lg-4" data-aos="zoom-in" data-aos-delay="300">
-                        <div class="pricing-item">
-                            <h3>
-                                Skripsi / Tugas Akhir / Magang
-                            </h3>
-                            <p class="description">
-                                Menerima Jasa Pembuatan Website / Aplikasi baik dari awal ataupun melanjutkan
-                            </p>
-                            <h4>
-                                <sup>Rp.</sup>399.000
-                                <span> / Mulai Dari</span>
-                            </h4>
-                            <a target="_blank"
-                                href="https://api.whatsapp.com/send?phone=081214707143&text=Hallo Admin, Saya ingin bertanya tentang Pembuatan Program / Laporan Untuk Skripsi / Tugas Akhir."
-                                class="cta-btn">Hubungi Admin</a>
-                            <ul>
-                                <li><i class="bi bi-check"></i> <span>Free Konsultasi Flow Database</span></li>
-                                <li><i class="bi bi-check"></i> <span>Free Konsultasi Alur Proses</span></li>
-                                <li><i class="bi bi-check"></i> <span>Free Template</span></li>
-                                <li><i class="bi bi-check"></i> <span>Free Pemasangan Program</span></li>
-                                <li><i class="bi bi-check"></i> <span>Free Penambahan Fitur (Syarat dan Ketentuan
-                                        Berlaku)</span></li>
-                                <li><i class="bi bi-check"></i> <span>Free Video Demo Program</span></li>
-                                <li>
-                                    <i class="bi bi-check"></i>
-                                    <span>Gratis Revisi Max: 5x (Tergantung Kompleksitas) </span>
-                                </li>
-                                <li>
-                                    <i class="bi bi-check"></i>
-                                    <span>Fast Respon</span>
-                                </li>
-                            </ul>
-                        </div>
-                    </div><!-- End Pricing Item -->
-
-                </div>
-
-                <div class="mt-4 row gy-4">
-
-                    <div class="col-lg-4" data-aos="zoom-in" data-aos-delay="100">
-                        <div class="pricing-item">
-                            <h3>Paket Mentoring</h3>
-                            <p class="description">
-                                Dilakukan secara online (melalui Video), untuk tema bisa disesuaikan kebutuhan
-                            </p>
-                            <h4>
-                                <sup>Rp.</sup>299.000
-                                <span> / Mulai Dari</span>
-                            </h4>
-                            <a target="_blank"
-                                href="https://api.whatsapp.com/send?phone=081214707143&text=Hallo Admin, Saya ingin bertanya mengenai Paket Mentoring, itu bagaimana ya sistem nya?"
-                                class="cta-btn">Hubungi Admin</a>
-                            <ul>
-                                <li><i class="bi bi-check"></i> <span>Konsultasi Program</span></li>
-                                <li><i class="bi bi-check"></i> <span>Konsultasi Alur</span></li>
-                                <li><i class="bi bi-check"></i> <span>Konsultasi Flow Database</span></li>
-                                <li><i class="bi bi-check"></i> <span>Video Dilakukan Bertahap</span></li>
-                                <li><i class="bi bi-check"></i> <span>Bisa dilakukan secara bersamaan / private</span>
-                                </li>
-                                <li>
-                                    <i class="bi bi-check"></i>
-                                    <span>Fast Respon</span>
-                                </li>
-                            </ul>
-                        </div>
-                    </div><!-- End Pricing Item -->
-
-                    <div class="col-lg-4" data-aos="zoom-in" data-aos-delay="200">
-                        <div class="pricing-item featured">
-                            <p class="popular">Populer</p>
-                            <h3>Penulisan Laporan</h3>
-                            <p class="description">
-                                Menerima jasa penulisan laporan, seperti :
-                                <strong>
-                                    Tugas Akhir, Skripsi, Tugas Kuliah ataupun Proposal
-                                </strong>
-                            </p>
-                            <h4>
-                                <sup>Rp.</sup>99.000<span> / Mulai dari</span>
-                            </h4>
-                            <a target="_blank"
-                                href="https://api.whatsapp.com/send?phone=081214707143&text=Hallo Admin, Saya ingin bertanya mengenai penulisan laporan, kira-kira kalau dari awal bisa ngga ya?"
-                                class="cta-btn">Hubungi Admin</a>
-                            <ul>
-                                <li><i class="bi bi-check"></i> <span>Free Konsultasi Alur Proses</span></li>
-                                <li><i class="bi bi-check"></i> <span>Free Konsultasi Jurnal / Artikel</span></li>
-                                <li><i class="bi bi-check"></i> <span>Penulisan Sesuai Panduan Yang Dibutuhkan</span>
-                                </li>
-                                <li><i class="bi bi-check"></i> <span>Minim Plagiarisme</span></li>
-                                <li>
-                                    <i class="bi bi-check"></i>
-                                    <span>Fast Respon</span>
-                                </li>
-                            </ul>
-                        </div>
-                    </div><!-- End Pricing Item -->
-
-                    <div class="col-lg-4" data-aos="zoom-in" data-aos-delay="300">
-                        <div class="pricing-item">
-                            <h3>
-                                Pengembangan Website
-                            </h3>
-                            <p class="description">
-                                Kami menerima juga untuk melakukan
-                                <strong>
-                                    Pengembangan Website
-                                </strong> yang sudah berjalan.
-                            </p>
-                            <h4>
-                                <sup>Rp.</sup>149.000
-                                <span> / Mulai Dari</span>
-                            </h4>
-                            <a target="_blank"
-                                href="https://api.whatsapp.com/send?phone=081214707143&text=Hallo Admin, Saya ingin bertanya tentang pengembangan website, kira-kira bisa ngga ya min?"
-                                class="cta-btn">Hubungi Admin</a>
-                            <ul>
-                                <li><i class="bi bi-check"></i> <span>Free Konsultasi Flow Database</span></li>
-                                <li><i class="bi bi-check"></i> <span>Free Konsultasi Alur Proses</span></li>
-                                <li><i class="bi bi-check"></i> <span>Free Penambahan Fitur (Syarat dan Ketentuan
-                                        Berlaku)</span></li>
-                                <li><i class="bi bi-check"></i> <span>Free Video Demo Program</span></li>
-                                <li>
-                                    <i class="bi bi-check"></i>
-                                    <span>Gratis Revisi Max: 5x (Tergantung Kompleksitas) </span>
-                                </li>
-                                <li>
-                                    <i class="bi bi-check"></i>
-                                    <span>Fast Respon</span>
-                                </li>
-                            </ul>
-                        </div>
-                    </div><!-- End Pricing Item -->
+                    @endforeach
 
                 </div>
 
             </div>
 
         </section><!-- /Pricing Section -->
+        @endif
 
-        <section id="produk" class="pricing section">
+        @if ($products->isNotEmpty())
+        <section id="produk" class="produk section light-background">
 
             <!-- Section Title -->
             <div class="container section-title" data-aos="fade-up">
-                <h2>Produk Yang Pernah Dikerjakan</h2>
-                <p>
-                    Beberapa Dokumentasi Produk Website / Aplikasi Yang Pernah Kami Buat dan Kembangkan
-                </p>
+                <h2>{{ $setting['produk_title'] }}</h2>
+                @if (filled($setting['produk_subtitle']))
+                    <p>{{ $setting['produk_subtitle'] }}</p>
+                @endif
             </div><!-- End Section Title -->
 
             <div class="container">
 
                 <div class="row gy-4">
 
-                    <div class="col-lg-4" data-aos="zoom-in" data-aos-delay="100">
-                        <div class="pricing-item">
-                            <h3>
-                                Website Program Iklim Kota Cirebon
-                                <strong>
-                                    (Proklim)
-                                </strong>
-                            </h3>
-                            <p class="description">
-                                Sebuah website yang diperuntukkan untuk
-                                <strong>
-                                    Dinas Lingkungan Hidup (DLH) Kota Cirebon
-                                </strong> Website ini ...
-                            </p>
-                    
-                            <!-- Wrapper untuk gambar yang dapat di-scroll -->
-                            <div class="card-body">
-                                <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
+                    @foreach ($products as $product)
+                    @php
+                        $productImages = $product->imageProduct->pluck('gambar')->filter()->values();
+                    @endphp
+                    <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="{{ ($loop->index % 3 + 1) * 100 }}">
+                        <article class="product-card d-flex flex-column h-100">
+                            @if ($productImages->count() > 1)
+                                <div id="carouselProduk{{ $product->id }}" class="carousel slide product-card-media" data-bs-ride="carousel">
                                     <div class="carousel-indicators">
-                                        <button type="button" data-bs-target="#carouselExampleIndicators"
-                                            data-bs-slide-to="0" class="active" aria-current="true"
-                                            aria-label="Slide 1"></button>
-                                        <button type="button" data-bs-target="#carouselExampleIndicators"
-                                            data-bs-slide-to="1" aria-label="Slide 2"></button>
-                                        <button type="button" data-bs-target="#carouselExampleIndicators"
-                                            data-bs-slide-to="2" aria-label="Slide 3"></button>
+                                        @foreach ($productImages as $image)
+                                            <button type="button" data-bs-target="#carouselProduk{{ $product->id }}"
+                                                data-bs-slide-to="{{ $loop->index }}" class="{{ $loop->first ? 'active' : '' }}"
+                                                @if ($loop->first) aria-current="true" @endif
+                                                aria-label="Slide {{ $loop->iteration }}"></button>
+                                        @endforeach
                                     </div>
                                     <div class="carousel-inner">
-                                        <div class="carousel-item active">
-                                            <img src="../assets/images/media/media-25.jpg" class="d-block w-100" alt="...">
-                                        </div>
-                                        <div class="carousel-item">
-                                            <img src="../assets/images/media/media-29.jpg" class="d-block w-100" alt="...">
-                                        </div>
-                                        <div class="carousel-item">
-                                            <img src="../assets/images/media/media-30.jpg" class="d-block w-100" alt="...">
-                                        </div>
+                                        @foreach ($productImages as $image)
+                                            <div class="carousel-item {{ $loop->first ? 'active' : '' }}">
+                                                <img src="{{ asset('storage/testimonial-product/' . $image) }}" class="d-block"
+                                                    alt="{{ $product->nama }} - gambar {{ $loop->iteration }}" loading="lazy">
+                                            </div>
+                                        @endforeach
                                     </div>
                                     <button class="carousel-control-prev" type="button"
-                                        data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
+                                        data-bs-target="#carouselProduk{{ $product->id }}" data-bs-slide="prev">
                                         <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                                         <span class="visually-hidden">Previous</span>
                                     </button>
                                     <button class="carousel-control-next" type="button"
-                                        data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
+                                        data-bs-target="#carouselProduk{{ $product->id }}" data-bs-slide="next">
                                         <span class="carousel-control-next-icon" aria-hidden="true"></span>
                                         <span class="visually-hidden">Next</span>
                                     </button>
                                 </div>
+                            @elseif ($productImages->isNotEmpty())
+                                <a href="{{ route('produk.detail', $product->slug) }}" class="product-card-media" tabindex="-1" aria-hidden="true">
+                                    <img src="{{ asset('storage/testimonial-product/' . $productImages->first()) }}"
+                                        alt="{{ $product->nama }}" loading="lazy">
+                                </a>
+                            @endif
+
+                            <div class="product-card-body d-flex flex-column flex-grow-1">
+                                <h3><a href="{{ route('produk.detail', $product->slug) }}">{{ $product->nama }}</a></h3>
+                                <p>{{ \App\Support\Html::text($product->deskripsi, 120) }}</p>
+                                <a href="{{ route('produk.detail', $product->slug) }}" class="product-card-link mt-auto">
+                                    Lihat detail <i class="bi bi-arrow-right"></i>
+                                </a>
                             </div>
-                    
-                            <a data-bs-toggle="modal" data-bs-target="#exampleModalProklim" class="cta-btn">
-                                Detail Produk
-                            </a>
-                        </div>
+                        </article>
                     </div><!-- End Pricing Item -->
-                    
-
-                    <div class="col-lg-4" data-aos="zoom-in" data-aos-delay="100">
-                        <div class="pricing-item">
-                            <h3>
-                                Website Desa Merdeka
-                            </h3>
-                            <p class="description">
-                                Sebuah website yang memiliki kerjasama dengan Desa Merdeka . Website ini berfokus pada
-                                perkembangan di lingkup ...
-                            </p>
-                            <img src="{{ url('/katalog/Website_Desa_Merdeka.jpg') }}" alt=""
-                                style="width: 100%; height: 300px">
-                            <a data-bs-toggle="modal" data-bs-target="#exampleModalDesaMerdeka" class="cta-btn">
-                                Detail Produk
-                            </a>
-                        </div>
-                    </div><!-- End Pricing Item -->
-
-                    <div class="col-lg-4" data-aos="zoom-in" data-aos-delay="100">
-                        <div class="pricing-item">
-                            <h3>
-                                Website Inventaris Barang
-                            </h3>
-                            <p class="description">
-                                Website sederhana yang digunakan untuk disebuah Sekolah / Kampus untuk ...
-                            </p>
-                            <img src="{{ url('/katalog/Website_Inventaris_Barang.jpg') }}" alt=""
-                                style="width: 100%; height: 300px">
-                            <a class="cta-btn" data-bs-toggle="modal" data-bs-target="#exampleModalInventarisBarang">
-                                Detail Produk
-                            </a>
-                        </div>
-                    </div><!-- End Pricing Item -->
-
-                </div>
-
-                <div class="mt-4 row gy-4">
-
-                    <div class="col-lg-4" data-aos="zoom-in" data-aos-delay="100">
-                        <div class="pricing-item">
-                            <h3>
-                                Website RTQ Ulil Albab Indramayu
-                            </h3>
-                            <p class="description">
-                                Sebuah website yang diperuntukkan untuk
-                                <strong>
-                                    Rumah Tahfidz Quran (RTQ) Ulil Albab Indramayu
-                                </strong>. Website ini ...
-                            </p>
-                            <img src="{{ url('/katalog/Website_RTQ.jpg') }}" alt="" style="width: 100%; height: 300px">
-                            <a class="cta-btn" data-bs-toggle="modal" data-bs-target="#exampleModalRTQ">
-                                Detail Produk
-                            </a>
-                        </div>
-                    </div><!-- End Pricing Item -->
-
-                    <div class="col-lg-4" data-aos="zoom-in" data-aos-delay="100">
-                        <div class="pricing-item">
-                            <h3>
-                                Aplikasi Smart Health Mobile
-                            </h3>
-                            <p class="description">
-                                Smart Health Mobile merupakan
-                                <strong>
-                                    Aplikasi Pelayanan Kesehatan dan Konsultasi Masyarakat berbasis Mobile
-                                </strong> yang dimana bisa bekerja sama dengan ...
-                            </p>
-                            <img src="{{ url('/katalog/Aplikasi_Berobat_Plus.png') }}" alt=""
-                                style="width: 100%; height: 600px">
-                            <a class="cta-btn" data-bs-toggle="modal" data-bs-target="#exampleModalSmartHealth">
-                                Detail Produk
-                            </a>
-                        </div>
-                    </div><!-- End Pricing Item -->
-
-                    <div class="col-lg-4" data-aos="zoom-in" data-aos-delay="100">
-                        <div class="pricing-item">
-                            <h3>
-                                Website Study Tracer
-                            </h3>
-                            <p class="description">
-                                Website yang berfokus pada bidang Akademik,
-                                <strong>
-                                    Khususnya Informasi Seputar Tentang Alumni, seperti : ...
-                                </strong>.
-                            </p>
-                            <img src="{{ url('/katalog/Website_Study_Tracer.jpg') }}" alt=""
-                                style="width: 100%; height: 300px">
-                            <a data-bs-toggle="modal" data-bs-target="#exampleModalStudyTracer" class="cta-btn">
-                                Detail Produk
-                            </a>
-                        </div>
-                    </div><!-- End Pricing Item -->
+                    @endforeach
 
                 </div>
 
             </div>
 
-        </section><!-- /Pricing Section -->
+        </section><!-- /Produk Section -->
+        @endif
 
+        @if ($faq->isNotEmpty())
         <!-- Faq Section -->
         <section id="faq" class="faq section">
 
             <!-- Section Title -->
             <div class="container section-title" data-aos="fade-up">
-                <h2>Beberapa pertanyaan yang sering diajukan</h2>
+                <h2>{{ $setting['faq_title'] }}</h2>
+                @if (filled($setting['faq_subtitle']))
+                    <p>{{ $setting['faq_subtitle'] }}</p>
+                @endif
             </div><!-- End Section Title -->
 
             <div class="container">
@@ -627,7 +332,7 @@
 
                         <div class="faq-container">
 
-                            @forelse ($faq as $item)
+                            @foreach ($faq as $item)
                             <div class="faq-item {{ $loop->first ? 'faq-active' : '' }} ">
                                 <h3>{{ $item["pertanyaan"] }}</h3>
                                 <div class="faq-content">
@@ -637,13 +342,7 @@
                                 </div>
                                 <i class="faq-toggle bi bi-chevron-right"></i>
                             </div>
-                            @empty
-                            <div class="alert alert-danger">
-                                <strong>
-                                    Perhatian!
-                                </strong>. Data FAQ Belum Tersedia
-                            </div>
-                            @endforelse
+                            @endforeach
 
                         </div>
 
@@ -654,16 +353,18 @@
             </div>
 
         </section><!-- /Faq Section -->
+        @endif
 
+        @if ($testimonials->isNotEmpty())
         <!-- Testimonials Section -->
         <section id="testimonials" class="testimonials section light-background">
 
             <!-- Section Title -->
             <div class="container section-title" data-aos="fade-up">
-                <h2>Apa Kata Mereka?</h2>
-                <p>
-                    Kami juga sudah mendapatkan cukup banyak review dari pelanggan kami
-                </p>
+                <h2>{{ $setting['testimonials_title'] }}</h2>
+                @if (filled($setting['testimonials_subtitle']))
+                    <p>{{ $setting['testimonials_subtitle'] }}</p>
+                @endif
             </div><!-- End Section Title -->
 
             <div class="container" data-aos="fade-up" data-aos-delay="100">
@@ -671,7 +372,7 @@
                 <div class="swiper init-swiper">
                     <script type="application/json" class="swiper-config">
                         {
-              "loop": true,
+              "loop": {{ $testimonials->count() > 3 ? 'true' : 'false' }},
               "speed": 600,
               "autoplay": {
                 "delay": 5000
@@ -696,114 +397,55 @@
                     </script>
                     <div class="swiper-wrapper">
 
+                        @foreach ($testimonials as $testimonial)
+                        @php
+                            $testimonialImage = $testimonial->gambar ? asset('storage/testimonial-costumer/' . $testimonial->gambar) : null;
+                            $testimonialName = $testimonial->nama ?: 'Pelanggan ' . $setting['site_name'];
+                        @endphp
                         <div class="swiper-slide">
-                            <div class="testimonial-item">
-                                <div class="stars">
-                                    <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i
-                                        class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i
-                                        class="bi bi-star-fill"></i>
+                            @if (filled($testimonial->deskripsi))
+                                <div class="testimonial-item">
+                                    <div class="stars">
+                                        <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i
+                                            class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i
+                                            class="bi bi-star-fill"></i>
+                                    </div>
+                                    <p>
+                                        {{ $testimonial->deskripsi }}
+                                    </p>
+                                    <div class="mt-auto profile">
+                                        @if ($testimonialImage)
+                                            <img src="{{ $testimonialImage }}" class="testimonial-img"
+                                                alt="Foto {{ $testimonialName }}" loading="lazy">
+                                        @else
+                                            <span class="testimonial-img testimonial-initial" aria-hidden="true">
+                                                {{ \Illuminate\Support\Str::upper(\Illuminate\Support\Str::substr($testimonialName, 0, 1)) }}
+                                            </span>
+                                        @endif
+                                        <h3>{{ $testimonialName }}</h3>
+                                        @if (filled($testimonial->keterangan))
+                                            <h4>{{ $testimonial->keterangan }}</h4>
+                                        @endif
+                                    </div>
                                 </div>
-                                <p>
-                                    Waktu itu aku nemu kontak nya di twitter, aku searching "joki murah", eh muncul
-                                    kontak kaka nya. Yaudah aku kontak kaka nya buat ngerjain tugas magang aku. Enak
-                                    banget kaka nya, bisa di ajak diskusi, bisa request revisi lagi wkwkwk, karena
-                                    recommended di kantong. Akhirnya aku nyaranin temen" aku kalo mau order, kesini
-                                    aja!.
-                                </p>
-                                <div class="mt-auto profile">
-                                    <img src="{{ url('/landing-page') }}/assets/img/testimonials/testimonials-1.jpg"
-                                        class="testimonial-img" alt="">
-                                    <h3>Me**y A** Fa****</h3>
-                                    <h4>Mahasiswa</h4>
+                            @else
+                                {{-- Testimoni berupa screenshot / gambar saja --}}
+                                <div class="testimonial-item testimonial-screenshot">
+                                    <a href="{{ $testimonialImage }}" class="glightbox" data-gallery="testimoni">
+                                        <img src="{{ $testimonialImage }}" alt="Testimoni {{ $testimonialName }}" loading="lazy">
+                                    </a>
+                                    @if ($testimonial->nama || $testimonial->keterangan)
+                                        <div class="mt-3 profile">
+                                            <h3>{{ $testimonialName }}</h3>
+                                            @if (filled($testimonial->keterangan))
+                                                <h4>{{ $testimonial->keterangan }}</h4>
+                                            @endif
+                                        </div>
+                                    @endif
                                 </div>
-                            </div>
+                            @endif
                         </div><!-- End testimonial item -->
-
-                        <div class="swiper-slide">
-                            <div class="testimonial-item">
-                                <div class="stars">
-                                    <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i
-                                        class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i
-                                        class="bi bi-star-fill"></i>
-                                </div>
-                                <p>
-                                    Pengerjaan nya sangat cepat, bisa request lagi mau terkait alur yang dibutuhin sama
-                                    dosen nya. Huhu sempet pasrah sama keadaan waktu itu, untung temen aku nyaranin
-                                    kesini, alhasil aku bisa lulus tepat waktu :).
-                                </p>
-                                <div class="mt-auto profile">
-                                    <img src="{{ url('/landing-page') }}/assets/img/testimonials/testimonials-2.jpg"
-                                        class="testimonial-img" alt="">
-                                    <h3>Ri**</h3>
-                                    <h4>Mahasiswa</h4>
-                                </div>
-                            </div>
-                        </div><!-- End testimonial item -->
-
-                        <div class="swiper-slide">
-                            <div class="testimonial-item">
-                                <div class="stars">
-                                    <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i
-                                        class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i
-                                        class="bi bi-star-fill"></i>
-                                </div>
-                                <p>
-                                    Waktu itu aku lagi butuh banget buat bantuin skripsi, aku nemu kontak ini di twitter
-                                    dlu waktu itu, truss aku coba hubungin. Setelah deal harga, eh ternyata aku diluar
-                                    expect ternyata secepat itu pengerjaan nya.
-                                </p>
-                                <div class="mt-auto profile">
-                                    <img src="{{ url('/landing-page') }}/assets/img/testimonials/testimonials-3.jpg"
-                                        class="testimonial-img" alt="">
-                                    <h3>Az****a</h3>
-                                    <h4>Mahasiswa</h4>
-                                </div>
-                            </div>
-                        </div><!-- End testimonial item -->
-
-                        <div class="swiper-slide">
-                            <div class="testimonial-item">
-                                <div class="stars">
-                                    <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i
-                                        class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i
-                                        class="bi bi-star-fill"></i>
-                                </div>
-                                <p>
-                                    Saya kenal semenjak sekolah SMK, bahkan hingga saya kuliah pun saya masih sering
-                                    konsultasi, baik itu dari pembuatan aplikasi, terkait issue error program, atau alur
-                                    flow dari perancangan Database / UML. Ngga salah sih asli kalau misal mau order ke
-                                    sini.
-                                </p>
-                                <div class="mt-auto profile">
-                                    <img src="{{ url('/landing-page') }}/assets/img/testimonials/testimonials-4.jpg"
-                                        class="testimonial-img" alt="">
-                                    <h3>Firli Ardiansyah</h3>
-                                    <h4>Mahasiswa</h4>
-                                </div>
-                            </div>
-                        </div><!-- End testimonial item -->
-
-                        <div class="swiper-slide">
-                            <div class="testimonial-item">
-                                <div class="stars">
-                                    <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i
-                                        class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i
-                                        class="bi bi-star-fill"></i>
-                                </div>
-                                <p>
-                                    Saya di rekomendasiin sama saudara saya untuk kesini. Waktu itu sangat buntu sekali
-                                    karena waktu udah mepet tapi belum buat apa", alhasil ketemu lah sama kaka nya.
-                                    Alhamdulillah skripsi saya bisa selesai dalam waktu 2 bulan kurang. Keren banget mas
-                                    e, top lah.
-                                </p>
-                                <div class="mt-auto profile">
-                                    <img src="{{ url('/landing-page') }}/assets/img/testimonials/testimonials-5.jpg"
-                                        class="testimonial-img" alt="">
-                                    <h3>I***l</h3>
-                                    <h4>Mahasiswa</h4>
-                                </div>
-                            </div>
-                        </div><!-- End testimonial item -->
+                        @endforeach
 
                     </div>
                     <div class="swiper-pagination"></div>
@@ -812,78 +454,78 @@
             </div>
 
         </section><!-- /Testimonials Section -->
+        @endif
 
         <!-- Contact Section -->
         <section id="contact" class="contact section">
 
             <!-- Section Title -->
             <div class="container section-title" data-aos="fade-up">
-                <h2>
-                    Kontak
-                </h2>
-                <p>
-                    Silahkan hubungi kontak dibawah ini untuk info lebih lanjut.
-                </p>
+                <h2>{{ $setting['contact_title'] }}</h2>
+                @if (filled($setting['contact_subtitle']))
+                    <p>{{ $setting['contact_subtitle'] }}</p>
+                @endif
             </div><!-- End Section Title -->
 
             <div class="container" data-aos="fade-up" data-aos-delay="100">
 
-                <div class="row gy-4">
-                    <!-- Kolom pertama -->
-                    <div class="col-lg-3">
-                        <div class="info-item d-flex flex-column justify-content-center align-items-center fixed-size-box" data-aos="fade-up" data-aos-delay="200">
-                            <i class="bi bi-geo-alt"></i>
+                @if ($contact)
+                @php
+                    $socials = collect([
+                        ['url' => $contact->link_fb, 'icon' => 'bi-facebook', 'label' => 'Facebook'],
+                        ['url' => $contact->link_ig, 'icon' => 'bi-instagram', 'label' => 'Instagram'],
+                        ['url' => $contact->link_twitter, 'icon' => 'bi-twitter-x', 'label' => 'X (Twitter)'],
+                        ['url' => $contact->link_tiktok, 'icon' => 'bi-tiktok', 'label' => 'TikTok'],
+                    ])->filter(fn ($social) => filled($social['url']) && str_starts_with($social['url'], 'http'));
+                @endphp
+                <div class="row gy-4 justify-content-center">
+                    @if (filled($contact->address))
+                    <div class="col-lg-3 col-md-6">
+                        <div class="info-item">
+                            <span class="info-icon"><i class="bi bi-geo-alt"></i></span>
                             <h3>Alamat</h3>
-                            <p style="text-align: center">
-                                Jl. Darma Putra Raya No.6, Kby. Lama Sel., Kec. Kby. Lama, Kota Jakarta Selatan.
-                            </p>
+                            <p>{{ $contact->address }}</p>
                         </div>
                     </div>
-                
-                    <!-- Kolom kedua -->
+                    @endif
+
+                    @if (filled($contact->phone))
                     <div class="col-lg-3 col-md-6">
-                        <div class="info-item d-flex flex-column justify-content-center align-items-center fixed-size-box" data-aos="fade-up" data-aos-delay="300">
-                            <i class="bi bi-telephone"></i>
+                        <div class="info-item">
+                            <span class="info-icon"><i class="bi bi-telephone"></i></span>
                             <h3>Narahubung</h3>
-                            <p>08121470</p>
+                            <p><a href="tel:{{ preg_replace('/[^0-9+]/', '', $contact->phone) }}">{{ $contact->phone }}</a></p>
                         </div>
                     </div>
-                
-                    <!-- Kolom ketiga -->
+                    @endif
+
+                    @if (filled($contact->email))
                     <div class="col-lg-3 col-md-6">
-                        <div class="info-item d-flex flex-column justify-content-center align-items-center fixed-size-box" data-aos="fade-up" data-aos-delay="400">
-                            <i class="bi bi-envelope"></i>
+                        <div class="info-item">
+                            <span class="info-icon"><i class="bi bi-envelope"></i></span>
                             <h3>Email</h3>
-                            <p>mimin.dikerjain@gmail.com</p>
+                            <p><a href="mailto:{{ $contact->email }}">{{ $contact->email }}</a></p>
                         </div>
                     </div>
-                
-                    <!-- Kolom baru dengan ikon sosial media -->
+                    @endif
+
+                    @if ($socials->isNotEmpty())
                     <div class="col-lg-3 col-md-6">
-                        <div class="info-item d-flex flex-column justify-content-center align-items-center fixed-size-box" data-aos="fade-up" data-aos-delay="500">
-                            <!-- Ikon Sosial Media -->
-                            <div class="d-flex justify-content-center align-items-center">
-                                <!-- Facebook Icon -->
-                                <i class="bi bi-facebook" style="font-size: 30px; color: #4267B2; margin-right: 10px;"></i> <!-- Facebook Icon -->
-                            
-                                <!-- Instagram Icon -->
-                                <i class="bi bi-instagram" style="font-size: 30px; color: #E4405F; margin-right: 10px;"></i> <!-- Instagram Icon -->
-                            
-                                <!-- X (formerly Twitter) Icon -->
-                                <i class="bi bi-x" style="font-size: 30px; color: #1D9BF0; margin-right: 10px;"></i> <!-- X (formerly Twitter) Icon -->
-                            
-                                <!-- TikTok Icon -->
-                                <i class="bi bi-tiktok" style="font-size: 30px; color: #010101;"></i> <!-- TikTok Icon -->
+                        <div class="info-item">
+                            <span class="info-icon"><i class="bi bi-share"></i></span>
+                            <h3>Media Sosial</h3>
+                            <div class="social-links justify-content-center mt-2">
+                                @foreach ($socials as $social)
+                                    <a href="{{ $social['url'] }}" target="_blank" rel="noopener" aria-label="{{ $social['label'] }} {{ $setting['site_name'] }}">
+                                        <i class="bi {{ $social['icon'] }}"></i>
+                                    </a>
+                                @endforeach
                             </div>
-                            
-                            <!-- Teks h3 untuk Sosmed Center -->
-                            <h3>Sosmed Center</h3>
                         </div>
-                    </div>                    
+                    </div>
+                    @endif
                 </div>
-                
-                
-                
+                @endif
 
                 <div class="mt-1 row gy-4">
 
@@ -894,27 +536,27 @@
                             <div class="row gy-4">
 
                                 <div class="col-md-6">
-                                    <input type="text" name="name" class="form-control" placeholder="Your Name"
-                                        required>
+                                    <input type="text" name="name" class="form-control" placeholder="Nama"
+                                        aria-label="Nama" required>
                                 </div>
 
                                 <div class="col-md-6">
-                                    <input type="email" class="form-control" name="email" placeholder="Your Email"
-                                        required>
+                                    <input type="email" class="form-control" name="email" placeholder="Email"
+                                        aria-label="Email" required>
                                 </div>
 
                                 <div class="col-md-12">
-                                    <input type="text" class="form-control" name="subject" placeholder="Subject"
-                                        required>
+                                    <input type="text" class="form-control" name="subject" placeholder="Subjek"
+                                        aria-label="Subjek" required>
                                 </div>
 
                                 <div class="col-md-12">
-                                    <textarea class="form-control" name="message" rows="6" placeholder="Message"
-                                        required></textarea>
+                                    <textarea class="form-control" name="message" rows="6" placeholder="Pesan"
+                                        aria-label="Pesan" required></textarea>
                                 </div>
 
                                 <div class="text-center col-md-12">
-                                    <button type="submit">Send Message</button>
+                                    <button type="submit">Kirim Pesan</button>
                                 </div>
 
                             </div>
@@ -929,192 +571,9 @@
 
     </main>
 
-    <!-- Website Proklim -->
-    <div class="modal fade" id="exampleModalProklim" tabindex="-1" aria-labelledby="exampleModalLabelProklim"
-        aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="exampleModalLabelProklim">
-                        Website Program Iklim Kota Cirebon
-                        <strong>
-                            ( Proklim )
-                        </strong>
-                    </h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    Sebuah website yang diperuntukkan untuk
-                    <strong>
-                        Dinas Lingkungan Hidup (DLH) Kota Cirebon
-                    </strong>. Website ini mempunyai fitur yang cukup sederhana, seperti :
-                    <ol>
-                        <li>Monitoring Data Curah Hujan Perbulan / Pertahun</li>
-                        <li>Monitoring Data Tanah Perdesa</li>
-                        <li>Monitoring Data Iklim pada Kota Cirebon</li>
-                        <li>Dan Lain - Lain</li>
-                    </ol>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Website Desa Merdeka -->
-    <div class="modal fade" id="exampleModalDesaMerdeka" tabindex="-1" aria-labelledby="exampleModalLabelDesaMerdeka"
-        aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="exampleModalLabelDesaMerdeka">
-                        Website Desa Merdeka
-                    </h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    Sebuah website yang memiliki kerjasama dengan
-                    <strong>
-                        Desa Merdeka
-                    </strong>. Website ini berfokus pada perkembangan di lingkup : <strong>UMKM, Industri, Komunitas,
-                        dll</strong>.
-                    <br> Selain itu Website ini mempunyai beberapa fitur, seperti :
-                    <ol>
-                        <li>Informasi Artikel Seputar UMKM, Berita Terkini, Industri</li>
-                        <li>Mengelola Data Desa, Komunitas, Industri, UMKM</li>
-                        <li>Informasi Perkembangan Desa</li>
-                        <li>Informasi Mengenai Perdagangan dan Pemasaran</li>
-                        <li>Dan Lain - Lain</li>
-                    </ol>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Website Inventaris Barang -->
-    <div class="modal fade" id="exampleModalInventarisBarang" tabindex="-1"
-        aria-labelledby="exampleModalLabelInventarisBarang" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="exampleModalLabelInventarisBarang">
-                        Website Inventaris Barang
-                    </h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    Website sederhana yang digunakan untuk disebuah Sekolah / Kampus untuk mengelola
-                    <strong>
-                        Data Barang / Inventaris yang didapat dari Pihak Luar
-                    </strong>.
-                    <br> Website ini sendiri mempunyai beberapa fitur, seperti :
-                    <ol>
-                        <li>Mengelola Data Barang sesuai Kategori (Hilang, Rusak, dan Baik)</li>
-                        <li>Mengelola Data Inventaris Barang untuk Perkelas </li>
-                        <li>Mengelola Data Peminjaman / Pengembalian Barang</li>
-                        <li>Mengelola Berita Acara Kehilangan / Kerusakan Barang</li>
-                        <li>Dan Lain - Lain</li>
-                    </ol>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- RTQ -->
-    <div class="modal fade" id="exampleModalRTQ" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="exampleModalLabel">
-                        Website RTQ Ulil Albab Indramayu
-                    </h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    Sebuah website yang diperuntukkan untuk
-                    <strong>
-                        Rumah Tahfidz Quran (RTQ) Ulil Albab Indramayu
-                    </strong>. Website ini mempunyai fitur seperti :
-                    <ol>
-                        <li>Mengelola Data Santri</li>
-                        <li>Mengelola KAS Pembayaran</li>
-                        <li>Absensi Asatidz (Guru)</li>
-                        <li>Absensi Santri (Siswa)</li>
-                        <li>Pencatatan Hafalan Doa / Surat Santri</li>
-                        <li>Cetak Rapot Nilai Santri</li>
-                        <li>Monitoring Nilai / Absensi oleh Wali</li>
-                        <li>Dan Lain - Lain</li>
-                    </ol>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Aplikasi Smarth Health -->
-    <div class="modal fade" id="exampleModalSmartHealth" tabindex="-1" aria-labelledby="exampleModalLabelSmartHealth"
-        aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="exampleModalLabelSmartHealth">
-                        Aplikasi Smart Health Mobile
-                    </h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    Smart Health Mobile merupakan
-                    <strong>
-                        Aplikasi Pelayanan Kesehatan dan Konsultasi Masyarakat berbasis Mobile
-                    </strong> yang dimana bisa bekerja sama dengan Pihak Medis, seperti : Dokter, Apoteker, dan Perawat.
-                    Aplikasi ini juga tidak menutup kemungkinan untuk terhubung dengan Profesi Lainnya ataupun pihak
-                    Rumah Sakit.
-                    <br>
-                    Aplikasi ini sendiri mempunyai fitur seperti :
-                    <ol>
-                        <li>Konsultasi Dokter / Perawat</li>
-                        <li>Jadwal Temu Janji Dokter / Perawat</li>
-                        <li>Rawat Jalan</li>
-                        <li>Artikel Seputar Kesehatan</li>
-                        <li>Transaksi Pembelian Obat</li>
-                        <li>Dan Lain - Lain</li>
-                    </ol>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Website Study Tracer -->
-    <div class="modal fade" id="exampleModalStudyTracer" tabindex="-1" aria-labelledby="exampleModalLabelStudyTracer"
-        aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="exampleModalLabelStudyTracer">
-                        Website Study Tracer
-                    </h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    Website yang berfokus pada bidang Akademik,
-                    <strong>
-                        Khususnya Informasi Seputar Tentang Alumni, seperti : Info mengenai Lowongan Pekerjaan dan Info
-                        mengenai Dunia Kerja / Perusahaan
-                    </strong>
-                    <br>
-                    Website ini memiliki beberapa fitur yang cukup unik , diantaranya :
-                    <ol>
-                        <li>Mengelola Data Alumni</li>
-                        <li>Mengelola Data Kuisioner Seputar Dunia Kerja / Perusahaan</li>
-                        <li>Rekomendasi Lowongan Kerja Alumni </li>
-                        <li>Riwayat Pekerjaan / Perguruan Tinggi Selanjutnya</li>
-                        <li>Dan Lain - Lain</li>
-                    </ol>
-                </div>
-            </div>
-        </div>
-    </div>
-
     @include('pages.landing-page.layouts.components.footer.footer')
 
-    <a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center"><i
+    <a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center" aria-label="Kembali ke atas"><i
             class="bi bi-arrow-up-short"></i></a>
 
 
@@ -1122,85 +581,21 @@
 
     @include('pages.landing-page.layouts.js.style')
 
-    {{-- <script>
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(function(position) {
-                const lat = position.coords.latitude;
-                const lon = position.coords.longitude;
-
-                fetch('/api/get-location', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                        },
-                        body: JSON.stringify({
-                            latitude: lat,
-                            longitude: lon
-                        })
-                    })
-                    .then(response => response.json())
-                    .then(data => {
-
-                        // const locationDiv = document.getElementById('location-info');
-
-                        // if (data && data.address) {
-                        //     locationDiv.innerHTML = `<strong>Lokasi Anda:</strong><br>
-                        //                  ${data.address}<br>
-                        //                  Latitude: ${lat}, Longitude: ${lon}`;
-                        // } else if (data.error) {
-                        //     locationDiv.innerHTML = `<strong>Error:</strong><br>${data.error}`;
-                        // } else {
-                        //     locationDiv.innerHTML = `<strong>Lokasi Anda:</strong><br>
-                        //                  Tidak dapat mendeteksi alamat dari koordinat yang diberikan.`;
-                        // }
-                    })
-                    .catch(error => {
-                        console.error('Error:', error);
-                    });
-            }, function(error) {
-                console.warn('Geolocation error:', error);
-                const locationDiv = document.getElementById('location-info');
-                locationDiv.innerHTML = 'Lokasi tidak dapat dideteksi.';
-            });
-        } else {
-            alert('Geolocation is not supported by this browser.');
-        }
-
-        let type = false;
-
-            if('{{session()->has("success")}}' == true) type = "success";
-            if('{{session()->has("error")}}' == true) type = "error";
-
-            if(type === "success"){
-                Swal.fire({
-                    icon: 'success',
-                    title: 'success!',
-                    text: '{{ session('success') }}'
-                });
-
-            }else if(type === "error") {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error!',
-                    text: '{{ session('error') }}'
-                });
-            }
-
-            function toast(message) {
-                Swal.fire({
-                    toast: true,
-                    position: 'top-end',
-                    icon: 'error',
-                    title: 'ERROR !',
-                    text: message,
-                    showConfirmButton: false,
-                    timer: 2000
-                });
-            }
-    </script> --}}
-
     <script>
+        @if (session()->has('success'))
+            Swal.fire({
+                icon: 'success',
+                title: 'Berhasil!',
+                text: @json(session('success'))
+            });
+        @elseif (session()->has('error'))
+            Swal.fire({
+                icon: 'error',
+                title: 'Error!',
+                text: @json(session('error'))
+            });
+        @endif
+
         document.getElementById("contact-form").addEventListener("submit", function(event) {
             event.preventDefault(); // Mencegah submit form langsung
 
@@ -1210,18 +605,22 @@
             let subject = document.querySelector("input[name='subject']").value;
             let message = document.querySelector("textarea[name='message']").value;
 
-            // Nomor WhatsApp tujuan (ganti dengan nomor yang sesuai)
-            let phone = "6281214707143"; // Format internasional, tanpa tanda +
+            // Nomor WhatsApp tujuan diatur dari menu Pengaturan & SEO di dashboard
+            let phone = @json(\App\Support\WhatsApp::number());
 
             // Format pesan WhatsApp
-            let text = `Halo Admin di-kerja.in, ada pesan baru dari website:%0A
-            Nama: ${name}%0A
-            Email: ${email}%0A
-            Subjek: ${subject}%0A
-            Pesan: ${message}`;
+            let text = [
+                `Halo Admin ${@json($setting['site_name'])}, ada pesan baru dari website:`,
+                `Nama: ${name}`,
+                `Email: ${email}`,
+                `Subjek: ${subject}`,
+                `Pesan: ${message}`
+            ].join("\n");
 
             // Redirect ke WhatsApp
-            window.open(`https://wa.me/${phone}?text=${text}`, "_blank");
+            if (phone) {
+                window.open(`https://wa.me/${phone}?text=${encodeURIComponent(text)}`, "_blank");
+            }
 
             // Submit form ke Laravel setelah 3 detik (agar user sempat kirim WhatsApp)
             setTimeout(() => {

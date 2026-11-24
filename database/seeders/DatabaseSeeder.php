@@ -24,13 +24,10 @@ class DatabaseSeeder extends Seeder
                 MetaConsultationServiceItemSeeder::class,
                 MetaFavoriteItemSeeder::class,
                 MetaPricePackageServiceSeeder::class,
-                PackageServiceSeeder::class,
-                PackageServiceConsultationSeeder::class,
-                // AboutSeeder::class,
                 ListSuperioritySeeder::class,
-                // AboutListSuperioritySeeder::class,
                 ContactSeeder::class,
-                TestimonialProductSeeder::class,
+                // Konten landing page: about, paket harga, produk, testimoni
+                LandingContentSeeder::class,
             ]);
         }
 }

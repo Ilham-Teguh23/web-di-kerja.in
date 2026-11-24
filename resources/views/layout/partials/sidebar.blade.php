@@ -2,7 +2,7 @@
 
     <!-- Start::main-sidebar-header -->
     <div class="main-sidebar-header">
-        <a href="{{ asset('index.html') }}" class="header-logo">
+        <a href="{{ route('dashboard') }}" class="header-logo">
             <img src="{{ url('/assets-images') }}/logo_aplikasi.png" alt="logo" class="desktop-logo">
             <img src="{{ url('/assets-images') }}/logo_aplikasi.png" alt="logo" class="toggle-logo">
             <img src="{{ url('/assets-images') }}/logo_aplikasi.png" alt="logo" class="desktop-dark">
@@ -128,7 +128,16 @@
                         </li>
                     </ul>
                 </li>
-    
+
+                <!-- Start::slide -->
+                <li class="slide {{ request()->routeIs('setting.*') ? 'active' : '' }}">
+                    <a href="{{ route('setting.index') }}" class="side-menu__item {{ request()->routeIs('setting.*') ? 'active' : '' }}">
+                        <i class="fe fe-globe side-menu__icon"></i>
+                        <span class="side-menu__label">Pengaturan & SEO</span>
+                    </a>
+                </li>
+                <!-- End::slide -->
+
                 <li class="slide__category">
                     <span class="category-name">Account</span>
                 </li>

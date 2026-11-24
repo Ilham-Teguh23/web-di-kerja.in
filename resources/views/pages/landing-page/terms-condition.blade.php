@@ -5,11 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    {!! config('seo.meta') !!}
-
-    <title>
-        .: di-kerja.in :.
-    </title>
+    @include('pages.landing-page.layouts.seo.seo')
 
     @include('pages.landing-page.layouts.favico.favico')
 
@@ -29,6 +25,11 @@
     <section class="legal-content container">
         <div class="row">
             <div class="col-lg-9 mx-auto">
+
+            <header class="legal-page-title">
+                <h1>Syarat & Ketentuan</h1>
+                <p>Ketentuan penggunaan layanan {{ $setting['site_name'] }}.</p>
+            </header>
 
             <!-- 1. Pendahuluan -->
             <section class="legal-section" id="intro">
@@ -128,11 +129,7 @@
                 <p>
                 Jika Anda memiliki pertanyaan, masukan, atau keluhan terkait ketentuan ini, silakan hubungi kami melalui:
                 </p>
-                <p>
-                Email: <a href="mailto:mimin.dikerjain@gmail.com">mimin.dikerjain@gmail.com</a><br>
-                WhatsApp: <a href="https://wa.me/628121470" target="_blank">0812-1470</a><br>
-                Alamat: Jl. Darma Putra Raya No.6, Kebayoran Lama, Jakarta Selatan
-                </p>
+                @include('pages.landing-page.layouts.components.contact-info', ['withAddress' => true])
             </section>
 
             </div>

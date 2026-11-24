@@ -30,7 +30,12 @@ class TestimonialCustomerController extends Controller
     {
         // dd($request->all());
         $request->validate([
-            'uploaded_image' => 'nullable|string',
+            'nama' => 'nullable|string|max:100',
+            'keterangan' => 'nullable|string|max:100',
+            'deskripsi' => 'nullable|string|max:1000|required_without:uploaded_image',
+            'uploaded_image' => 'nullable|string|regex:/^[\w.\-]+$/',
+        ], [
+            'deskripsi.required_without' => 'Isi testimoni atau upload gambar testimoni terlebih dahulu.',
         ]);
 
         try {
@@ -39,6 +44,9 @@ class TestimonialCustomerController extends Controller
             $imageFilename = $request->uploaded_image;
 
             TestimonialCustomer::create([
+                'nama' => $request->nama,
+                'keterangan' => $request->keterangan,
+                'deskripsi' => $request->deskripsi,
                 'gambar' => $imageFilename,
                 'status' => '0'
             ]);
@@ -90,14 +98,21 @@ class TestimonialCustomerController extends Controller
     {
         // dd($request->all())  ;
         $request->validate([
-            'uploaded_image' => 'nullable|string',
+            'nama' => 'nullable|string|max:100',
+            'keterangan' => 'nullable|string|max:100',
+            'deskripsi' => 'nullable|string|max:1000',
+            'uploaded_image' => 'nullable|string|regex:/^[\w.\-]+$/',
         ]);
-        
+
         try {
             DB::beginTransaction();
-            
+
             $package = TestimonialCustomer::findOrFail($id);
-            
+
+            $package->nama = $request->nama;
+            $package->keterangan = $request->keterangan;
+            $package->deskripsi = $request->deskripsi;
+
             $imageFilename = $request->uploaded_image;
             
             if ($imageFilename && $imageFilename !== $package->gambar) {
@@ -202,7 +217,11 @@ class TestimonialCustomerController extends Controller
         if ($request->hasFile('file')) {
             $file = $request->file('file');
 
-            $extension = $file->getClientOriginalExtension();
+            if ($invalid = $this->rejectInvalidImage($request)) {
+                return $invalid;
+            }
+
+            $extension = $file->extension();
             $encryptedName = md5($file->getClientOriginalName() . time()) . '.' . $extension;
 
             $dir = 'storage/testimonial-costumer/';
@@ -215,7 +234,7 @@ class TestimonialCustomerController extends Controller
 
             try {
                 if ($request->has('old_filename')) {
-                    $oldFileName = $request->input('old_filename');
+                    $oldFileName = basename((string) $request->input('old_filename'));
                     $oldFilePath = public_path($dir . $oldFileName);
 
                     if (File::exists($oldFilePath)) {
@@ -249,7 +268,7 @@ class TestimonialCustomerController extends Controller
 
     public function deleteUploadedImage(Request $request)
     {
-        $filename = $request->input('filename');
+        $filename = basename((string) $request->input('filename'));
 
         if (!$filename) {
             return response()->json([
@@ -278,7 +297,7 @@ class TestimonialCustomerController extends Controller
 
         return response()->json([
             'status' => false,
-            'message' => 'File tidak ditemukan: ' . $path
+            'message' => 'File tidak ditemukan: ' . $filename
         ], 404);
     }
 

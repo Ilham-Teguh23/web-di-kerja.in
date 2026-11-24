@@ -54,9 +54,10 @@ class WhatsAppController extends Controller
 
     public function templates(): JsonResponse
     {
+        // components: the Send message tab shows the text and asks for its variables.
         return $this->withToken(fn () => $this->graph->call('GET', config('services.whatsapp.waba_id').'/message_templates', [
-            'fields' => 'id,name,status,category,language',
-            'limit' => 50,
+            'fields' => 'id,name,status,category,language,parameter_format,components',
+            'limit' => 100,
         ]));
     }
 
@@ -93,13 +94,24 @@ class WhatsAppController extends Controller
 
         $message = ['messaging_product' => 'whatsapp', 'recipient_type' => 'individual', 'to' => $to];
         if ($request->input('type') === 'template') {
-            $template = [
-                'name' => trim((string) $request->input('template')) ?: 'hello_world',
-                'language' => ['code' => trim((string) $request->input('language')) ?: 'en_US'],
-            ];
-            $param = trim((string) $request->input('param'));
-            if ($param !== '') {
-                $template['components'] = [['type' => 'body', 'parameters' => [['type' => 'text', 'text' => $param]]]];
+            $name = trim((string) $request->input('template'));
+            if ($name === '') {
+                return $this->fail('Choose a template.', 422);
+            }
+            $template = ['name' => $name, 'language' => ['code' => trim((string) $request->input('language')) ?: 'en_US']];
+
+            $components = [];
+            foreach (['header' => 'header_params', 'body' => 'body_params'] as $type => $field) {
+                $parameters = $this->templateParameters($request->input($field));
+                if ($parameters === null) {
+                    return $this->fail('Fill in every template variable.', 422);
+                }
+                if ($parameters !== []) {
+                    $components[] = ['type' => $type, 'parameters' => $parameters];
+                }
+            }
+            if ($components !== []) {
+                $template['components'] = $components;
             }
             $message += ['type' => 'template', 'template' => $template];
         } else {
@@ -244,6 +256,33 @@ class WhatsAppController extends Controller
         ]);
 
         return response()->json(['entries' => $events]);
+    }
+
+    /**
+     * Template variables from the page, [{key, value}], as Cloud API
+     * parameters: {{1}}, {{2}}... in order, named ones ({{customer_name}})
+     * with parameter_name. Null when a value is missing.
+     */
+    private function templateParameters(mixed $variables): ?array
+    {
+        if (! is_array($variables)) {
+            return [];
+        }
+
+        $parameters = [];
+        foreach ($variables as $variable) {
+            $key = trim((string) (is_array($variable) ? ($variable['key'] ?? '') : ''));
+            $value = trim((string) (is_array($variable) ? ($variable['value'] ?? '') : ''));
+            if ($key === '' || $value === '') {
+                return null;
+            }
+            $parameters[$key] = ctype_digit($key)
+                ? ['type' => 'text', 'text' => $value]
+                : ['type' => 'text', 'parameter_name' => $key, 'text' => $value];
+        }
+        ksort($parameters, SORT_NATURAL);
+
+        return array_values($parameters);
     }
 
     private function withToken(callable $call): JsonResponse

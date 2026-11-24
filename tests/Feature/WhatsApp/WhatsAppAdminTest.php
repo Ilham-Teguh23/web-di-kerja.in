@@ -80,6 +80,80 @@ class WhatsAppAdminTest extends TestCase
             ->assertStatus(400)->assertJsonPath('error.message', 'WA_ACCESS_TOKEN is empty. Put a token in .env first.');
     }
 
+    public function test_templates_are_read_with_their_text(): void
+    {
+        Http::fake(['graph.facebook.com/*' => Http::response(['data' => []])]);
+
+        $this->actingAs($this->admin)->getJson('/master/whatsapp/templates')->assertOk();
+
+        Http::assertSent(fn (Request $request) => str_contains(urldecode($request->url()), 'fields=id,name,status,category,language,parameter_format,components'));
+    }
+
+    public function test_send_template_fills_numbered_named_and_header_variables(): void
+    {
+        Http::fake(['graph.facebook.com/*' => Http::response(['messages' => [['id' => 'wamid.2']]])]);
+
+        $this->actingAs($this->admin)->postJson('/master/whatsapp/messages', [
+            'to' => '083123555526',
+            'type' => 'template',
+            'template' => 'task_completed_notice',
+            'language' => 'id',
+            'header_params' => [['key' => '1', 'value' => 'Tugas #12']],
+            'body_params' => [
+                ['key' => '2', 'value' => 'Senin'],
+                ['key' => '1', 'value' => 'Budi'],
+                ['key' => '10', 'value' => 'ke-10'],
+            ],
+        ])->assertOk()->assertJsonPath('body.messages.0.id', 'wamid.2');
+
+        Http::assertSent(fn (Request $request) => $request['to'] === '6283123555526'
+            && $request['type'] === 'template'
+            && $request['template']['name'] === 'task_completed_notice'
+            && $request['template']['language'] === ['code' => 'id']
+            && $request['template']['components'] === [
+                ['type' => 'header', 'parameters' => [['type' => 'text', 'text' => 'Tugas #12']]],
+                ['type' => 'body', 'parameters' => [
+                    ['type' => 'text', 'text' => 'Budi'],
+                    ['type' => 'text', 'text' => 'Senin'],
+                    ['type' => 'text', 'text' => 'ke-10'],
+                ]],
+            ]);
+
+        $this->actingAs($this->admin)->postJson('/master/whatsapp/messages', [
+            'to' => '083123555526', 'type' => 'template', 'template' => 'order_update', 'language' => 'en_US',
+            'body_params' => [['key' => 'customer_name', 'value' => 'Budi']],
+        ])->assertOk();
+
+        Http::assertSent(fn (Request $request) => $request['template']['name'] === 'order_update'
+            && $request['template']['components'] === [
+                ['type' => 'body', 'parameters' => [['type' => 'text', 'parameter_name' => 'customer_name', 'text' => 'Budi']]],
+            ]);
+    }
+
+    public function test_send_template_needs_a_name_and_every_variable(): void
+    {
+        $this->actingAs($this->admin)->postJson('/master/whatsapp/messages', ['to' => '0812', 'type' => 'template'])
+            ->assertStatus(422)->assertJsonPath('error.message', 'Choose a template.');
+
+        $this->actingAs($this->admin)->postJson('/master/whatsapp/messages', [
+            'to' => '0812', 'type' => 'template', 'template' => 'task_completed_notice',
+            'body_params' => [['key' => '1', 'value' => '  ']],
+        ])->assertStatus(422)->assertJsonPath('error.message', 'Fill in every template variable.');
+
+        Http::assertNothingSent();
+    }
+
+    public function test_send_template_without_variables_has_no_components(): void
+    {
+        Http::fake(['graph.facebook.com/*' => Http::response(['messages' => [['id' => 'wamid.3']]])]);
+
+        $this->actingAs($this->admin)->postJson('/master/whatsapp/messages', [
+            'to' => '0812', 'type' => 'template', 'template' => 'hello_world', 'language' => 'en_US',
+        ])->assertOk();
+
+        Http::assertSent(fn (Request $request) => $request['template'] === ['name' => 'hello_world', 'language' => ['code' => 'en_US']]);
+    }
+
     public function test_create_template_submits_a_utility_template(): void
     {
         Http::fake(['graph.facebook.com/*' => Http::response(['id' => '99', 'status' => 'PENDING', 'category' => 'UTILITY'])]);

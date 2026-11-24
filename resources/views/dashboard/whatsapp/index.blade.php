@@ -23,6 +23,10 @@
         .wa-log .ok { color: #81c995; }
         .wa-log .err { color: #f28b82; }
         .wa-ids code { color: inherit; }
+        .wa-preview { background: #e7fbe9; border: 1px solid #c9eccd; border-radius: .5rem; padding: .75rem 1rem; white-space: pre-wrap; max-width: 520px; }
+        .wa-preview .wa-preview-header { font-weight: 600; margin-bottom: .35rem; }
+        .wa-preview .wa-preview-footer { color: #6c757d; font-size: 12px; margin-top: .35rem; }
+        .wa-preview mark { background: #fff3cd; padding: 0 .15rem; }
     </style>
 
     <div class="row">
@@ -144,17 +148,19 @@
                                         <label class="form-label" for="m-text">Message</label>
                                         <textarea class="form-control" id="m-text" name="text" rows="3">Halo! Tugas Anda di Di-kerjain sudah kami terima dan sedang dikerjakan. Kami kabari lagi saat selesai.</textarea>
                                     </div>
-                                    <div class="col-md-4" data-when="template" hidden>
-                                        <label class="form-label" for="m-template">Template name</label>
-                                        <input class="form-control" id="m-template" name="template" value="hello_world">
+                                    <div class="col-12" data-when="template" hidden>
+                                        <label class="form-label" for="m-template">Template</label>
+                                        <div class="d-flex gap-2">
+                                            <select class="form-select" id="m-template">
+                                                <option value="">Loading approved templates…</option>
+                                            </select>
+                                            <button class="btn btn-light text-nowrap" type="button" id="m-template-reload">Reload</button>
+                                        </div>
                                     </div>
-                                    <div class="col-md-4" data-when="template" hidden>
-                                        <label class="form-label" for="m-lang">Template language</label>
-                                        <input class="form-control" id="m-lang" name="language" value="en_US">
-                                    </div>
-                                    <div class="col-md-4" data-when="template" hidden>
-                                        <label class="form-label" for="m-param">Value for @{{1}} (optional)</label>
-                                        <input class="form-control" id="m-param" name="param">
+                                    <div class="col-12" data-when="template" hidden>
+                                        <div class="row g-3" id="m-template-vars"></div>
+                                        <label class="form-label mt-3 mb-1">Preview</label>
+                                        <div class="wa-preview" id="m-template-preview">Choose a template.</div>
                                     </div>
                                 </div>
                                 <button class="btn btn-primary mt-3" type="submit">Send message</button>
@@ -314,22 +320,145 @@
                 button.addEventListener('click', () => load(button.dataset.load, button));
             });
 
+            // ---- 3 · Approved templates for Send message ------------------------------------
+            // Template variables are numbered (1, 2...) or named (customer_name), each
+            // between double curly braces. No double brace is written literally below:
+            // Blade would read it as an echo.
+            const PLACEHOLDER = /\{\{\s*([A-Za-z0-9_]+)\s*\}\}/g;
+            const curly = (key) => '{' + '{' + key + '}' + '}';
+            const templateSelect = document.getElementById('m-template');
+            const templateVars = document.getElementById('m-template-vars');
+            const templatePreview = document.getElementById('m-template-preview');
+            let approvedTemplates = [];
+            let templatesLoaded = false;
+
+            const partOf = (template, type) => (template?.components || []).find((component) => component.type === type);
+            const keysIn = (value) => [...new Set([...String(value || '').matchAll(PLACEHOLDER)].map((match) => match[1]))];
+            const selectedTemplate = () => approvedTemplates[templateSelect.value] ?? null;
+
+            // Why a template cannot be sent from this page (media header, URL button with a variable).
+            const unsupported = (template) => {
+                const header = partOf(template, 'HEADER');
+                if (header && header.format && header.format !== 'TEXT') return `Templates with a media header (${header.format.toLowerCase()}) cannot be sent from this page.`;
+                const buttons = partOf(template, 'BUTTONS')?.buttons || [];
+                if (buttons.some((button) => keysIn(button.url).length)) return 'Templates with a URL button variable cannot be sent from this page.';
+                return null;
+            };
+
+            const exampleFor = (component, part, key) => {
+                const example = component?.example || {};
+                const named = example[`${part}_text_named_params`]?.find((item) => item.param_name === key)?.example;
+                const positional = part === 'header' ? example.header_text?.[Number(key) - 1] : example.body_text?.[0]?.[Number(key) - 1];
+                return named || positional || '';
+            };
+
+            const fill = (value, part) => escapeHtml(value || '').replace(PLACEHOLDER, (all, key) => {
+                const input = templateVars.querySelector(`[data-var-part="${part}"][data-var-key="${key}"]`);
+                const filled = input?.value.trim();
+                return `<mark>${filled ? escapeHtml(filled) : curly(key)}</mark>`;
+            });
+
+            const renderPreview = () => {
+                const template = selectedTemplate();
+                if (!template) {
+                    templatePreview.textContent = approvedTemplates.length ? 'Choose a template.' : 'No approved template yet. Create one in tab 2 and wait for APPROVED.';
+                    return;
+                }
+                const header = partOf(template, 'HEADER');
+                const footer = partOf(template, 'FOOTER');
+                const buttons = partOf(template, 'BUTTONS')?.buttons || [];
+                const problem = unsupported(template);
+                templatePreview.innerHTML = (header?.format === 'TEXT' ? `<div class="wa-preview-header">${fill(header.text, 'header')}</div>` : '')
+                    + `<div>${fill(partOf(template, 'BODY')?.text, 'body')}</div>`
+                    + (footer?.text ? `<div class="wa-preview-footer">${escapeHtml(footer.text)}</div>` : '')
+                    + (buttons.length ? `<div class="wa-preview-footer">Buttons: ${buttons.map((button) => escapeHtml(button.text)).join(' · ')}</div>` : '')
+                    + (problem ? `<div class="text-danger mt-2">${escapeHtml(problem)}</div>` : '');
+            };
+
+            const renderTemplate = () => {
+                const template = selectedTemplate();
+                const header = partOf(template, 'HEADER');
+                const body = partOf(template, 'BODY');
+                const variables = [
+                    ...(header?.format === 'TEXT' ? keysIn(header.text).map((key) => ({ part: 'header', key, component: header })) : []),
+                    ...keysIn(body?.text).map((key) => ({ part: 'body', key, component: body })),
+                ];
+                templateVars.innerHTML = variables.map((variable) => `<div class="col-md-4">
+                        <label class="form-label">${variable.part === 'header' ? 'Header ' : ''}${escapeHtml(curly(variable.key))}</label>
+                        <input class="form-control" data-var-part="${variable.part}" data-var-key="${escapeHtml(variable.key)}" placeholder="${escapeHtml(exampleFor(variable.component, variable.part, variable.key))}">
+                    </div>`).join('');
+                renderPreview();
+            };
+
+            const loadApprovedTemplates = async () => {
+                templateSelect.innerHTML = '<option value="">Loading approved templates…</option>';
+                templateVars.innerHTML = '';
+                try {
+                    const data = await call(routes.templates);
+                    const error = errorOf(data);
+                    if (error) {
+                        templateSelect.innerHTML = `<option value="">${escapeHtml(error)}</option>`;
+                        return;
+                    }
+                    approvedTemplates = (data.body?.data || []).filter((template) => template.status === 'APPROVED');
+                    templatesLoaded = true;
+                    templateSelect.innerHTML = approvedTemplates.length
+                        ? '<option value="">Choose a template…</option>' + approvedTemplates.map((template, index) =>
+                            `<option value="${index}">${escapeHtml(template.name)} · ${escapeHtml(template.language)} · ${escapeHtml(template.category)}</option>`).join('')
+                        : '<option value="">No approved template yet</option>';
+                } catch (failure) {
+                    templateSelect.innerHTML = `<option value="">${escapeHtml(failure.message)}</option>`;
+                } finally {
+                    renderPreview();
+                }
+            };
+
+            templateSelect.addEventListener('change', renderTemplate);
+            templateVars.addEventListener('input', renderPreview);
+            document.getElementById('m-template-reload').addEventListener('click', () => loadApprovedTemplates());
+
             // ---- 2-3 · Forms ------------------------------------------------------------------
             const typeSelect = document.getElementById('m-type');
             typeSelect.addEventListener('change', () => {
                 document.querySelectorAll('[data-when]').forEach((part) => { part.hidden = part.dataset.when !== typeSelect.value; });
+                if (typeSelect.value === 'template' && !templatesLoaded) loadApprovedTemplates();
             });
+
+            // The fields sent for a template message, or the reason it cannot be sent.
+            const templateMessage = (form) => {
+                const template = selectedTemplate();
+                if (!template) return { error: 'Choose a template.' };
+                const problem = unsupported(template);
+                if (problem) return { error: problem };
+                const values = (part) => [...templateVars.querySelectorAll(`[data-var-part="${part}"]`)]
+                    .map((input) => ({ key: input.dataset.varKey, value: input.value.trim() }));
+                const variables = [...values('header'), ...values('body')];
+                if (variables.some((variable) => variable.value === '')) return { error: 'Fill in every template variable.' };
+                return {
+                    fields: {
+                        to: form.elements.to.value,
+                        type: 'template',
+                        template: template.name,
+                        language: template.language,
+                        header_params: values('header'),
+                        body_params: values('body'),
+                    },
+                };
+            };
 
             document.querySelectorAll('[data-form]').forEach((form) => {
                 form.addEventListener('submit', async (event) => {
                     event.preventDefault();
                     const result = form.querySelector('[data-result]');
                     const button = form.querySelector('button[type="submit"]');
-                    const fields = Object.fromEntries(new FormData(form));
-                    if (form.dataset.form === 'messages') {
-                        document.querySelectorAll('[data-when]').forEach((part) => {
-                            if (part.hidden) part.querySelectorAll('[name]').forEach((input) => { delete fields[input.name]; });
-                        });
+                    let fields = Object.fromEntries(new FormData(form));
+                    if (form.dataset.form === 'messages' && typeSelect.value === 'template') {
+                        const message = templateMessage(form);
+                        if (message.error) {
+                            show(result, false, `Error: ${message.error}`);
+                            return;
+                        }
+                        fields = message.fields;
                     }
                     button.disabled = true;
                     result.hidden = true;

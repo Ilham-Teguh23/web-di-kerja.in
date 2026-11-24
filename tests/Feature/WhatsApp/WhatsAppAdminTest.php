@@ -130,6 +130,28 @@ class WhatsAppAdminTest extends TestCase
             ]);
     }
 
+    public function test_send_authentication_template_puts_the_code_on_the_copy_code_button(): void
+    {
+        Http::fake(['graph.facebook.com/*' => Http::response(['messages' => [['id' => 'wamid.4']]])]);
+
+        $this->actingAs($this->admin)->postJson('/master/whatsapp/messages', [
+            'to' => '083123555526', 'type' => 'template', 'template' => 'verification_otp', 'language' => 'en_US',
+            'body_params' => [['key' => '1', 'value' => '123456']],
+            'button_params' => [['index' => '0', 'value' => '123456']],
+        ])->assertOk();
+
+        Http::assertSent(fn (Request $request) => $request['template']['components'] === [
+            ['type' => 'body', 'parameters' => [['type' => 'text', 'text' => '123456']]],
+            ['type' => 'button', 'sub_type' => 'url', 'index' => '0', 'parameters' => [['type' => 'text', 'text' => '123456']]],
+        ]);
+
+        $this->actingAs($this->admin)->postJson('/master/whatsapp/messages', [
+            'to' => '083123555526', 'type' => 'template', 'template' => 'verification_otp',
+            'body_params' => [['key' => '1', 'value' => '123456']],
+            'button_params' => [['index' => '0', 'value' => '']],
+        ])->assertStatus(422)->assertJsonPath('error.message', 'Fill in every template variable.');
+    }
+
     public function test_send_template_needs_a_name_and_every_variable(): void
     {
         $this->actingAs($this->admin)->postJson('/master/whatsapp/messages', ['to' => '0812', 'type' => 'template'])

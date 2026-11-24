@@ -110,6 +110,11 @@ class WhatsAppController extends Controller
                     $components[] = ['type' => $type, 'parameters' => $parameters];
                 }
             }
+            $buttons = $this->templateButtons($request->input('button_params'));
+            if ($buttons === null) {
+                return $this->fail('Fill in every template variable.', 422);
+            }
+            $components = [...$components, ...$buttons];
             if ($components !== []) {
                 $template['components'] = $components;
             }
@@ -283,6 +288,35 @@ class WhatsAppController extends Controller
         ksort($parameters, SORT_NATURAL);
 
         return array_values($parameters);
+    }
+
+    /**
+     * URL button variables from the page, [{index, value}]: a URL button with a
+     * variable, or the code button of an authentication template (the code).
+     * Null when a value is missing.
+     */
+    private function templateButtons(mixed $buttons): ?array
+    {
+        if (! is_array($buttons)) {
+            return [];
+        }
+
+        $components = [];
+        foreach ($buttons as $button) {
+            $index = trim((string) (is_array($button) ? ($button['index'] ?? '') : ''));
+            $value = trim((string) (is_array($button) ? ($button['value'] ?? '') : ''));
+            if (! ctype_digit($index) || $value === '') {
+                return null;
+            }
+            $components[] = [
+                'type' => 'button',
+                'sub_type' => 'url',
+                'index' => $index,
+                'parameters' => [['type' => 'text', 'text' => $value]],
+            ];
+        }
+
+        return $components;
     }
 
     private function withToken(callable $call): JsonResponse

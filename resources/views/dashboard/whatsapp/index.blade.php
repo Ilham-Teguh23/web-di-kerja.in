@@ -336,14 +336,25 @@
             const keysIn = (value) => [...new Set([...String(value || '').matchAll(PLACEHOLDER)].map((match) => match[1]))];
             const selectedTemplate = () => approvedTemplates[templateSelect.value] ?? null;
 
-            // Why a template cannot be sent from this page (media header, URL button with a variable).
+            // Why a template cannot be sent from this page (a media header needs a file).
             const unsupported = (template) => {
                 const header = partOf(template, 'HEADER');
                 if (header && header.format && header.format !== 'TEXT') return `Templates with a media header (${header.format.toLowerCase()}) cannot be sent from this page.`;
-                const buttons = partOf(template, 'BUTTONS')?.buttons || [];
-                if (buttons.some((button) => keysIn(button.url).length)) return 'Templates with a URL button variable cannot be sent from this page.';
                 return null;
             };
+
+            // Buttons that need a value when sending: a URL button with a variable, and the
+            // code button of an authentication template (Copy code / one-tap), which gets
+            // the code itself, the same value as the body variable.
+            const buttonVariables = (template) => (partOf(template, 'BUTTONS')?.buttons || [])
+                .map((button, index) => ({ button, index }))
+                .filter(({ button }) => button.type === 'OTP' || keysIn(button.url).length)
+                .map(({ button, index }) => ({
+                    index,
+                    text: button.text || `Button ${index + 1}`,
+                    example: (Array.isArray(button.example) ? button.example[0] : button.example) || '',
+                    code: button.type === 'OTP' || template.category === 'AUTHENTICATION',
+                }));
 
             const exampleFor = (component, part, key) => {
                 const example = component?.example || {};
@@ -372,6 +383,7 @@
                     + `<div>${fill(partOf(template, 'BODY')?.text, 'body')}</div>`
                     + (footer?.text ? `<div class="wa-preview-footer">${escapeHtml(footer.text)}</div>` : '')
                     + (buttons.length ? `<div class="wa-preview-footer">Buttons: ${buttons.map((button) => escapeHtml(button.text)).join(' · ')}</div>` : '')
+                    + (buttonVariables(template).some((button) => button.code) ? '<div class="wa-preview-footer">The code button carries the same code as the message.</div>' : '')
                     + (problem ? `<div class="text-danger mt-2">${escapeHtml(problem)}</div>` : '');
             };
 
@@ -386,6 +398,10 @@
                 templateVars.innerHTML = variables.map((variable) => `<div class="col-md-4">
                         <label class="form-label">${variable.part === 'header' ? 'Header ' : ''}${escapeHtml(curly(variable.key))}</label>
                         <input class="form-control" data-var-part="${variable.part}" data-var-key="${escapeHtml(variable.key)}" placeholder="${escapeHtml(exampleFor(variable.component, variable.part, variable.key))}">
+                    </div>`).join('')
+                    + (template ? buttonVariables(template) : []).filter((button) => !button.code).map((button) => `<div class="col-md-4">
+                        <label class="form-label">Button "${escapeHtml(button.text)}" URL ${escapeHtml(curly(1))}</label>
+                        <input class="form-control" data-var-part="button" data-var-key="${button.index}" placeholder="${escapeHtml(button.example)}">
                     </div>`).join('');
                 renderPreview();
             };
@@ -432,7 +448,13 @@
                 if (problem) return { error: problem };
                 const values = (part) => [...templateVars.querySelectorAll(`[data-var-part="${part}"]`)]
                     .map((input) => ({ key: input.dataset.varKey, value: input.value.trim() }));
-                const variables = [...values('header'), ...values('body')];
+                const buttons = buttonVariables(template).map((button) => ({
+                    index: String(button.index),
+                    value: button.code
+                        ? (values('body')[0]?.value || '')
+                        : (templateVars.querySelector(`[data-var-part="button"][data-var-key="${button.index}"]`)?.value.trim() || ''),
+                }));
+                const variables = [...values('header'), ...values('body'), ...buttons];
                 if (variables.some((variable) => variable.value === '')) return { error: 'Fill in every template variable.' };
                 return {
                     fields: {
@@ -442,6 +464,7 @@
                         language: template.language,
                         header_params: values('header'),
                         body_params: values('body'),
+                        button_params: buttons,
                     },
                 };
             };
